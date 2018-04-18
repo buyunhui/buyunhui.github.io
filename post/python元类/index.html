@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="suiyelian" />
+  <meta name="description" content="python元类 1. 在python中，一切皆对象 class ObjectCreator(object): pass 将在内存中创建一个对象，名字就是ObjectCreator。这个对象（类）自身拥有创建对" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/python%E5%85%83%E7%B1%BB/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="python元类 1. 在python中，一切皆对象 class ObjectCreator(object): pass 将在内存中创建一个对象，名字就是ObjectCreator。这个对象（类）自身拥有创建对" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python%E5%85%83%E7%B1%BB/" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="python元类 1. 在python中，一切皆对象 class ObjectCreator(object): pass 将在内存中创建一个对象，名字就是ObjectCreator。这个对象（类）自身拥有创建对">
+
+
+
+<meta itemprop="wordCount" content="1244">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="python元类 1. 在python中，一切皆对象 class ObjectCreator(object): pass 将在内存中创建一个对象，名字就是ObjectCreator。这个对象（类）自身拥有创建对"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 约 1244 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#python元类">python元类</a>
+<ul>
+<li><a href="#1-在python中-一切皆对象">1. 在python中，一切皆对象</a></li>
+<li><a href="#2-python-元类-类-实例-属性之间的关系">2. python 元类，类，实例，属性之间的关系</a>
+<ul>
+<li><a href="#2-1-在python中-type为万物之源-type可以直接生成类-class-但也可以先生成元类-metaclass-再使用元类批量定制类-class">2.1 在python中，type为万物之源，type可以直接生成类（class），但也可以先生成元类（metaclass），再使用元类批量定制类（class）</a></li>
+</ul></li>
+<li><a href="#3-什么是元类">3. 什么是元类</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="python元类">python元类</h2>
+
+<h3 id="1-在python中-一切皆对象">1. 在python中，一切皆对象</h3>
+
+<pre><code class="language-python">class ObjectCreator(object):
+     pass
+</code></pre>
+
+<p>将在内存中创建一个对象，名字就是ObjectCreator。这个对象（类）自身拥有创建对象（类实例）的能力，而这就是为什么它是一个类的原因。但是，它的本质仍然是一个对象，于是你可以对它做如下的操作：可以将它赋值给一个变量， 你可以拷贝它， 你可以为它增加属性， 你可以将它作为函数参数进行传递,也可以返回一个类</p>
+
+<pre><code class="language-python">
+def choose_class(name):
+    if name == 'foo':
+        class Foo(object):
+            pass
+        return Foo     # 返回的是类，不是类的实例
+    else:
+        class Bar(object):
+            pass
+        return Bar
+MyClass = choose_class('foo')
+
+print MyClass              # 函数返回的是类，不是类的实例
+#输出：&lt;class '__main__.Foo'&gt;
+
+print MyClass()            # 你可以通过这个类创建类实例，也就是对象
+\输出：&lt;__main__.Foo object at 0x1085ed950
+</code></pre>
+
+<h3 id="2-python-元类-类-实例-属性之间的关系">2. python 元类，类，实例，属性之间的关系</h3>
+
+<h4 id="2-1-在python中-type为万物之源-type可以直接生成类-class-但也可以先生成元类-metaclass-再使用元类批量定制类-class">2.1 在python中，type为万物之源，type可以直接生成类（class），但也可以先生成元类（metaclass），再使用元类批量定制类（class）</h4>
+
+<p>语法格式：</p>
+
+<pre><code class="language-python">type(类名, 父类的元组（针对继承的情况，可以为空），包含属性的字典（名称和值）)
+</code></pre>
+
+<p>比如下面的代码：</p>
+
+<pre><code class="language-python">class MyShinyClass(object):
+    pass
+</code></pre>
+
+<p>可以手动通过type创建，其实</p>
+
+<pre><code class="language-python">MyShinyClass = type('MyShinyClass', (), {})  # 返回一个类对象
+print MyShinyClass
+\#输出：&lt;class '__main__.MyShinyClass'&gt;
+</code></pre>
+
+<pre><code class="language-python">print MyShinyClass()  #  创建一个该类的实例
+#输出：&lt;__main__.MyShinyClass object at 0x1085cd810&gt;
+你会发现我们使用“MyShinyClass”作为类名，并且也可以把它当做一个变量来作为类的引用。
+
+1、构建Foo类
+#构建目标代码
+class Foo(object):
+    bar = True
+#使用type构建
+Foo = type('Foo', (), {'bar':True})
+
+2.继承Foo类
+#构建目标代码：
+class FooChild(Foo):
+    pass
+#使用type构建
+FooChild = type('FooChild', (Foo,),{})
+
+print FooChild
+#输出：&lt;class '__main__.FooChild'&gt;
+print FooChild.bar   # bar属性是由Foo继承而来
+#输出：True
+
+3.为Foochild类增加方法
+def echo_bar(self):
+    print self.bar
+
+FooChild = type('FooChild', (Foo,), {'echo_bar': echo_bar})
+hasattr(Foo, 'echo_bar')
+#输出：False
+hasattr(FooChild, 'echo_bar')
+#输出：True
+my_foo = FooChild()
+my_foo.echo_bar()
+#输出：True
+</code></pre>
+
+<h3 id="3-什么是元类">3. 什么是元类</h3>
+
+<p>通过上文的描述，我们知道了Python中的类也是对象。元类就是用来创建这些类（对象）的，元类就是类的类，你可以这样理解为：</p>
+
+<pre><code>MyClass = MetaClass()    #元类创建
+MyObject = MyClass()     #类创建实例
+实际上MyClass就是通过type()来创创建出MyClass类，它是type()类的一个实例；同时MyClass本身也是类，也可以创建出自己的实例，这里就是MyObject
+</code></pre>
+
+<p>函数type实际上是一个元类。type就是Python在背后用来创建所有类的元类。现在你想知道那为什么type会全部采用小写形式而不是Type呢？好吧，我猜这是为了和str保持一致性，str是用来创建字符串对象的类，而int是用来创建整数对象的类。type就是创建类对象的类。你可以通过检查<strong>class</strong>属性来看到这一点。Python中所有的东西，注意，我是指所有的东西——都是对象。这包括整数、字符串、函数以及类。它们全部都是对象，而且它们都是从一个类创建而来。</p>
+
+<pre><code class="language-python">只适用于python2.*
+# 元类会自动将你通常传给‘type’的参数作为自己的参数传入
+def upper_attr(future_class_name, future_class_parents, future_class_attr):
+    '''返回一个类对象，将属性都转为大写形式'''
+    #选择所有不以'__'开头的属性
+    attrs = ((name, value) for name, value in future_class_attr.items() if not name.startswith('__'))
+    # 将它们转为大写形式
+    uppercase_attr = dict((name.upper(), value) for name, value in attrs)
+    #通过'type'来做类对象的创建
+    return type(future_class_name, future_class_parents, uppercase_attr)#返回一个类
+
+class Foo(object):
+    __metaclass__ = upper_attr
+    bar = 'bip'
+</code></pre>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">suiyelian</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">0001-01-01</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/1%E8%A3%85%E9%A5%B0%E5%99%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python 类 - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="buyunhui" />
+  <meta name="description" content="python Class 1.变量作用域 在python中，*当前作用域局部变量-&amp;gt;外层作用域变量-&amp;gt;当前模块中的全局变量-&amp;gt;python内置变量" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/python%E7%B1%BB1/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python 类" />
+<meta property="og:description" content="python Class 1.变量作用域 在python中，*当前作用域局部变量-&gt;外层作用域变量-&gt;当前模块中的全局变量-&gt;python内置变量" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python%E7%B1%BB1/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="python 类">
+<meta itemprop="description" content="python Class 1.变量作用域 在python中，*当前作用域局部变量-&gt;外层作用域变量-&gt;当前模块中的全局变量-&gt;python内置变量">
+
+
+<meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="wordCount" content="2585">
+
+
+
+<meta itemprop="keywords" content="python,python语法,python进阶," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python 类"/>
+<meta name="twitter:description" content="python Class 1.变量作用域 在python中，*当前作用域局部变量-&gt;外层作用域变量-&gt;当前模块中的全局变量-&gt;python内置变量"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">python 类</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/python/"> python </a>
+            
+              <a href="/categories/python%E8%AF%AD%E6%B3%95/"> python语法 </a>
+            
+              <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
+            
+          </div>
+        <span class="more-meta"> 约 2585 字 </span>
+        <span class="more-meta"> 预计阅读 6 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#python-class">python Class</a>
+<ul>
+<li><a href="#1-变量作用域"><strong>1.变量作用域</strong></a></li>
+<li><a href="#2-函数对象"><strong>2.函数对象</strong></a>
+<ul>
+<li><a href="#a-函数身为一个对象-拥有对象模型的三个通用属性-id-类型-和值">a.函数身为一个对象，拥有对象模型的三个通用属性：id、类型、和值。</a></li>
+<li><a href="#b-函数可以被引用-即函数可以赋值给一个变量">b.函数可以被引用，即函数可以赋值给一个变量</a></li>
+<li><a href="#c-函数可以当做参数传递">c.函数可以当做参数传递</a></li>
+<li><a href="#d-函数可以作返回值">D.函数可以作返回值</a></li>
+<li><a href="#e-函数可以当作容器类型的元素">E.函数可以当作容器类型的元素</a></li>
+<li><a href="#f-函数还可以嵌套">F.函数还可以嵌套</a></li>
+</ul></li>
+<li><a href="#3-类变量与实例变量"><strong>3.类变量与实例变量</strong></a></li>
+<li><a href="#4-访问控制"><strong>4.访问控制</strong></a>
+<ul>
+<li><a href="#1-通过下划线控制-不加下划线表示公有-单下划线表示保护成员-派生类可用-加双下划线表示仅仅类内部可用">1.通过下划线控制，不加下划线表示公有，单下划线表示保护成员，派生类可用，加双下划线表示仅仅类内部可用</a></li>
+<li><a href="#2-使用-property-达到成员访问权限控制与参数检查">2.使用@property，达到成员访问权限控制与参数检查</a></li>
+</ul></li>
+<li><a href="#5-创建新的类或实例属性">5.创建新的类或实例属性</a>
+<ul>
+<li><a href="#描述器定义">描述器定义</a></li>
+<li><a href="#描述器分类">描述器分类</a></li>
+<li><a href="#调用流程">调用流程</a></li>
+<li><a href="#描述器实例">描述器实例</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="python-class">python Class</h2>
+
+<h3 id="1-变量作用域"><strong>1.变量作用域</strong></h3>
+
+<pre><code>  在python中，*当前作用域局部变量-&gt;外层作用域变量-&gt;当前模块中的全局变量-&gt;python内置变量*
+</code></pre>
+
+<pre><code class="language-python">def scope_test():
+    def do_local():
+        spam = &quot;local spam&quot; #此函数定义了另外的一个spam字符串变量，并且生命周期只在此函数内。此处的spam和外层的spam是两个变量，如果写出spam = spam + “local spam” 会报错
+    def do_nonlocal():
+        nonlocal  spam        #使用外层的spam变量
+        spam = &quot;nonlocal spam&quot;
+    def do_global():
+        global spam
+        spam = &quot;global spam&quot;
+    spam = &quot;test spam&quot;
+    do_local()
+    print(&quot;After local assignmane:&quot;, spam)
+    do_nonlocal()
+    print(&quot;After nonlocal assignment:&quot;,spam)
+    do_global()
+    print(&quot;After global assignment:&quot;,spam)
+ 
+scope_test()
+print(&quot;In global scope:&quot;,spam)
+</code></pre>
+
+<p>**
+上面code的output are:
+After local assignmane: test spam
+After nonlocal assignment: nonlocal spam
+After global assignment: nonlocal spam
+In global scope: global spam</p>
+
+<p>备注：说明： nonlocal适用于在局部函数中的局部函数，把最内层的局部变量设置成外层局部可用，但是还不是全局的。
+**</p>
+
+<h3 id="2-函数对象"><strong>2.函数对象</strong></h3>
+
+<pre><code>在 Python 中万物皆为对象，函数也不例外，函数作为对象可以赋值给一个变量、可以作为元素添加到集合对象中、可作为参数值传递给其它函数，还可以当做函数的返回值，这些特性就是第一类对象所特有的。
+</code></pre>
+
+<h4 id="a-函数身为一个对象-拥有对象模型的三个通用属性-id-类型-和值">a.函数身为一个对象，拥有对象模型的三个通用属性：id、类型、和值。</h4>
+
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+def foo():
+    print('from foo')
+foo()
+
+print(id(foo))
+print(type(foo))
+print(foo)
+输出：
+from foo
+4406808360
+&lt;class 'function'&gt;
+&lt;function foo at 0x106aa8f28&gt;
+</code></pre>
+
+<h4 id="b-函数可以被引用-即函数可以赋值给一个变量">b.函数可以被引用，即函数可以赋值给一个变量</h4>
+
+<p>还可以把该函数赋值给更多的变量，唯一变化的是该函数对象的引用计数不断地增加，本质上这些变量最终指向的都是同一个函数对象。</p>
+
+<pre><code class="language-python"># -*- coding:utf-8 -*-
+def foo():
+    print('from foo')
+
+foo()
+func=foo    #引用,赋值
+print(foo)
+print(func)
+func()
+输出：
+from foo
+&lt;function foo at 0x10eed8f28&gt;
+&lt;function foo at 0x10eed8f28&gt;
+from foo
+</code></pre>
+
+<h4 id="c-函数可以当做参数传递">c.函数可以当做参数传递</h4>
+
+<pre><code class="language-python">def foo():
+    print('from foo')
+
+def bar(func):
+    print(func)
+    func()
+
+bar(foo)
+输出：
+&lt;function foo at 0x000001F77C3A3E18&gt;
+from foo
+
+</code></pre>
+
+<h4 id="d-函数可以作返回值">D.函数可以作返回值</h4>
+
+<pre><code class="language-python">def foo():
+    print('from foo')
+
+def bar(func):
+    return func     
+
+f=bar(foo)
+
+print(f)
+
+f()
+输出：
+
+&lt;function foo at 0x000001F77C3A3E18&gt;
+from foo
+
+map,filter,reduce等内置函数
+</code></pre>
+
+<h4 id="e-函数可以当作容器类型的元素">E.函数可以当作容器类型的元素</h4>
+
+<pre><code class="language-python">def foo():
+    print('from foo')
+dic={'func':foo}
+foo()
+print(dic['func'])
+dic['func']()
+输出：
+from foo
+&lt;function foo at 0x0000024B6D443E18&gt;
+from foo
+</code></pre>
+
+<h4 id="f-函数还可以嵌套">F.函数还可以嵌套</h4>
+
+<pre><code class="language-python">def f1():
+
+    def f2():
+        print('from f2')
+        def f3():
+            print('from f3')
+        f3()
+    f2()
+f1()
+输出：
+from f2
+from f3
+
+</code></pre>
+
+<h3 id="3-类变量与实例变量"><strong>3.类变量与实例变量</strong></h3>
+
+<pre><code class="language-python">class Student(object):
+    count = 0  #类数据属性属于类本身，可以通过类名进行访问/修改
+    books = [] # 类数据属性也可以被类的所有实例访问/修改，所以非特殊情 况，请不要定义可变的类数据属性
+    def __init__(self, name, age):
+        self.name = name  # 实例数据属性只能通过实例访问
+        self.age = age  # 实例数据属性只能通过实例访问
+    pass
+Student.addAttri = &quot;add&quot;; # 在类定义之后，可以通过类名动态添加类数据属性，新增的类属性也被类和所有实例共有
+</code></pre>
+
+<p>对于可变类型的类属性：
+1.可以通过实例进行访问,此时，类属性与实例属性相同
+2.当通过实例赋值属性的时候，都将为实例新建一个实例属性，这时类属性与实例属性不一样
+3.当通过实例修改类属性的时候，将修改指向的内存地址，此时实例属性与类属性相同</p>
+
+<h3 id="4-访问控制"><strong>4.访问控制</strong></h3>
+
+<h4 id="1-通过下划线控制-不加下划线表示公有-单下划线表示保护成员-派生类可用-加双下划线表示仅仅类内部可用">1.通过下划线控制，不加下划线表示公有，单下划线表示保护成员，派生类可用，加双下划线表示仅仅类内部可用</h4>
+
+<p>如果想要强制访问私有字段，可以通过 【对象._类名<strong>私有字段明 】访问（如：obj._C</strong>foo），不建议强制访问私有成员。</p>
+
+<pre><code class="language-python">class C:
+    name = '类公有成员'
+    _var = &quot;类保护成员&quot;
+    __foo = &quot;类私有成员&quot;
+    
+    def __init__(self):
+       self.name = '实例公有成员'
+       self.name_var = &quot;实例保护成员&quot;
+       self.name__foo = &quot;实例私有成员&quot;
+</code></pre>
+
+<h4 id="2-使用-property-达到成员访问权限控制与参数检查">2.使用@property，达到成员访问权限控制与参数检查</h4>
+
+<pre><code class="language-python">class Person:
+    def __init__(self, first_name):
+        self.first_name = first_name
+
+    # Getter function
+    @property
+    def first_name(self):
+        return self._first_name
+
+    # Setter function
+    @first_name.setter
+    def first_name(self, value):
+        if not isinstance(value, str):
+            raise TypeError('Expected a string')
+        self._first_name = value
+
+    # Deleter function (optional)
+    @first_name.deleter
+    def first_name(self):
+        raise AttributeError(&quot;Can't delete attribute&quot;)
+</code></pre>
+
+<p>上述代码中有三个相关联的方法，这三个方法的名字都必须一样。 第一个方法是一个 getter 函数，它使得 first_name 成为一个属性。 其他两个方法给 first_name 属性添加了 setter 和 deleter 函数。 需要强调的是只有在 first_name 属性被创建后， 后面的两个装饰器 @first_name.setter 和 @first_name.deleter 才能被定义。设置了setter实例对象才能对属性值进行更改。</p>
+
+<p><strong>一个property属性其实就是一系列相关绑定方法的集合。如果你去查看拥有property的类， 就会发现property本身的fget、fset和fdel属性就是类里面的普通方法。比如：</strong></p>
+
+<pre><code class="language-python">&gt;&gt;&gt; Person.first_name.fget
+&lt;function Person.first_name at 0x1006a60e0&gt;
+&gt;&gt;&gt; Person.first_name.fset
+&lt;function Person.first_name at 0x1006a6170&gt;
+&gt;&gt;&gt; Person.first_name.fdel
+&lt;function Person.first_name at 0x1006a62e0&gt;
+&gt;&gt;&gt;
+</code></pre>
+
+<p>通常来讲，我们写代码不用直接取调用fget或者fset，它们会在访问property的时候自动被触发。</p>
+
+<p>只有当你确实需要对attribute执行其他额外的操作的时候才应该使用到property。 有时候一些从其他编程语言(比如Java)过来的程序员总认为所有访问都应该通过getter和setter， 所以他们认为代码应该像下面这样写：</p>
+
+<pre><code class="language-python">class Person:
+    def __init__(self, first_name):
+        self.first_name = first_name
+
+    @property
+    def first_name(self):
+        return self._first_name
+
+    @first_name.setter
+    def first_name(self, value):
+        self._first_name = value
+</code></pre>
+
+<p>不要写上面这种没有做任何其他额外操作的property。 首先，它会让你的代码变得很臃肿，并且还会迷惑阅读者。 其次，它还会让你的程序运行起来变慢很多。</p>
+
+<p>Properties还是一种定义动态计算attribute的方法。 这种类型的attributes并不会被实际的存储，而是在需要的时候计算出来。</p>
+
+<pre><code class="language-python">import math
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+
+    @property
+    def area(self):
+        return math.pi * self.radius ** 2
+
+    @property
+    def diameter(self):
+        return self.radius * 2
+
+    @property
+    def perimeter(self):
+        return 2 * math.pi * self.radius
+</code></pre>
+
+<h3 id="5-创建新的类或实例属性">5.创建新的类或实例属性</h3>
+
+<p>如果你想创建一个全新的实例属性，可以通过一个描述器类的形式来定义它的功能。</p>
+
+<h4 id="描述器定义">描述器定义</h4>
+
+<p>任何函数或者对象定义了一下方法<strong>get</strong>(), <strong>set</strong>(), <strong>delete</strong>()，均称为描述器
+python默认的属性调用是对象的<strong>dict</strong>，对于实例：a.x，调用a.<strong>dict</strong>[&lsquo;x&rsquo;]，对于类：调用type(a).<strong>dict</strong>[&lsquo;x&rsquo;]。如果一个对象定义了描述子，则优先调用描述子方法。
+1. descr.<strong>get</strong>(self, obj, type=None) &ndash;&gt; value
+1. descr.<strong>set</strong>(self, obj, value) &ndash;&gt; None
+1. descr.<strong>delete</strong>(self, obj) &ndash;&gt; None</p>
+
+<h4 id="描述器分类">描述器分类</h4>
+
+<p>数据描述器：同时定义了 <strong>get</strong>() , <strong>set</strong>()
+非数据描述器：只定义了<strong>get</strong>()
+如果一个实例属性与数据描述器同名，则数据描述器优先，与非数据描述器同名，则实例字典优先
+如果定义一个只读数据描述器，将set方法抛出异常
+Properties, bound methods, static methods, and class methods are all based on the descriptor protocol.</p>
+
+<h4 id="调用流程">调用流程</h4>
+
+<p>==<strong>==• descriptors are invoked by the <strong>getattribute</strong>() method
+• overriding <strong>getattribute</strong>() prevents automatic descriptor calls
+• object.<strong>getattribute</strong>() and type.<strong>getattribute</strong>() make different calls to <strong>get</strong>().
+• data descriptors always override instance dictionaries.
+• non-data descriptors may be overridden by instance dictionaries.==</strong>==</p>
+
+<h4 id="描述器实例">描述器实例</h4>
+
+<pre><code class="language-python"># Descriptor attribute for an integer type-checked attribute
+class Integer:
+    def __init__(self, name):
+        self.name = name
+
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        else:
+            return instance.__dict__[self.name]
+
+    def __set__(self, instance, value):
+        if not isinstance(value, int):
+            raise TypeError('Expected an int')
+        instance.__dict__[self.name] = value
+
+    def __delete__(self, instance):
+        del instance.__dict__[self.name]
+
+class Point:
+    x = Integer('x')
+    y = Integer('y')
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        
+p = Point(2, 3)
+print(p.x)  # Calls Point.x.__get__(p,Point)
+p.x = 2.3 # Calls Point.x.__set__(p, 2.3)
+p.y = 5 # Calls Point.y.__set__(p, 5)
+print(p.y)
+</code></pre>
+
+<pre><code>   描述器可实现大部分Python类特性中的底层魔法， 包括 @classmethod 、@staticmethod 、@property ，甚至是 __slots__ 特性。
+   通过定义一个描述器，你可以在底层捕获核心的实例操作(get, set, delete)，并且可完全自定义它们的行为。 这是一个强大的工具，有了它你可以实现很多高级功能，并且它也是很多高级库和框架中的重要工具之一。
+   描述器的一个比较困惑的地方是它只能在类级别被定义，而不能为每个实例单独定义。
+</code></pre>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">buyunhui</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/python/">python</a>
+          
+          <a href="/tags/python%E8%AF%AD%E6%B3%95/">python语法</a>
+          
+          <a href="/tags/python%E8%BF%9B%E9%98%B6/">python进阶</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/python-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python 常用函数</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/%E7%B1%BB%E7%BB%A7%E6%89%BF/">
+            <span class="next-text nav-default">python 类继承</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>

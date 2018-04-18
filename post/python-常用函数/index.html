@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python 常用函数 - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="buyunhui" />
+  <meta name="description" content="python 常用函数 1.operator模块 itemgetter operator.itemgetter(item) operator.itemgetter(*items) Return a callable object that fetches item from its operand using the operand’s getitem() method. If multiple items are specified, returns a tuple of lookup values. For example: • After f = itemgetter(2), the call f&amp;reg; returns r[2]. • After g =" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python 常用函数" />
+<meta property="og:description" content="python 常用函数 1.operator模块 itemgetter operator.itemgetter(item) operator.itemgetter(*items) Return a callable object that fetches item from its operand using the operand’s getitem() method. If multiple items are specified, returns a tuple of lookup values. For example: • After f = itemgetter(2), the call f&reg; returns r[2]. • After g =" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="python 常用函数">
+<meta itemprop="description" content="python 常用函数 1.operator模块 itemgetter operator.itemgetter(item) operator.itemgetter(*items) Return a callable object that fetches item from its operand using the operand’s getitem() method. If multiple items are specified, returns a tuple of lookup values. For example: • After f = itemgetter(2), the call f&reg; returns r[2]. • After g =">
+
+
+<meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="wordCount" content="205">
+
+
+
+<meta itemprop="keywords" content="python,python语法,python进阶," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python 常用函数"/>
+<meta name="twitter:description" content="python 常用函数 1.operator模块 itemgetter operator.itemgetter(item) operator.itemgetter(*items) Return a callable object that fetches item from its operand using the operand’s getitem() method. If multiple items are specified, returns a tuple of lookup values. For example: • After f = itemgetter(2), the call f&reg; returns r[2]. • After g ="/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">python 常用函数</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/python/"> python </a>
+            
+              <a href="/categories/python%E8%AF%AD%E6%B3%95/"> python语法 </a>
+            
+              <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
+            
+          </div>
+        <span class="more-meta"> 约 205 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#python-常用函数">python 常用函数</a>
+<ul>
+<li><a href="#1-operator模块">1.operator模块</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h1 id="python-常用函数">python 常用函数</h1>
+
+<h2 id="1-operator模块">1.operator模块</h2>
+
+<ul>
+<li><strong>itemgetter</strong></li>
+</ul>
+
+<pre><code class="language-python">operator.itemgetter(item)
+operator.itemgetter(*items)
+</code></pre>
+
+<p>Return a callable object that fetches item from its operand using the operand’s <strong>getitem</strong>() method.
+If multiple items are specified, returns a tuple of lookup values. For example:
+• After f = itemgetter(2), the call f&reg; returns r[2].
+• After g = itemgetter(2, 5, 3), the call g&reg; returns (r[2], r[5], r[3]).</p>
+
+<p>实现源代码（类似）：</p>
+
+<pre><code class="language-python">def itemgetter(*items):
+    if len(items) == 1:
+        item = items[0]
+        def g(obj):
+            return obj[item]
+    else:
+        def g(obj):
+          return tuple(obj[item] for item in items)
+    return g
+</code></pre>
+
+<p><strong>items 可接受任何hashable值，如list，tuple,strings</strong></p>
+
+<pre><code class="language-python">#　list
+&gt;&gt;&gt; itemgetter(1)('ABCDEFG')
+'B'
+&gt;&gt;&gt; itemgetter(1,3,5)('ABCDEFG')
+
+('B', 'D', 'F')
+&gt;&gt;&gt; itemgetter(slice(2,None))('ABCDEFG')
+'CDEFG
+
+#　dic
+&gt;&gt;&gt; soldier = dict(rank='captain', name='dotterbart')
+&gt;&gt;&gt; itemgetter('rank')(soldier)
+'captain'
+</code></pre>
+
+<pre><code class="language-python">&gt;&gt;&gt; inventory = [('apple', 3), ('banana', 2), ('pear', 5), ('orange', 1)]
+&gt;&gt;&gt; getcount = itemgetter(1)
+&gt;&gt;&gt; list(map(getcount, inventory))
+[3, 2, 5, 1]
+&gt;&gt;&gt; sorted(inventory, key=getcount)
+[('orange', 1), ('banana', 2), ('apple', 3), ('pear', 5)]
+</code></pre>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">buyunhui</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/python/">python</a>
+          
+          <a href="/tags/python%E8%AF%AD%E6%B3%95/">python语法</a>
+          
+          <a href="/tags/python%E8%BF%9B%E9%98%B6/">python进阶</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/python-sort/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python sort记录</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/python%E7%B1%BB1/">
+            <span class="next-text nav-default">python 类</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>

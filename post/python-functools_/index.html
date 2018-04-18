@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python functools详解 - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="buyunhui" />
+  <meta name="description" content="functools — 高阶函数 functools.cmp_to_key(func) 它是一个key函数，可提供给sorted(), min(), max(), heapq.nlargest(), heapq.nsmallest(), itertools.groupby().等函数使用 eg:sorted(iterable, key=cmp_to_key(locale.strcoll)) # locale-aware sort order @functools.lru_cache(maxsize=128, typed=False) 装饰器" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/python-functools_/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python functools详解" />
+<meta property="og:description" content="functools — 高阶函数 functools.cmp_to_key(func) 它是一个key函数，可提供给sorted(), min(), max(), heapq.nlargest(), heapq.nsmallest(), itertools.groupby().等函数使用 eg:sorted(iterable, key=cmp_to_key(locale.strcoll)) # locale-aware sort order @functools.lru_cache(maxsize=128, typed=False) 装饰器" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python-functools_/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="python functools详解">
+<meta itemprop="description" content="functools — 高阶函数 functools.cmp_to_key(func) 它是一个key函数，可提供给sorted(), min(), max(), heapq.nlargest(), heapq.nsmallest(), itertools.groupby().等函数使用 eg:sorted(iterable, key=cmp_to_key(locale.strcoll)) # locale-aware sort order @functools.lru_cache(maxsize=128, typed=False) 装饰器">
+
+
+<meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="wordCount" content="3252">
+
+
+
+<meta itemprop="keywords" content="python,python语法,python进阶," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python functools详解"/>
+<meta name="twitter:description" content="functools — 高阶函数 functools.cmp_to_key(func) 它是一个key函数，可提供给sorted(), min(), max(), heapq.nlargest(), heapq.nsmallest(), itertools.groupby().等函数使用 eg:sorted(iterable, key=cmp_to_key(locale.strcoll)) # locale-aware sort order @functools.lru_cache(maxsize=128, typed=False) 装饰器"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">python functools详解</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/python/"> python </a>
+            
+              <a href="/categories/python%E8%AF%AD%E6%B3%95/"> python语法 </a>
+            
+              <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
+            
+          </div>
+        <span class="more-meta"> 约 3252 字 </span>
+        <span class="more-meta"> 预计阅读 7 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#center-functools-高阶函数"><center>functools — 高阶函数</a>
+<ul>
+<li><a href="#functools-cmp-to-key-func">functools.cmp_to_key(func)</a></li>
+<li><a href="#functools-lru-cache-maxsize-128-typed-false">@functools.lru_cache(maxsize=128, typed=False)</a></li>
+<li><a href="#functools-total-ordering">@functools.total_ordering</a></li>
+<li><a href="#functools-partial-func-args-keywords">**functools.partial(func, *args, <strong>keywords)</strong></a></li>
+<li><a href="#class-functools-partialmethod-func-args-keywords">class functools.partialmethod(func, *args, **keywords)</a></li>
+<li><a href="#functools-reduce-function-iterable-initializer">functools.reduce(function, iterable[, initializer ])</a></li>
+<li><a href="#functools-singledispatch">@functools.singledispatch</a></li>
+<li><a href="#functools-update-wrapper-wrapper-wrapped-assigned-wrapper-assignments-updated-wrapper-updates">functools.update_wrapper(wrapper, wrapped, assigned=WRAPPER_ASSIGNMENTS, updated=WRAPPER_UPDATES)</a></li>
+<li><a href="#functools-wraps-wrapped-assigned-wrapper-assignments-updated-wrapper-updates">@functools.wraps(wrapped, assigned=WRAPPER_ASSIGNMENTS, updated=WRAPPER_UPDATES)</a></li>
+</ul></li>
+<li><a href="#partial对象">partial对象</a>
+<ul>
+<li><a href="#partial-func">partial.func</a></li>
+<li><a href="#partial-args">partial.args</a></li>
+<li><a href="#partial-keywords">partial.keywords</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="center-functools-高阶函数"><center>functools — 高阶函数</h2>
+
+<h3 id="functools-cmp-to-key-func">functools.cmp_to_key(func)</h3>
+
+<p>它是一个key函数，可提供给sorted(), min(), max(), heapq.nlargest(), heapq.nsmallest(), itertools.groupby().等函数使用</p>
+
+<pre><code class="language-python">eg:sorted(iterable, key=cmp_to_key(locale.strcoll)) # locale-aware sort order
+</code></pre>
+
+<h3 id="functools-lru-cache-maxsize-128-typed-false">@functools.lru_cache(maxsize=128, typed=False)</h3>
+
+<p>装饰器用一个有记忆的调用包装一个函数，它可以保存最近maxsize次调用。当使用同样的参数定期调用费时或I/O绑定的函数时，它可以节省时间。</p>
+
+<p>因为使用字典缓存结果，所以函数的位置和关键字参数必须是hashable。</p>
+
+<p>如果maxsize设置为None，则禁用LRU功能，并且缓存可以无限增长。当maxsize设置为<img src="https://latex.codecogs.com/gif.latex?2^n"/>时，性能最佳。</p>
+
+<p>如果typed设置为真，则不同类型的函数参数会分别缓存。例如，f(3)和f(3.0)将视为不同结果的不同调用。</p>
+
+<p>为了帮助测量缓存的有效性并调整maxsize参数，包装函数使用cache_info()函数返回一个命名元组，包括hits，misses，maxsize和currsize。在多线程环境中，hits和misses是近似值。</p>
+
+<p>装饰器还提供了cache_clear()函数用于清除缓存，或者让缓存失效。</p>
+
+<p>原始的底层函数通过wrapped属性访问。这对于内省，绕过缓存，或者重新装饰函数很有用。</p>
+
+<p>当最近调用是即将调用的最佳调用因子时（例如，新闻服务器上的最受欢迎文章常常每天改变），LRU（least recently used）缓存效果最好。缓存的大小限制确保缓存不会在长时间运行的进程（如web服务器）上不受限制的增长</p>
+
+<pre><code class="language-python">@lru_cache(maxsize=None)
+def fib(n):
+    if n &lt; 2:
+        return n
+    return fib(n-1) + fib(n-2)
+  
+&gt;&gt;&gt; [fib(n) for n in range(16)]
+[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610]
+  
+&gt;&gt;&gt; fib.cache_info()
+CacheInfo(hits=28, misses=16, maxsize=None, currsize=16)
+  
+</code></pre>
+
+<h3 id="functools-total-ordering">@functools.total_ordering</h3>
+
+<p>给定的一个类定义了一个或多个富比较方法，该类装饰器提供剩下的。这简化了指定所有富比较操作的工作量。</p>
+
+<p>类必须定义<strong>lt</strong>()，<strong>le</strong>()，<strong>gt</strong>()或<strong>ge</strong>()的其中一个。此外，类应该提供一个<strong>eq</strong>()方法。</p>
+
+<pre><code class="language-python">@total_ordering
+class Student:
+    def _is_valid_operand(self, other):
+        return (hasattr(other, 'lastname') and
+                hasattr(other, 'firstname'))
+    def __eq__(self, other):
+        if not self._is_valid_operand(other):
+            return NotImplemented
+        return ((self.lastname.lower(), self.firstname.lower()) ==
+                (other.lastname.lowher(), other.firstname.lower()))
+    def __lt__(self, other):
+        if not self._is_valid_operand(other):
+            return NotImplemented
+        return ((self.lastname.lower(), self.firstname.lower()) &lt;
+                (other.lastname.lower(), other.firstname.lower()))
+</code></pre>
+
+<p><strong>注意：虽然该装饰器能很容易的创建行为良好的完全有序类型，但会导致衍生出的比较函数执行的更慢，以及更复杂的堆栈跟踪。如果性能基准测试表明这是程序的瓶颈，则实现所有六个富比较函数可能会是提高速度的方式</strong></p>
+
+<h3 id="functools-partial-func-args-keywords">**functools.partial(func, *args, <strong>keywords)</strong></h3>
+
+<p>返回一个新的partial对象，该对象被调用时，类似使用位置参数args和关键字参数keywords调用func。如果调用时提供了更多参数，它们会被添加到args。如果提供了额外的关键字参数，它们会扩展和覆盖keywords。大致等价于：</p>
+
+<pre><code class="language-python">def partial(func, *args, **keywords):
+    def newfunc(*fargs, **fkeywords):
+        newkeywords = keywords.copy()
+        newkeywords.update(fkeywords)
+        return func(*args, *fargs, **newkeywords)
+    newfunc.func = func
+    newfunc.args = args
+    newfunc.keywords = keywords
+    return newfunc
+  
+partial()用于冻结函数的某些参数和/或关键字参数，生成一个简化的签名对象。例如，用于创建一个类似int()函数的可调用对象，其中base参数默认为2：
+eg:
+&gt;&gt;&gt; from functools import partial
+&gt;&gt;&gt; basetwo = partial(int, base=2)
+&gt;&gt;&gt; basetwo.__doc__ = 'Convert base 2 string to an int.'
+&gt;&gt;&gt; basetwo('10010')
+18
+</code></pre>
+
+<h3 id="class-functools-partialmethod-func-args-keywords">class functools.partialmethod(func, *args, **keywords)</h3>
+
+<p>返回一个行为类似partial的新partialmethod描述符，除了它是用于方法定义，而不是直接调用。
+  func必须是一个descriptor或者可调用对象（两个对象都像常规函数一样作为descriptor）。
+  当func是一个descriptor(比如普遍的Python函数，classmethod()，staticmethod()，abstractmethod()，或者其
+partialmethod实例时，get的调用会委托给底层的descriptor，并返回一个适当的partial对象。
+  当func不是可调用的descriptor时，会动态创建一个适当的绑定方法。用于方法时，该行为类似普通的Python函数：self参数会插
+入为第一个位置参数，甚至在传递给partialmethod构造器的args和keywords之前。</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; class Cell(object):
+...     def __init__(self):
+...         self._alive = False
+...     @property
+...     def alive(self):
+...         return self._alive
+...     def set_state(self, state):
+...         self._alive = bool(state)
+...     set_alive = partialmethod(set_state, True)
+...     set_dead = partialmethod(set_state, False)
+...
+&gt;&gt;&gt; c = Cell()
+&gt;&gt;&gt; c.alive
+False
+&gt;&gt;&gt; c.set_alive()
+&gt;&gt;&gt; c.alive
+True
+</code></pre>
+
+<h3 id="functools-reduce-function-iterable-initializer">functools.reduce(function, iterable[, initializer ])</h3>
+
+<p>将两个参数的function从左至右依次作用于序列中的项，减少序列为单个值。例如，reduce(lambda x, y: x+y, [1, 2, 3, 4, 5])会计算((((1+2)+3)+4)+5)。左边的参数x是计算出的值，右边的参数y是从序列中更新的值。如果提供了可选参数initializer，在计算中，它会放在序列项之前，当序列为空时，提供一个默认值。如果没指定initializer，并且序列只有包含一项，会返回第一项。</p>
+
+<pre><code class="language-python">def reduce(function, iterable, initializer=None):
+    it = iter(iterable)
+    if initializer is None:
+        value = next(it)
+    else:
+        value = initializer
+    for element in it:
+        value = function(value, element)
+    return value
+</code></pre>
+
+<h3 id="functools-singledispatch">@functools.singledispatch</h3>
+
+<p>它是是一个key函数，可提供给sorted(), min(), max(), heapq.nlargest(), heapq.nsmallest(), itertools.groupby().等函数使用</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; from functools import singledispatch
+&gt;&gt;&gt; @singledispatch
+... def fun(arg, verbose=False):
+...     if verbose:
+...         print('Let me juset say,', end=' ')
+...     print(arg)
+  
+使用generic函数的register()属性添加函数的重载实现。这是一个装饰器，接受一个类型参数，并装饰实现该类型操作的函数：
+  
+&gt;&gt;&gt; @fun.register(int)
+... def _(arg, verbose=False):
+...    if verbose:
+...        print('Strength in numbers, eh?', end=' ')
+...    print(arg)
+...
+&gt;&gt;&gt; @fun.register(list)
+... def _(arg, verbose=False):
+...     if verbose:
+...         print('Enumerate this:')
+...     for i, elem in enumerate(arg):
+...         print(i, elem)
+  
+为了能够注册lambda表达式和预先存在的函数，register()可以用于函数形式：
+&gt;&gt;&gt; def nothing(arg, verbose=False):
+...     print('Nothing.')
+...
+&gt;&gt;&gt; fun.register(type(None), nothind)
+  
+register()属性返回未装饰的函数，可以使用装饰堆叠，pickling，以及为每个变体单独创建单元测试：
+&gt;&gt;&gt; @fun.register(float)
+... @fun.register(Decimal)
+... def fun_num(arg, verbose=False):
+...     if verbose:
+...         print('Half of your number:', end=' ')
+...     print(arg / 2)
+...
+&gt;&gt;&gt; fun_num is fun
+False
+  
+调用时，generic函数根据第一个参数的类型dispatch：
+&gt;&gt;&gt; fun('Hello World.')
+Hello World.
+&gt;&gt;&gt; fun('test.', verbose=True)
+Let me just say, test.
+&gt;&gt;&gt; fun(42, verbose=True)
+Strength in numbers, eh? 42
+&gt;&gt;&gt; fun(['spam', 'spam', 'eggs', 'spam'], verbose=True)
+Enumerate this:
+0 spam
+1 spam
+2 eggs
+3 spam
+&gt;&gt;&gt; fun(None)
+Nothing.
+&gt;&gt;&gt; fun(1.23)
+0.615
+  
+当没有注册特定类型的实现时，其方法解析顺序用于查找更通用的实现。用@singledispatch装饰的原始函数是为object类型注册的，如果没有找到更好的实现，则使用它。
+  
+使用dispatch()属性查看generic函数为指定类型选择哪个实现：
+&gt;&gt;&gt; fun.dispatch(float)
+&lt;function fun_num at 0x1035a2840&gt;
+&gt;&gt;&gt; fun.dispatch(dict)
+&lt;function fun at 0x103fe0000&gt;
+  
+使用只读属性registry访问所有注册的实现：
+&gt;&gt;&gt; fun.registry.keys()
+dict_keys([&lt;class 'NoneType'&gt;, &lt;class 'int'&gt;, &lt;class 'object'&gt;,
+          &lt;class 'decimal.Decimal'&gt;, &lt;class 'list'&gt;,
+          &lt;class 'float'&gt;])
+&gt;&gt;&gt; fun.registry[float]
+&lt;function fun_num at 0x1035a2840&gt;
+&gt;&gt;&gt; fun.registry[object]
+&lt;function fun at 0x103fe0000&gt;
+  
+  
+</code></pre>
+
+<h3 id="functools-update-wrapper-wrapper-wrapped-assigned-wrapper-assignments-updated-wrapper-updates">functools.update_wrapper(wrapper, wrapped, assigned=WRAPPER_ASSIGNMENTS, updated=WRAPPER_UPDATES)</h3>
+
+<p>更新一个wrapper函数，让它看起来像一个wrapped函数。可选参数是元组，用来指定原函数的哪些属性直接分配给wrapper函数的匹配属性，wrapper函数的哪些属性从原函数的相应属性更新。这些参数的默认值是模块级别的常量WRAPPER_ASSIGNMENTS（分配wrapper函数的<strong>module</strong>，<strong>name</strong>，<strong>qualname</strong>，<strong>annotations</strong>和文档字符串<strong>doc</strong>）和WRAPPER_UPDATES（哪些更新wrapper函数的<strong>dict</strong>，比如实例的字典）。</p>
+
+<p>为了内省和其它目的（比如绕过缓存装饰器lru_cache()）允许访问原始函数，该函数自动在wrapper函数添加一个<strong>wrapped</strong>属性，应用wrapped函数。</p>
+
+<p>该函数的主要用途是，在装饰器函数中包装被装饰的函数，并返回wrapper。如果wrapper函数没有更新，返回函数的元数据将反射wrapper的定义，而不是原始函数的定义，原始函数的定义通常没有意义。</p>
+
+<p>除了函数，update_wrapper()可以与其它可调用对象一起使用。出现在assigned或updated参数中，而不在被包装对象中的任何属性都会被忽略（比如，该函数不会试图在wrapper函数中设置它们）。如果wrapper函数本身缺少updated中的属性，仍然会抛出AttributeError。</p>
+
+<h3 id="functools-wraps-wrapped-assigned-wrapper-assignments-updated-wrapper-updates">@functools.wraps(wrapped, assigned=WRAPPER_ASSIGNMENTS, updated=WRAPPER_UPDATES)</h3>
+
+<p>这是一个便捷函数，定义一个wrapper函数时，作为函数装饰器调用update_wrapper()。它等价于partial(update_wrapper, wrapped=wrapped, assigned=assigned, updated=updated)。例如：</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; from functools import wraps
+&gt;&gt;&gt; def my_decorator(f):
+... @wraps(f)
+... def wrapper(*args, **kwds):
+... print('Calling decorated function')
+... return f(*args, **kwds)
+... return wrapper
+...
+&gt;&gt;&gt; @my_decorator
+... def example():
+... &quot;&quot;&quot;Docstring&quot;&quot;&quot;
+... print('Called example function')
+...
+&gt;&gt;&gt; example()
+Calling decorated function
+Called example function
+&gt;&gt;&gt; example.__name__
+'example'
+&gt;&gt;&gt; example.__doc__
+'Docstring'
+</code></pre>
+
+<h2 id="partial对象">partial对象</h2>
+
+<p>partial()创建可调用的partial对象。它们有三个只读属性：</p>
+
+<h3 id="partial-func">partial.func</h3>
+
+<p>一个可调用的对象或函数。调用partial对象会转为使用新的参数和关键字参数调用func。</p>
+
+<h3 id="partial-args">partial.args</h3>
+
+<p>最左边的位置参数会优先作为位置参数提供给partial对象调用。</p>
+
+<h3 id="partial-keywords">partial.keywords</h3>
+
+<p>partial对象被调用时提供关键字参数。</p>
+
+<p>partial对象与函数对象类似，它们可以被调用，有弱引用，并且可以有属性。但有一些重要的区别。对于实例，<strong>name</strong>和<strong>doc</strong>属性不会自动创建。同时，在类中定义的partial对象的行为类似静态方法，在实例属性查找时，不会转换为绑定方法。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">buyunhui</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/python/">python</a>
+          
+          <a href="/tags/python%E8%AF%AD%E6%B3%95/">python语法</a>
+          
+          <a href="/tags/python%E8%BF%9B%E9%98%B6/">python进阶</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/python-decorate/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python decorate</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/python-itertools/">
+            <span class="next-text nav-default">python itertools详解</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>

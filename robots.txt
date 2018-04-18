@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://buyunhui.github.io/sitemap.xml

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python itertools详解 - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="buyunhui" />
+  <meta name="description" content="itertools api: Itertool functions itertools.accumulate(iterable[, func ]) def accumulate(iterable, func=operator.add): &#39;Return running totals&#39; # accumulate([1,2,3,4,5]) --&amp;gt; 1 3 6 10 15 # accumulate([1,2,3,4,5], operator.mul) --&amp;gt; 1 2 6 24 120 it = iter(iterable) try: total = next(it) except StopIteration: return yield total for element in it: total = func(total, element) yield total eg: &amp;gt;&amp;gt;&amp;gt; data = [3, 4, 6, 2, 1, 9, 0, 7, 5, 8] &amp;gt;&amp;gt;&amp;gt; list(accumulate(data, operator.mul)) #" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/python-itertools/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python itertools详解" />
+<meta property="og:description" content="itertools api: Itertool functions itertools.accumulate(iterable[, func ]) def accumulate(iterable, func=operator.add): &#39;Return running totals&#39; # accumulate([1,2,3,4,5]) --&gt; 1 3 6 10 15 # accumulate([1,2,3,4,5], operator.mul) --&gt; 1 2 6 24 120 it = iter(iterable) try: total = next(it) except StopIteration: return yield total for element in it: total = func(total, element) yield total eg: &gt;&gt;&gt; data = [3, 4, 6, 2, 1, 9, 0, 7, 5, 8] &gt;&gt;&gt; list(accumulate(data, operator.mul)) #" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python-itertools/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="python itertools详解">
+<meta itemprop="description" content="itertools api: Itertool functions itertools.accumulate(iterable[, func ]) def accumulate(iterable, func=operator.add): &#39;Return running totals&#39; # accumulate([1,2,3,4,5]) --&gt; 1 3 6 10 15 # accumulate([1,2,3,4,5], operator.mul) --&gt; 1 2 6 24 120 it = iter(iterable) try: total = next(it) except StopIteration: return yield total for element in it: total = func(total, element) yield total eg: &gt;&gt;&gt; data = [3, 4, 6, 2, 1, 9, 0, 7, 5, 8] &gt;&gt;&gt; list(accumulate(data, operator.mul)) #">
+
+
+<meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="wordCount" content="1602">
+
+
+
+<meta itemprop="keywords" content="python,python语法,python进阶," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python itertools详解"/>
+<meta name="twitter:description" content="itertools api: Itertool functions itertools.accumulate(iterable[, func ]) def accumulate(iterable, func=operator.add): &#39;Return running totals&#39; # accumulate([1,2,3,4,5]) --&gt; 1 3 6 10 15 # accumulate([1,2,3,4,5], operator.mul) --&gt; 1 2 6 24 120 it = iter(iterable) try: total = next(it) except StopIteration: return yield total for element in it: total = func(total, element) yield total eg: &gt;&gt;&gt; data = [3, 4, 6, 2, 1, 9, 0, 7, 5, 8] &gt;&gt;&gt; list(accumulate(data, operator.mul)) #"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">python itertools详解</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/python/"> python </a>
+            
+              <a href="/categories/python%E8%AF%AD%E6%B3%95/"> python语法 </a>
+            
+              <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
+            
+          </div>
+        <span class="more-meta"> 约 1602 字 </span>
+        <span class="more-meta"> 预计阅读 4 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#itertools">itertools</a>
+<ul>
+<li><a href="#api">api:</a></li>
+<li><a href="#itertool-functions">Itertool functions</a>
+<ul>
+<li><a href="#itertools-accumulate-iterable-func">itertools.accumulate(iterable[, func ])</a></li>
+<li><a href="#itertools-chain-连接多个列表或者迭代器">itertools.chain 连接多个列表或者迭代器</a></li>
+<li><a href="#itertools-combinations-求列表或生成器中指定数目的元素不重复的所有组合">itertools.combinations 求列表或生成器中指定数目的元素不重复的所有组合</a></li>
+<li><a href="#itertools-combinations-with-replacement-iterable-r-允许重复元素的组合">itertools.combinations_with_replacement(iterable, r) 允许重复元素的组合</a></li>
+<li><a href="#itertools-compress-data-selectors-按照真值表筛选元素">itertools.compress(data, selectors) 按照真值表筛选元素</a></li>
+<li><a href="#itertools-count-start-0-step-1">itertools.count(start=0, step=1)</a></li>
+<li><a href="#itertools-cycle-iterable-循环指定的列表和迭代器">itertools.cycle(iterable) 循环指定的列表和迭代器</a></li>
+<li><a href="#itertools-dropwhile-predicate-iterable-根据真值表舍弃第一个不满足条件前面的值">itertools.dropwhile(predicate, iterable) 根据真值表舍弃第一个不满足条件前面的值</a></li>
+<li><a href="#itertools-filterfalse-保留对应真值为false的元素">itertools.filterfalse 保留对应真值为False的元素</a></li>
+<li><a href="#itertools-groupby-iterable-key-none-按照分组函数的值对元素进行分组">itertools.groupby(iterable, key=None) 按照分组函数的值对元素进行分组</a></li>
+<li><a href="#itertools-islice-iterable-stop">itertools.islice(iterable, stop)</a></li>
+<li><a href="#itertools-islice-iterable-start-stop-step">itertools.islice(iterable, start, stop[, step ])</a></li>
+<li><a href="#itertools-permutations-iterable-r-none-输出输入序列的全排列">itertools.permutations(iterable, r=None),输出输入序列的全排列</a></li>
+<li><a href="#the-number-of-items-returned-is-n-n-r-when-0-r-n-or-zero-when-r-n">The number of items returned is n! / (n-r)! when 0 &lt;= r &lt;= n or zero when r &gt; n.</a></li>
+<li><a href="#根据序列位置进行全排列-而不是值-所以如果输入序列有重复值-输出亦会有"><strong>根据序列位置进行全排列，而不是值，所以如果输入序列有重复值，输出亦会有</strong></a></li>
+<li><a href="#itertools-product-iterables-repeat-1-cartesian-product-of-input-iterables">itertools.product(*iterables, repeat=1) Cartesian product of input iterables.</a></li>
+<li><a href="#product-a-b-returns-the-same-as-x-y-for-x-in-a-for-y-in-b">product(A, B) returns the same as ((x,y) for x in A for y in B)</a></li>
+<li><a href="#itertools-repeat-object-times">itertools.repeat(object[, times ])</a></li>
+<li><a href="#itertools-starmap-function-iterable">itertools.starmap(function, iterable)</a></li>
+<li><a href="#map-and-starmap-的区别类似于function-a-b-and-function-c">map() and starmap()的区别类似于function(a,b) and function(*c).</a></li>
+<li><a href="#itertools-takewhile-predicate-iterable-保留序列元素直到条件不满足">itertools.takewhile(predicate, iterable) 保留序列元素直到条件不满足</a></li>
+<li><a href="#itertools-tee-iterable-n-2">itertools.tee(iterable, n=2)</a></li>
+<li><a href="#一旦迭代器被tee-函数分割-就不要再次使用-list-其实更快">一旦迭代器被tee()函数分割，就不要再次使用；list（）其实更快</a></li>
+<li><a href="#itertools-zip-longest-iterables-fillvalue-none">itertools.zip_longest(*iterables, fillvalue=None)</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="itertools">itertools</h2>
+
+<h3 id="api">api:</h3>
+
+<p><img src="https://i.imgur.com/kVc4SVm.png" alt="iter1" />
+<img src="https://i.imgur.com/FLPdFvP.png" alt="Combinatoric" /></p>
+
+<h3 id="itertool-functions">Itertool functions</h3>
+
+<h4 id="itertools-accumulate-iterable-func">itertools.accumulate(iterable[, func ])</h4>
+
+<pre><code class="language-python">def accumulate(iterable, func=operator.add):
+    'Return running totals'
+    # accumulate([1,2,3,4,5]) --&gt; 1 3 6 10 15
+    # accumulate([1,2,3,4,5], operator.mul) --&gt; 1 2 6 24 120
+    it = iter(iterable)
+    try:
+        total = next(it)
+    except StopIteration:
+        return
+    yield total
+    for element in it:
+        total = func(total, element)
+        yield total
+
+
+eg:
+&gt;&gt;&gt; data = [3, 4, 6, 2, 1, 9, 0, 7, 5, 8]
+&gt;&gt;&gt; list(accumulate(data, operator.mul)) # running product
+[3, 12, 72, 144, 144, 1296, 0, 0, 0, 0]
+&gt;&gt;&gt; list(accumulate(data, max)) # running maximum
+[3, 4, 6, 6, 6, 9, 9, 9, 9, 9]
+# Amortize a 5% loan of 1000 with 4 annual payments of 90
+&gt;&gt;&gt; cashflows = [1000, -90, -90, -90, -90]
+&gt;&gt;&gt; list(accumulate(cashflows, lambda bal, pmt: bal*1.05 + pmt))
+[1000, 960.0, 918.0, 873.9000000000001, 827.5950000000001]
+</code></pre>
+
+<h4 id="itertools-chain-连接多个列表或者迭代器">itertools.chain 连接多个列表或者迭代器</h4>
+
+<pre><code class="language-python">&gt;&gt;&gt; x = itertools.chain(range(3), range(4), [3,2,1])
+&gt;&gt;&gt; print(list(x))
+[0, 1, 2, 0, 1, 2, 3, 3, 2, 1]
+</code></pre>
+
+<h4 id="itertools-combinations-求列表或生成器中指定数目的元素不重复的所有组合">itertools.combinations 求列表或生成器中指定数目的元素不重复的所有组合</h4>
+
+<pre><code class="language-python">源码：
+def combinations(iterable, r):
+    # combinations('ABCD', 2) --&gt; AB AC AD BC BD CD
+    # combinations(range(4), 3) --&gt; 012 013 023 123
+    pool = tuple(iterable)
+    n = len(pool)
+    if r &gt; n:
+        return
+    indices = list(range(r))
+    yield tuple(pool[i] for i in indices)
+    while True:
+        for i in reversed(range(r)):
+            if indices[i] != i + n - r:
+                break
+        else:
+            return
+        indices[i] += 1
+        for j in range(i+1, r):
+            indices[j] = indices[j-1] + 1
+        yield tuple(pool[i] for i in indices)
+
+def combinations(iterable, r):
+    pool = tuple(iterable)
+    n = len(pool)
+    for indices in permutations(range(n), r):
+        if sorted(indices) == list(indices):
+            yield tuple(pool[i] for i in indices)
+
+&gt;&gt;&gt; x = itertools.combinations(range(4), 3)
+&gt;&gt;&gt; print(list(x))
+[(0, 1, 2), (0, 1, 3), (0, 2, 3), (1, 2, 3)]
+</code></pre>
+
+<h4 id="itertools-combinations-with-replacement-iterable-r-允许重复元素的组合">itertools.combinations_with_replacement(iterable, r) 允许重复元素的组合</h4>
+
+<pre><code class="language-python">&gt;&gt;&gt; x = itertools.combinations_with_replacement('ABC', 2)
+&gt;&gt;&gt; print(list(x))
+[('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')]
+</code></pre>
+
+<h4 id="itertools-compress-data-selectors-按照真值表筛选元素">itertools.compress(data, selectors) 按照真值表筛选元素</h4>
+
+<pre><code class="language-python">def compress(data, selectors):
+    # compress('ABCDEF', [1,0,1,0,1,1]) --&gt; A C E F
+    return (d for d, s in zip(data, selectors) if s)
+
+&gt;&gt;&gt; list(itertools.compress(s,[1,0,1,0,1,1]))
+['a', 'c', 'e', 'f']
+</code></pre>
+
+<h4 id="itertools-count-start-0-step-1">itertools.count(start=0, step=1)</h4>
+
+<pre><code class="language-python">def count(start=0, step=1):
+    # count(10) --&gt; 10 11 12 13 14 ...
+    # count(2.5, 0.5) -&gt; 2.5 3.0 3.5 ...
+    n = start
+    while True:
+        yield n
+        n += step
+&gt;&gt;&gt; x = itertools.count(start=20, step=-1)
+&gt;&gt;&gt; print(list(itertools.islice(x, 0, 10, 1)))
+[20, 19, 18, 17, 16, 15, 14, 13, 12, 11]
+</code></pre>
+
+<h4 id="itertools-cycle-iterable-循环指定的列表和迭代器">itertools.cycle(iterable) 循环指定的列表和迭代器</h4>
+
+<pre><code class="language-python">def cycle(iterable):
+    # cycle('ABCD') --&gt; A B C D A B C D A B C D ...
+    saved = []
+    for element in iterable:
+        yield element
+        saved.append(element)
+    while saved:
+        for element in saved:
+            yield element
+
+&gt;&gt;&gt; x = itertools.cycle('ABC')
+&gt;&gt;&gt; print(list(itertools.islice(x, 0, 10, 1)))
+['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C', 'A']
+</code></pre>
+
+<h4 id="itertools-dropwhile-predicate-iterable-根据真值表舍弃第一个不满足条件前面的值">itertools.dropwhile(predicate, iterable) 根据真值表舍弃第一个不满足条件前面的值</h4>
+
+<pre><code class="language-python">def dropwhile(predicate, iterable):
+    # dropwhile(lambda x: x&lt;5, [1,4,6,4,1]) --&gt; 6 4 1
+    iterable = iter(iterable)
+    for x in iterable:
+        if not predicate(x):
+            yield x
+            break
+    for x in iterable:
+        yield x
+
+&gt;&gt;&gt; x = itertools.dropwhile(lambda e: e &lt; 5, range(10))
+&gt;&gt;&gt; print(list(x))
+[5, 6, 7, 8, 9]
+</code></pre>
+
+<h4 id="itertools-filterfalse-保留对应真值为false的元素">itertools.filterfalse 保留对应真值为False的元素</h4>
+
+<pre><code class="language-python">def filterfalse(predicate, iterable):
+    # filterfalse(lambda x: x%2, range(10)) --&gt; 0 2 4 6 8
+    if predicate is None:
+        predicate = bool
+    for x in iterable:
+        if not predicate(x):
+            yield x
+
+&gt;&gt;&gt; x = itertools.filterfalse(lambda e: e &lt; 5, (1, 5, 3, 6, 9, 4))
+&gt;&gt;&gt; print(list(x))
+[5, 6, 9]
+</code></pre>
+
+<h4 id="itertools-groupby-iterable-key-none-按照分组函数的值对元素进行分组">itertools.groupby(iterable, key=None) 按照分组函数的值对元素进行分组</h4>
+
+<pre><code class="language-python">
+class groupby:
+    # [k for k, g in groupby('AAAABBBCCDAABBB')] --&gt; A B C D A B
+    # [list(g) for k, g in groupby('AAAABBBCCD')] --&gt; AAAA BBB CC D
+    def __init__(self, iterable, key=None):
+        if key is None:
+            key = lambda x: x
+        self.keyfunc = key
+        self.it = iter(iterable)
+        self.tgtkey = self.currkey = self.currvalue = object()
+    def __iter__(self):
+        return self
+    def __next__(self):
+        self.id = object()
+        while self.currkey == self.tgtkey:
+            self.currvalue = next(self.it) # Exit on StopIteration
+            self.currkey = self.keyfunc(self.currvalue)
+        self.tgtkey = self.currkey
+    return (self.currkey, self._grouper(self.tgtkey, self.id))
+    def _grouper(self, tgtkey, id):
+        while self.id is id and self.currkey == tgtkey:
+            yield self.currvalue
+            try:
+                self.currvalue = next(self.it)
+            except StopIteration:
+                return
+            self.currkey = self.keyfunc(self.currvalue)
+
+&gt;&gt;&gt; x = itertools.groupby(range(10), lambda x: x &lt; 5 or x &gt; 8)
+&gt;&gt;&gt; for condition, numbers in x:
+    print(condition, list(numbers))
+True [0, 1, 2, 3, 4]
+False [5, 6, 7, 8]
+True [9]
+</code></pre>
+
+<h4 id="itertools-islice-iterable-stop">itertools.islice(iterable, stop)</h4>
+
+<h4 id="itertools-islice-iterable-start-stop-step">itertools.islice(iterable, start, stop[, step ])</h4>
+
+<pre><code class="language-python">def islice(iterable, *args):
+    # islice('ABCDEFG', 2) --&gt; A B
+    # islice('ABCDEFG', 2, 4) --&gt; C D
+
+    # islice('ABCDEFG', 2, None) --&gt; C D E F G
+    # islice('ABCDEFG', 0, None, 2) --&gt; A C E G
+    s = slice(*args)
+    it = iter(range(s.start or 0, s.stop or sys.maxsize, s.step or 1))
+    try:
+        nexti = next(it)
+    except StopIteration:
+        return
+    for i, element in enumerate(iterable):
+        if i == nexti:
+            yield element
+            nexti = next(it)
+
+&gt;&gt;&gt; x = itertools.islice(range(10), 0, 9, 2)
+&gt;list(x)
+&gt;[0, 2, 4, 6, 8]
+</code></pre>
+
+<h4 id="itertools-permutations-iterable-r-none-输出输入序列的全排列">itertools.permutations(iterable, r=None),输出输入序列的全排列</h4>
+
+<h4 id="the-number-of-items-returned-is-n-n-r-when-0-r-n-or-zero-when-r-n">The number of items returned is n! / (n-r)! when 0 &lt;= r &lt;= n or zero when r &gt; n.</h4>
+
+<h4 id="根据序列位置进行全排列-而不是值-所以如果输入序列有重复值-输出亦会有"><strong>根据序列位置进行全排列，而不是值，所以如果输入序列有重复值，输出亦会有</strong></h4>
+
+<pre><code class="language-python">源码模拟：
+def permutations(iterable, r=None):
+    # permutations('ABCD', 2) --&gt; AB AC AD BA BC BD CA CB CD DA DB DC
+    # permutations(range(3)) --&gt; 012 021 102 120 201 210
+    pool = tuple(iterable)
+    n = len(pool)
+    r = n if r is None else r
+    if r &gt; n:
+        return
+    indices = list(range(n))
+    cycles = list(range(n, n-r, -1))
+    yield tuple(pool[i] for i in indices[:r])
+    while n:
+        for i in reversed(range(r)):
+            cycles[i] -= 1
+            if cycles[i] == 0:
+                indices[i:] = indices[i+1:] + indices[i:i+1]
+                cycles[i] = n - i
+            else:
+                j = cycles[i]
+                indices[i], indices[-j] = indices[-j], indices[i]
+                yield tuple(pool[i] for i in indices[:r])
+                break
+    else:
+        return
+eg:
+&gt;&gt;&gt; import itertools as iters
+&gt;&gt;&gt; x = iters.permutations([0,1,2], 3)
+&gt;&gt;&gt; x
+&lt;itertools.permutations object at 0x0000018B993C40A0&gt;
+&gt;&gt;&gt; list(x)
+[(0, 1, 2), (0, 2, 1), (1, 0, 2), (1, 2, 0), (2, 0, 1), (2, 1, 0)]
+&gt;&gt;&gt;  x = iters.permutations([0,1,1], 3)
+&gt;&gt;&gt; x = iters.permutations([0,1,1], 3)
+&gt;&gt;&gt; list(x)
+[(0, 1, 1), (0, 1, 1), (1, 0, 1), (1, 1, 0), (1, 0, 1), (1, 1, 0)]
+</code></pre>
+
+<h4 id="itertools-product-iterables-repeat-1-cartesian-product-of-input-iterables">itertools.product(*iterables, repeat=1) Cartesian product of input iterables.</h4>
+
+<h4 id="product-a-b-returns-the-same-as-x-y-for-x-in-a-for-y-in-b">product(A, B) returns the same as ((x,y) for x in A for y in B)</h4>
+
+<pre><code class="language-python">def product(*args, repeat=1):
+    # product('ABCD', 'xy') --&gt; Ax Ay Bx By Cx Cy Dx Dy
+    # product(range(2), repeat=3) --&gt; 000 001 010 011 100 101 110 111
+    pools = [tuple(pool) for pool in args] * repeat
+    result = [[]]
+    for pool in pools:
+        result = [x+[y] for x in result for y in pool]
+    for prod in result:
+        yield tuple(prod)
+
+&gt;&gt;&gt; list(iters.product('ABC',repeat =1))
+[('A',), ('B',), ('C',)]
+&gt;&gt;&gt; list(iters.product('ABC',repeat =2))
+[('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'B'), ('B', 'C'), ('C', 'A'), ('C', 'B'), ('C', 'C')]
+
+</code></pre>
+
+<h4 id="itertools-repeat-object-times">itertools.repeat(object[, times ])</h4>
+
+<pre><code class="language-python">def repeat(object, times=None):
+    # repeat(10, 3) --&gt; 10 10 10
+    if times is None:
+    while True:
+        yield object
+    else:
+        for i in range(times):
+            yield object
+
+&gt;&gt;&gt; list(map(pow, range(10), repeat(2)))
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+</code></pre>
+
+<h4 id="itertools-starmap-function-iterable">itertools.starmap(function, iterable)</h4>
+
+<h4 id="map-and-starmap-的区别类似于function-a-b-and-function-c">map() and starmap()的区别类似于function(a,b) and function(*c).</h4>
+
+<pre><code class="language-python">def starmap(function, iterable):
+    # starmap(pow, [(2,5), (3,2), (10,3)]) --&gt; 32 9 1000
+    for args in iterable:
+        yield function(*args)
+
+&gt;&gt;&gt; x = itertools.starmap(str.islower, 'aBCDefGhI')
+&gt;&gt;&gt; print(list(x))
+[True, False, False, False, True, True, False, True, False]
+</code></pre>
+
+<h4 id="itertools-takewhile-predicate-iterable-保留序列元素直到条件不满足">itertools.takewhile(predicate, iterable) 保留序列元素直到条件不满足</h4>
+
+<pre><code class="language-python">
+def takewhile(predicate, iterable):
+    # takewhile(lambda x: x&lt;5, [1,4,6,4,1]) --&gt; 1 4
+    for x in iterable:
+        if predicate(x):
+            yield x
+        else:
+            break
+</code></pre>
+
+<h4 id="itertools-tee-iterable-n-2">itertools.tee(iterable, n=2)</h4>
+
+<h4 id="一旦迭代器被tee-函数分割-就不要再次使用-list-其实更快">一旦迭代器被tee()函数分割，就不要再次使用；list（）其实更快</h4>
+
+<pre><code class="language-python">def tee(iterable, n=2):
+    it = iter(iterable)
+    deques = [collections.deque() for i in range(n)]
+    def gen(mydeque):
+    while True:
+        if not mydeque: # when the local deque is empty
+            try:
+                newval = next(it) # fetch a new value and
+            except StopIteration:
+                return
+            for d in deques: # load it to all the deques
+                d.append(newval)
+        yield mydeque.popleft()
+    return tuple(gen(d) for d in deques)
+
+&gt;&gt;&gt; x = itertools.tee(range(10), 2)
+&gt;&gt;&gt; for letters in x:
+... print(list(letters))
+...
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+</code></pre>
+
+<h4 id="itertools-zip-longest-iterables-fillvalue-none">itertools.zip_longest(*iterables, fillvalue=None)</h4>
+
+<pre><code class="language-python">def zip_longest(*args, fillvalue=None):
+    # zip_longest('ABCD', 'xy', fillvalue='-') --&gt; Ax By C- Diterators
+    = [iter(it) for it in args]
+    num_active = len(iterators)
+    if not num_active:
+        return
+    while True:
+        values = []
+        for i, it in enumerate(iterators):
+                try:
+                    value = next(it)
+            except StopIteration:
+                    num_active -= 1
+                    if not num_active:
+                        return
+                    iterators[i] = repeat(fillvalue)
+                    value = fillvalue
+            values.append(value)
+        yield tuple(values)
+
+&gt;&gt;&gt; x = itertools.zip_longest(range(3), range(5))
+&gt;&gt;&gt; y = zip(range(3), range(5))
+&gt;&gt;&gt; print(list(x))
+[(0, 0), (1, 1), (2, 2), (None, 3), (None, 4)]
+&gt;&gt;&gt; print(list(y))
+[(0, 0), (1, 1), (2, 2)]
+
+</code></pre>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">buyunhui</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/python/">python</a>
+          
+          <a href="/tags/python%E8%AF%AD%E6%B3%95/">python语法</a>
+          
+          <a href="/tags/python%E8%BF%9B%E9%98%B6/">python进阶</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/python-functools_/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python functools详解</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/python-sort/">
+            <span class="next-text nav-default">python sort记录</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>

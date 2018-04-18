@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C&#43;&#43;编码规范 on 小灰灰的乱世奇谈</title>
+    <link>https://buyunhui.github.io/tags/c&#43;&#43;%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/</link>
+    <description>Recent content in C&#43;&#43;编码规范 on 小灰灰的乱世奇谈</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>suiyelian(卜云辉)</copyright>
+    <lastBuildDate>Sun, 15 Apr 2018 14:57:23 +0800</lastBuildDate>
+    
+	<atom:link href="https://buyunhui.github.io/tags/c++%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Exceptional C&#43;&#43;读书笔记一</title>
+      <link>https://buyunhui.github.io/post/c&#43;&#43;%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/c&#43;&#43;%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>c/c++读书系列(EffectiveC++中文版) 1.取值迭代器时，务必确保迭代器有效 有效的数值：避免*iter.end(),直接复位了。</description>
+    </item>
+    
+  </channel>
+</rss>

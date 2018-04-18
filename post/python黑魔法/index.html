@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python 黑魔法 - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="buyunhui" />
+  <meta name="description" content="python 黑魔法 1、上下文管理器 概述 在正常的管理各种系统资源(文件、锁定和连接)，在涉及到异常时通常是个棘手的问题。异常很可能导致控制流跳过负责释放" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/python%E9%BB%91%E9%AD%94%E6%B3%95/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python 黑魔法" />
+<meta property="og:description" content="python 黑魔法 1、上下文管理器 概述 在正常的管理各种系统资源(文件、锁定和连接)，在涉及到异常时通常是个棘手的问题。异常很可能导致控制流跳过负责释放" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python%E9%BB%91%E9%AD%94%E6%B3%95/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="python 黑魔法">
+<meta itemprop="description" content="python 黑魔法 1、上下文管理器 概述 在正常的管理各种系统资源(文件、锁定和连接)，在涉及到异常时通常是个棘手的问题。异常很可能导致控制流跳过负责释放">
+
+
+<meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="wordCount" content="3778">
+
+
+
+<meta itemprop="keywords" content="python,python语法,python进阶," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python 黑魔法"/>
+<meta name="twitter:description" content="python 黑魔法 1、上下文管理器 概述 在正常的管理各种系统资源(文件、锁定和连接)，在涉及到异常时通常是个棘手的问题。异常很可能导致控制流跳过负责释放"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">python 黑魔法</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/python/"> python </a>
+            
+              <a href="/categories/python%E8%AF%AD%E6%B3%95/"> python语法 </a>
+            
+              <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
+            
+          </div>
+        <span class="more-meta"> 约 3778 字 </span>
+        <span class="more-meta"> 预计阅读 8 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#python-黑魔法">python 黑魔法</a>
+<ul>
+<li><a href="#1-上下文管理器">1、上下文管理器</a>
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#1-1-什么是上下文管理器">1.1 什么是上下文管理器</a></li>
+<li><a href="#1-2-with语句详解">1.2 with语句详解</a></li>
+<li><a href="#1-3-python提供的上下文管理器">1.3 python提供的上下文管理器</a></li>
+</ul></li>
+<li><a href="#2-迭代器">2 迭代器</a>
+<ul>
+<li><a href="#2-1-python-迭代器的大致定义">2.1 python 迭代器的大致定义</a></li>
+</ul></li>
+<li><a href="#3-生成器">3. 生成器</a>
+<ul>
+<li><a href="#3-1-生成器-generator-概念">3.1 生成器(generator)概念</a></li>
+<li><a href="#3-2-生成器函数">3.2 生成器函数</a></li>
+<li><a href="#3-3yield-与-return">3.3yield 与 return</a></li>
+<li><a href="#3-4-生成器支持的方法">3.4 生成器支持的方法</a>
+<ul>
+<li><a href="#3-4-1-close">3.4.1 close()</a></li>
+</ul></li>
+<li><a href="#3-4-2-send">3.4.2 send()</a></li>
+<li><a href="#3-4-2-throw">3.4.2 throw()</a></li>
+</ul></li>
+<li><a href="#3-5-生成器总结">3.5 生成器总结</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="python-黑魔法">python 黑魔法</h2>
+
+<h3 id="1-上下文管理器">1、上下文管理器</h3>
+
+<h4 id="概述">概述</h4>
+
+<p>在正常的管理各种系统资源(文件、锁定和连接)，在涉及到异常时通常是个棘手的问题。异常很可能导致控制流跳过负责释放关键资源的语句。例如打开一个文件进行操作时，如果意外情况发生（磁盘已满、特殊的终端信号让其终止等），就会抛出异常，这样可能最后的文件关闭操作就不会执行。如果这样的问题频繁出现，则可能耗尽系统资源。</p>
+
+<p>是的，这样的问题并不是不可避免。在没有接触到上下文管理器之前，我们可以用“try/finally”语句来解决这样的问题。或许在有些人看来，“try/finally”语句显得有些繁琐。上下文管理器就是被设计用来简化“try/finally”语句的，这样可以让程序更加简洁。</p>
+
+<p>平时我们写文件操作代码大概这样,有时候甚至会遗漏释放资源这个步骤</p>
+
+<pre><code class="language-python">def m1():
+    f = open(&quot;output.txt&quot;, &quot;w&quot;)
+    f.write(&quot;python之禅&quot;)
+    f.close()
+</code></pre>
+
+<p>逻辑厉害的程序员也许会这样写：</p>
+
+<pre><code class="language-python">def m2():
+    f = open(&quot;output.txt&quot;, &quot;w&quot;)
+    try:
+        f.write(&quot;python之禅&quot;)
+    except IOError:
+        print(&quot;oops error&quot;)
+    finally:
+        f.close()
+</code></pre>
+
+<p>改良版本的程序是对可能发生异常的代码处进行 try 捕获，使用 try/finally 语句，该语句表示如果在 try 代码块中程序出现了异常，后续代码就不再执行，而直接跳转到 except 代码块。而无论如何，finally 块的代码最终都会被执行。因此，只要把 close 放在 finally 代码中，文件就一定会关闭。</p>
+
+<p><strong>但是python已经为我们屌丝程序员考虑到这一点了，提供了上下文管理器，以及with语法糖，上述问题可简写为：</strong></p>
+
+<pre><code class="language-python">def m3():
+    with open(&quot;output.txt&quot;, &quot;w&quot;) as f:
+        f.write(&quot;Python之禅&quot;)
+</code></pre>
+
+<h4 id="1-1-什么是上下文管理器">1.1 什么是上下文管理器</h4>
+
+<p>任何实现了 <strong>__enter__()</strong> 和 <strong>__exit__()</strong> 方法的对象都可称之为上下文管理器，上下文管理器对象可以使用 with 关键字。显然，文件（file）对象也实现了上下文管理器。</p>
+
+<p>eg:自定义文件操作</p>
+
+<pre><code class="language-python">class File():
+    def __init__(self, filename, mode):
+        self.filename = filename
+        self.mode = mode
+
+    def __enter__(self):
+        &quot;&quot;&quot;
+        __enter__() 方法返回资源对象，这里就是你将要打开的那个文件对象
+        &quot;&quot;&quot;
+        print(&quot;entering&quot;)
+        self.f = open(self.filename, self.mode)
+        return self.f
+
+    def __exit__(self, *args):
+        &quot;&quot;&quot;
+        __exit__() 方法处理一些清除工作。
+        &quot;&quot;&quot;
+        print(&quot;will exit&quot;)
+        self.f.close()
+&quot;&quot;&quot;
+因为 File 类实现了上下文管理器，现在就可以使用 with 语句了。
+&quot;&quot;&quot;
+with File('txt.txt', 'w') as f:
+    print(&quot;writing&quot;)
+    f.write('hello, python')
+
+</code></pre>
+
+<h4 id="1-2-with语句详解">1.2 with语句详解</h4>
+
+<p>通用的上下文语句结构：</p>
+
+<pre><code class="language-python">class Contextor:
+    def __enter__(self):
+        pass
+        
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+ 
+contextor = Contextor()
+with contextor [as var]:
+    with_body
+</code></pre>
+
+<p><strong>with语句执行的大概流程：</strong>
+1. 执行 contextor 以获取上下文管理器
+1. 加载上下文管理器的 exit() 方法以备稍后调用
+1. 调用上下文管理器的 enter() 方法
+1. 如果有 as var 从句，则将 enter() 方法的返回值赋给 var
+1. 执行子代码块 with_body
+1. 调用上下文管理器的 exit() 方法，如果 with_body 的退出是由异常引发的，那么该异常的 type、value 和 traceback 会作为参数传给 exit()，否则传三个 None
+1. 如果 with_body 的退出由异常引发，并且 exit() 的返回值等于 False，那么这个异常将被重新引发一次；如果 exit() 的返回值等于 True，那么这个异常就被无视掉，继续执行后面的代码</p>
+
+<h4 id="1-3-python提供的上下文管理器">1.3 python提供的上下文管理器</h4>
+
+<p>通过实现上下文协议定义创建上下文管理器很方便，Python为了更优雅，还提供了一个 contextmanager 的装饰器，更进一步简化了上下文管理器的实现方式。通过 yield 将函数分割成两部分，yield 之前的语句在 <strong>enter</strong> 方法中执行，yield 之后的语句在 <strong>exit</strong> 方法中执行。紧跟在 yield 后面的值是函数的返回值。</p>
+
+<pre><code class="language-python">from contextlib import contextmanager
+
+@contextmanager
+def my_open(path, mode):
+    f = open(path, mode)
+    yield f
+    f.close()
+
+
+with File('txt.txt', 'w') as f:
+    print(&quot;writing&quot;)
+    f.write('hello, python')
+
+</code></pre>
+
+<h3 id="2-迭代器">2 迭代器</h3>
+
+<h4 id="2-1-python-迭代器的大致定义">2.1 python 迭代器的大致定义</h4>
+
+<p>简而言之，实现了迭代器协议的对象，就是迭代器。什么是迭代器协议呢？再简而言之，满足下面两个条件即可：</p>
+
+<p>实现了魔法方法 <strong>iter</strong>()，返回一个迭代对象，这个对象有一个next()方法，
+实现 next() 方法，返回当前的元素，并指向下一个元素的位置，当前位置已经没有元素的时候，抛出StopIteration异常。</p>
+
+<pre><code class="language-python">class ReverseList(object):
+
+    def __init__(self, item):
+        self.list = list(range(item))
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+
+        try:
+            return self.list.pop()
+        except:
+            raise StopIteration
+
+
+it = ReverseList(5)
+print(it.next()) # 4
+print(it.next()) # 3
+print(it.next()) # 2
+print(it.next()) # 1
+print(it.next()) # 0
+</code></pre>
+
+<p>对于迭代器，python还有很多高级功能，并且还专门有一个itertools标准库用来做迭代器对象的相关处理。</p>
+
+<h3 id="3-生成器">3. 生成器</h3>
+
+<h4 id="3-1-生成器-generator-概念">3.1 生成器(generator)概念</h4>
+
+<p>生成器不会把结果保存在一个系列中，而是保存生成器的状态，在每次进行迭代时返回一个值，直到遇到StopIteration异常结束。</p>
+
+<p><strong><em>生成器语法：</em></strong></p>
+
+<p>生成器表达式： 通列表解析语法，只不过把列表解析的[]换成()
+生成器表达式能做的事情列表解析基本都能处理，只不过在需要处理的序列比较大时，列表解析比较费内存</p>
+
+<pre><code class="language-python">L = [x * x for x in range(10)]  # list
+print L # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+g = (x * x for x in range(10))  # 生成器
+print g # &lt;generator object &lt;genexpr&gt; at 0x000002061928A6D0&gt;
+
+# 如果要一个一个打印出来，可以通过generator的next()方法：
+print g.next() # 0
+</code></pre>
+
+<h4 id="3-2-生成器函数">3.2 生成器函数</h4>
+
+<p>在函数中如果出现了yield关键字，那么该函数就不再是普通函数，而是生成器函数。但是生成器函数可以生产一个无线的序列，这样列表根本没有办法进行处理。</p>
+
+<p>yield 的作用就是把一个函数变成一个 generator，带有 yield 的函数不再是一个普通函数，Python 解释器会将其视为一个 generator。
+下面为一个可以无穷生产奇数的生成器函数。<strong>(生成器是包含有<strong>iter()和next</strong>()方法的)</strong></p>
+
+<pre><code class="language-python">def odd():
+    n = 0
+    while True:
+        yield n
+        n += 2
+
+odd_num = odd()
+count = 0
+
+for o in odd_num:
+    if count &gt;= 5:
+        break
+    print(o)
+    count += 1
+output:
+0 2 4 6 8
+</code></pre>
+
+<h4 id="3-3yield-与-return">3.3yield 与 return</h4>
+
+<p>在一个生成器中，如果没有return，则默认执行到函数完毕时返回StopIteration</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; def g1():
+...     yield 1
+...
+&gt;&gt;&gt; g=g1()
+&gt;&gt;&gt; next(g)    #第一次调用next(g)时，会在执行完yield语句后挂起，所以此时程序并没有执行结束。
+1
+&gt;&gt;&gt; next(g)    #程序试图从yield语句的下一条语句开始执行，发现已经到了结尾，所以抛出StopIteration异常。
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+StopIteration
+&gt;&gt;&gt;
+</code></pre>
+
+<p><strong>如果遇到return,如果在执行过程中 return，则直接抛出 StopIteration</strong></p>
+
+<pre><code class="language-python">&gt;&gt;&gt; def g2():
+...     yield 'a'
+...     return
+...     yield 'b'
+...
+&gt;&gt;&gt; g=g2()
+&gt;&gt;&gt; next(g)    #程序停留在执行完yield 'a'语句后的位置。
+'a'
+&gt;&gt;&gt; next(g)    #程序发现下一条语句是return，所以抛出StopIteration异常，这样yield 'b'语句永远也不会执行。
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+StopIteration
+</code></pre>
+
+<h4 id="3-4-生成器支持的方法">3.4 生成器支持的方法</h4>
+
+<pre><code>&gt;&gt;&gt; help(odd_num)
+Help on generator object:
+ 
+odd = class generator(object)
+ |  Methods defined here:
+ ......
+ |  close(...)
+ |      close() -&gt; raise GeneratorExit inside generator.
+ |
+ |  send(...)
+ |      send(arg) -&gt; send 'arg' into generator,
+ |      return next yielded value or raise StopIteration.
+ |
+ |  throw(...)
+ |      throw(typ[,val[,tb]]) -&gt; raise exception in generator,
+ |      return next yielded value or raise StopIteration.
+</code></pre>
+
+<h5 id="3-4-1-close">3.4.1 close()</h5>
+
+<p>手动关闭生成器函数，后面的调用会直接返回StopIteration异常。</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; def g4():
+...     yield 1
+...     yield 2
+...     yield 3
+...
+&gt;&gt;&gt; g=g4()
+&gt;&gt;&gt; next(g)
+1
+&gt;&gt;&gt; g.close()
+&gt;&gt;&gt; next(g)    #关闭后，yield 2和yield 3语句将不再起作用
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+StopIteration
+</code></pre>
+
+<h4 id="3-4-2-send">3.4.2 send()</h4>
+
+<p>生成器函数最大的特点是可以接受外部传入的一个变量，并根据变量内容计算结果后返回。
+这是生成器函数最难理解的地方，也是最重要的地方，实现后面我会讲到的协程就全靠它了。</p>
+
+<pre><code class="language-python">def gen():
+    value=0
+    while True:
+        receive=yield value
+        if receive=='e':
+            break
+        value = 'got: %s' % receive
+ 
+g=gen()
+print(g.send(None))     
+print(g.send('aaa'))
+print(g.send(3))
+print(g.send('e'))
+
+got: aaa
+got: 3
+Traceback (most recent call last):
+File &quot;h.py&quot;, line 14, in &lt;module&gt;
+  print(g.send('e'))
+StopIteration
+</code></pre>
+
+<p>执行流程：</p>
+
+<ol>
+<li>通过g.send(None)或者next(g)可以启动生成器函数，并执行到第一个yield语句结束的位置。此时，执行完了yield语句，但是没有给receive赋值。yield value会输出初始值0注意：在启动生成器函数时只能send(None),如果试图输入其它的值都会得到错误提示信息。</li>
+<li>通过g.send(‘aaa’)，会传入aaa，并赋值给receive，然后计算出value的值，并回到while头部，执行yield value语句有停止。此时yield value会输出”got: aaa”，然后挂起。</li>
+<li>通过g.send(3)，会重复第2步，最后输出结果为”got: 3″</li>
+<li>当我们g.send(‘e’)时，程序会执行break然后推出循环，最后整个函数执行完毕，所以会得到StopIteration异常。</li>
+</ol>
+
+<h4 id="3-4-2-throw">3.4.2 throw()</h4>
+
+<p>用来向生成器函数送入一个异常，可以结束系统定义的异常，或者自定义的异常。
+throw()后直接跑出异常并结束程序，或者消耗掉一个yield，或者在没有下一个yield的时候直接进行到程序的结尾。</p>
+
+<pre><code class="language-python">def gen():
+    while True: 
+        try:
+            yield 'normal value'
+            yield 'normal value 2'
+            print('here')
+        except ValueError:
+            print('we got ValueError here')
+        except TypeError:
+            break
+ 
+g=gen()
+print(next(g))
+print(g.throw(ValueError))
+print(next(g))
+print(g.throw(TypeError))
+
+normal value
+we got ValueError here
+normal value
+normal value 2
+Traceback (most recent call last):
+  File &quot;h.py&quot;, line 15, in &lt;module&gt;
+    print(g.throw(TypeError))
+StopIteration
+</code></pre>
+
+<p>解释：</p>
+
+<ol>
+<li>print(next(g))：会输出normal value，并停留在yield ‘normal value 2’之前。</li>
+<li>由于执行了g.throw(ValueError)，所以会跳过所有后续的try语句，也就是说yield ‘normal value 2’不会被执行，然后进入到except语句，打印出we got ValueError here。然后再次进入到while语句部分，消耗一个yield，所以会输出normal value。</li>
+<li>print(next(g))，会执行yield ‘normal value 2’语句，并停留在执行完该语句后的位置。</li>
+<li>g.throw(TypeError)：会跳出try语句，从而print(‘here’)不会被执行，然后执行break语句，跳出while循环，然后到达程序结尾，所以跑出StopIteration异常</li>
+</ol>
+
+<h3 id="3-5-生成器总结">3.5 生成器总结</h3>
+
+<p>综合例子：</p>
+
+<pre><code class="language-python">def flatten(nested):
+    try:
+        # 如果是字符串，那么手动抛出TypeError。
+        if isinstance(nested, str):
+            raise TypeError
+        for sublist in nested:
+            # yield flatten(sublist)
+            for element in flatten(sublist):
+                # yield element
+                print('got:', element)
+    except TypeError:
+        print('here')
+        yield nested
+
+
+L = ['aaadf', [1, 2, 3], 2, 4, [5, [6, [8, [9]], 'ddf'], 7]]
+
+for num in flatten(L):
+    print(num)
+    
+here
+got: aaadf
+here
+got: 1
+here
+got: 2
+here
+got: 3
+here
+got: 2
+here
+got: 4
+here
+got: 5
+here
+got: 6
+here
+got: 8
+here
+got: 9
+here
+got: ddf
+here
+got: 7
+</code></pre>
+
+<p>按照鸭子模型理论，生成器就是一种迭代器，可以使用for进行迭代。
+第一次执行next(generator)时，会执行完yield语句后程序进行挂起，所有的参数和状态会进行保存。再一次执行next(generator)时，会从挂起的状态开始往后执行。在遇到程序的结尾或者遇到StopIteration时，循环结束。
+可以通过generator.send(arg)来传入参数，这是协程模型。
+可以通过generator.throw(exception)来传入一个异常。throw语句会消耗掉一个yield。可以通过generator.close()来手动关闭生成器。
+next()等价于send(None)</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">buyunhui</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/python/">python</a>
+          
+          <a href="/tags/python%E8%AF%AD%E6%B3%95/">python语法</a>
+          
+          <a href="/tags/python%E8%BF%9B%E9%98%B6/">python进阶</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/%E7%B1%BB%E7%BB%A7%E6%89%BF/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python 类继承</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/python%E5%AE%9A%E5%88%B6%E7%B1%BB/">
+            <span class="next-text nav-default">python类的定制</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>

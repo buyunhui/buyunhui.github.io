@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python decorate - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="buyunhui" />
+  <meta name="description" content="python 装饰器 现在需要在函数运行前后打印一条日志, 但是又不希望或者没有权限修改函数内部的结构, 就可以用到装饰器(decorator): def log(function): def wrapper(*args, **kwargs): print" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/python-decorate/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python decorate" />
+<meta property="og:description" content="python 装饰器 现在需要在函数运行前后打印一条日志, 但是又不希望或者没有权限修改函数内部的结构, 就可以用到装饰器(decorator): def log(function): def wrapper(*args, **kwargs): print" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python-decorate/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="python decorate">
+<meta itemprop="description" content="python 装饰器 现在需要在函数运行前后打印一条日志, 但是又不希望或者没有权限修改函数内部的结构, 就可以用到装饰器(decorator): def log(function): def wrapper(*args, **kwargs): print">
+
+
+<meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="wordCount" content="1461">
+
+
+
+<meta itemprop="keywords" content="python,python语法,python进阶," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python decorate"/>
+<meta name="twitter:description" content="python 装饰器 现在需要在函数运行前后打印一条日志, 但是又不希望或者没有权限修改函数内部的结构, 就可以用到装饰器(decorator): def log(function): def wrapper(*args, **kwargs): print"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">python decorate</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/python/"> python </a>
+            
+              <a href="/categories/python%E8%AF%AD%E6%B3%95/"> python语法 </a>
+            
+              <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
+            
+          </div>
+        <span class="more-meta"> 约 1461 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#python-装饰器">python 装饰器</a>
+<ul>
+<li><a href="#1-函数装饰器">1.函数装饰器</a>
+<ul>
+<li><a href="#1-1-无参数装饰器">1.1 无参数装饰器</a></li>
+<li><a href="#1-2-装饰函数有参数-args-和-kwargs">1.2 装饰函数有参数（ args 和 *kwargs）</a></li>
+</ul></li>
+<li><a href="#1-3-装饰器本身有参数">1.3 装饰器本身有参数</a></li>
+<li><a href="#1-4-装饰器调用顺序">1.4 装饰器调用顺序</a>
+<ul>
+<li><a href="#1-5装饰器会改变函数签名">1.5装饰器会改变函数签名</a></li>
+</ul></li>
+<li><a href="#2-类装饰器">2.类装饰器</a>
+<ul>
+<li><a href="#2-1-不带参数的类装饰器">2.1 不带参数的类装饰器</a></li>
+<li><a href="#2-2-带参数的类装饰器">2.2 带参数的类装饰器</a></li>
+</ul></li>
+<li><a href="#3-函数装饰器修饰类方法">3. 函数装饰器修饰类方法</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="python-装饰器">python 装饰器</h2>
+
+<p>现在需要在函数运行前后打印一条日志, 但是又不希望或者没有权限修改函数内部的结构, 就可以用到装饰器(decorator):</p>
+
+<pre><code class="language-python">
+def log(function):
+
+    def wrapper(*args, **kwargs):
+
+        print 'before function [%s()] run.' % function.__name__
+
+        rst = function(*args, **kwargs)
+
+        print 'after function [%s()] run.' % function.__name__
+
+        return rst
+
+    return wrapper 
+
+
+
+@log
+
+def func():
+
+    print 'func() run.'
+
+
+
+output：
+
+before function [func()] run.
+
+func() run.
+
+after function [func()] run.
+
+</code></pre>
+
+<h3 id="1-函数装饰器">1.函数装饰器</h3>
+
+<h4 id="1-1-无参数装饰器">1.1 无参数装饰器</h4>
+
+<pre><code class="language-python">
+def outer(some_func):
+
+    def inner():
+
+        print(&quot;before some_func&quot;)
+
+        ret = some_func() # 1
+
+        return ret + 1
+
+    return inner
+
+
+
+def foo():
+
+    return 1
+
+decorater = outer(foo)
+
+print(decorater())
+
+
+
+output:
+
+before some_func
+
+2
+
+</code></pre>
+
+<p>**使用@</p>
+
+<p>@outer等价 decorater = outer(foo) **</p>
+
+<pre><code class="language-python">
+@outer
+
+def foo1():
+
+    return 1
+
+print(foo1())
+
+
+
+output:
+
+before some_func
+
+2
+
+</code></pre>
+
+<h4 id="1-2-装饰函数有参数-args-和-kwargs">1.2 装饰函数有参数（ args 和 *kwargs）</h4>
+
+<ul>
+<li><p>*args 只在定义函数时用来表示位置参数将会保存在变量 args 中。Python 也允许指定一些变量，并捕获任何在 args 里的额外参数</p></li>
+
+<li><p>（*）符号也可以用在函数调用时，在这里它也有类似的意义。在调用函数时，以 * 开头的变量表示该变量内容需被取出用做位置参数</p></li>
+</ul>
+
+<pre><code class="language-python">
+&gt;&gt;&gt; def add(x, y):
+
+...     return x + y
+
+&gt;&gt;&gt; lst = [1,2]
+
+&gt;&gt;&gt; add(lst[0], lst[1]) # 1
+
+3
+
+&gt;&gt;&gt; add(*lst) # 2
+
+3
+
+
+
+&gt;&gt;&gt; def foo(**kwargs):
+
+...     print kwargs
+
+&gt;&gt;&gt; foo()
+
+{}
+
+&gt;&gt;&gt; foo(x=1, y=2)
+
+{'y': 2, 'x': 1}
+
+</code></pre>
+
+<p>当定义一个函数时，使用 **kwargs 来表示所有未捕获的关键字参数将会被存储在字典 kwargs 中。此前 args 和 kwargs 都不是 Python 中语法的一部分，但在函数定义时使用这两个变量名是一种惯例。和 * 的使用一样，可以在函数调用和定义时使用 **。</p>
+
+<pre><code class="language-python">
+&gt;&gt;&gt; dct = {'x': 1, 'y': 2}
+
+&gt;&gt;&gt; def bar(x, y):
+
+...     return x + y
+
+&gt;&gt;&gt; bar(**dct)
+
+3
+
+</code></pre>
+
+<h3 id="1-3-装饰器本身有参数">1.3 装饰器本身有参数</h3>
+
+<pre><code class="language-python">
+def log(text=''):
+
+    def decorator(function):
+
+        @functools.wraps(function)
+
+        def wrapper(*args, **kwargs):
+
+            print 'before function [%s()] run, text: [%s].' % (function.__name__, text)
+
+            rst = function(*args, **kwargs)
+
+            print 'after function [%s()] run, text: [%s].' % (function.__name__, text)
+
+            return rst 
+
+        return wrapper
+
+    return decorator
+
+
+
+@log('log text')
+
+def func():
+
+    print 'func() run.'
+
+
+
+output:
+
+before function [func()] run.
+
+func() run.
+
+after function [func()] run.
+
+
+
+def external_function(i, j):
+
+    k = i - j
+
+    def decorator(func):
+
+        def wrapper(*arg):
+
+            print('this func is %s'%(func.__name__))
+
+            print(k * func(*arg))
+
+        return wrapper
+
+    return decorator
+
+
+
+@external_function(10,5)
+
+def my_func(x,y):
+
+    return x + y
+
+
+
+if __name__ == '__main__':
+
+    my_func(10, 2)
+
+
+
+this func is my_func
+
+60
+
+</code></pre>
+
+<h3 id="1-4-装饰器调用顺序">1.4 装饰器调用顺序</h3>
+
+<pre><code class="language-python">
+def dec1(func):
+
+    print(&quot;entry dec1&quot;)
+
+    def wapper(a, b):
+
+        print(&quot;enter dec1 wapper&quot;)
+
+        func(a,b)
+
+    return wapper
+
+    
+
+def dec2(func):
+
+    print(&quot;entry dec2&quot;)
+
+    def wapper2(a, b):
+
+        print(&quot;enter dec2 wapper&quot;)
+
+        func(a,b)
+
+    return wapper2
+
+
+
+@dec1
+
+@dec2
+
+def Add(a, b):
+
+    print(a + b)
+
+    
+
+Add(1, 2)
+
+
+
+output:
+
+
+
+entry dec2
+
+entry dec1
+
+enter dec1 wapper
+
+enter dec2 wapper
+
+3
+
+</code></pre>
+
+<p>参考上面例子，首先执行</p>
+
+<pre><code class="language-python">
+@dec2
+
+def Add(a, b):
+
+    print(a + b)
+
+    
+
+返回
+
+dec2函数的wapper2
+
+接着执行
+
+@dec1
+
+wapper2
+
+接着执行dec1的wapper函数，wapper2作为func参数传入最后执行
+
+</code></pre>
+
+<h4 id="1-5装饰器会改变函数签名">1.5装饰器会改变函数签名</h4>
+
+<p>使用装饰器极大地复用了代码，但是他有一个缺点就是原函数的元信息不见了，比如函数的docstring、__name__、参数列表</p>
+
+<pre><code class="language-python">
+ef logged(func):
+
+    def with_logging(*args, **kwargs):
+
+        &quot;with_logging&quot;
+
+        print(func.__name__ + &quot; was called&quot;)
+
+        return func(*args, **kwargs)
+
+    return with_logging
+
+
+
+@logged
+
+def f(x):
+
+    &quot;&quot;&quot;does some math&quot;&quot;&quot;
+
+    return x + x * x
+
+if __name__ == '__main__':
+
+    f(2)
+
+    print(f.__name__) # prints 'with_logging')
+
+    print(f.__doc__ )# prints with_logging)
+
+ 
+
+@logged
+
+def f(x)
+
+
+
+等价于 f = logged(f)
+
+锁函数f被with_logging所代替了，相应的doc,__name__等属性也就被代替了
+
+
+
+</code></pre>
+
+<h3 id="2-类装饰器">2.类装饰器</h3>
+
+<p>相比函数装饰器，类装饰器具有灵活度大、高内聚、封装性等优点。使用类装饰器还可以依靠类内部的__call__方法，当使用 @ 形式将装饰器附加到函数上时，就会调用此方法。</p>
+
+<h4 id="2-1-不带参数的类装饰器">2.1 不带参数的类装饰器</h4>
+
+<pre><code class="language-python">
+class Foo(object):
+
+    def __init__(self, func):
+
+        self._func = func
+
+        
+
+    def __call__(self):
+
+        print(&quot;class decorater runing&quot;)
+
+        self._func()
+
+        print(&quot;class decorater runing&quot;)       
+
+@Foo
+
+def bar():
+
+    print(&quot;bar&quot;)
+
+    
+
+output:
+
+class decorater runing
+
+bar
+
+class decorater runing
+
+</code></pre>
+
+<pre><code>@Foo
+
+def bar(): 等价于 bar = Foo(bar)
+</code></pre>
+
+<h4 id="2-2-带参数的类装饰器">2.2 带参数的类装饰器</h4>
+
+<pre><code class="language-python">
+class tracer:  
+
+
+
+    def __init__(self, *args):  
+
+        self.calls = 0
+
+        self.args = args
+
+
+
+    def __call__(self, func):
+
+        self.func = func
+
+        def realfunc(*args):
+
+              self.calls += 1
+
+              print('call %s to %s' %(self.calls, self.func.__name__))
+
+              self.func(*args)
+
+        return realfunc
+
+
+
+@tracer(&quot;xxxx&quot;)
+
+def spam(a, b, c):   
+
+    print(a + b + c)  
+
+
+
+if __name__ == '__main__':
+
+    spam(1,2,3)
+
+    
+
+output:
+
+call 1 to spam
+
+6
+
+</code></pre>
+
+<h3 id="3-函数装饰器修饰类方法">3. 函数装饰器修饰类方法</h3>
+
+<p>有一个类Test, 它的结构如下:现在我需要捕获一个异常</p>
+
+<pre><code class="language-python">
+class Test(object):
+
+    def __init__(self):
+
+        pass
+
+
+
+    def revive(self):
+
+        print('revive from exception.')
+
+        # do something to restore
+
+
+
+    def read_value(self):
+
+        print('here I will do something.')
+
+        # do something.
+
+</code></pre>
+
+<p>使用装饰器来解决这个问题，装饰器函数应该写在类里面还是类外面呢？答案是，写在类外面。那么既然写在类外面，如何调用这个类的其他方法呢？</p>
+
+<p>首先写出一个最常见的处理异常的装饰器：</p>
+
+<pre><code class="language-python">
+def catch_exception(origin_func):
+
+    def wrapper(*args, **kwargs):
+
+        try:
+
+            u = origin_func(*args, **kwargs)
+
+            return u
+
+        except Exception:
+
+            return 'an Exception raised.'
+
+    return wrapper
+
+
+
+
+
+class Test(object):
+
+    def __init__(self):
+
+        pass
+
+
+
+    def revive(self):
+
+        print('revive from exception.')
+
+        # do something to restore
+
+
+
+    @catch_exception
+
+    def read_value(self):
+
+        print('here I will do something.')
+
+        # do something.
+
+</code></pre>
+
+<p>这种写法，确实可以捕获到origin_func()的异常，但是如果在发生异常的时候，需要调用类里面的另一个方法来处理异常，这又应该怎么办？答案是给wrapper增加一个参数：self.</p>
+
+<pre><code class="language-python">
+def catch_exception(origin_func):
+
+    def wrapper(self, *args, **kwargs):
+
+        try:
+
+            u = origin_func(self, *args, **kwargs)
+
+            return u
+
+        except Exception:
+
+            self.revive() #不用顾虑，直接调用原来的类的方法
+
+            return 'an Exception raised.'
+
+    return wrapper
+
+
+
+
+
+class Test(object):
+
+    def __init__(self):
+
+        pass
+
+
+
+    def revive(self):
+
+        print('revive from exception.')
+
+        # do something to restore
+
+
+
+    @catch_exception
+
+    def read_value(self):
+
+        print('here I will do something.')
+
+        sada # 人造异常
+
+        # do something.
+
+
+
+
+
+if __name__ == '__main__':
+
+    test = Test()
+
+    test.read_value()
+
+    
+
+output:
+
+here I will do something.
+
+revive from exception.
+
+</code></pre>
+
+<p>。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">buyunhui</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/python/">python</a>
+          
+          <a href="/tags/python%E8%AF%AD%E6%B3%95/">python语法</a>
+          
+          <a href="/tags/python%E8%BF%9B%E9%98%B6/">python进阶</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/c&#43;&#43;%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Exceptional C&#43;&#43;读书笔记一</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/python-functools_/">
+            <span class="next-text nav-default">python functools详解</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>

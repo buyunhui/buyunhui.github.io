@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 小灰灰的乱世奇谈</title>
+    <link>https://buyunhui.github.io/tags/</link>
+    <description>Recent content in Tags on 小灰灰的乱世奇谈</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>suiyelian(卜云辉)</copyright>
+    <lastBuildDate>Sun, 15 Apr 2018 14:57:23 +0800</lastBuildDate>
+    
+	<atom:link href="https://buyunhui.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C&#43;&#43;使用技巧</title>
+      <link>https://buyunhui.github.io/tags/c&#43;&#43;%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/tags/c&#43;&#43;%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;性能提升</title>
+      <link>https://buyunhui.github.io/tags/c&#43;&#43;%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/tags/c&#43;&#43;%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;编码规范</title>
+      <link>https://buyunhui.github.io/tags/c&#43;&#43;%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/tags/c&#43;&#43;%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C/C&#43;&#43;</title>
+      <link>https://buyunhui.github.io/tags/c/c&#43;&#43;/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/tags/c/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://buyunhui.github.io/tags/python/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python语法</title>
+      <link>https://buyunhui.github.io/tags/python%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/tags/python%E8%AF%AD%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python进阶</title>
+      <link>https://buyunhui.github.io/tags/python%E8%BF%9B%E9%98%B6/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/tags/python%E8%BF%9B%E9%98%B6/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

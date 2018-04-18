@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Exceptional C&#43;&#43;读书笔记一 - 小灰灰的乱世奇谈</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://buyunhui.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="buyunhui" />
+  <meta name="description" content="c/c&#43;&#43;读书系列(EffectiveC&#43;&#43;中文版) 1.取值迭代器时，务必确保迭代器有效 有效的数值：避免*iter.end(),直接复位了。" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://buyunhui.github.io/post/c&#43;&#43;%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Exceptional C&#43;&#43;读书笔记一" />
+<meta property="og:description" content="c/c&#43;&#43;读书系列(EffectiveC&#43;&#43;中文版) 1.取值迭代器时，务必确保迭代器有效 有效的数值：避免*iter.end(),直接复位了。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://buyunhui.github.io/post/c&#43;&#43;%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" />
+
+
+
+<meta property="article:published_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-04-15T14:57:23&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Exceptional C&#43;&#43;读书笔记一">
+<meta itemprop="description" content="c/c&#43;&#43;读书系列(EffectiveC&#43;&#43;中文版) 1.取值迭代器时，务必确保迭代器有效 有效的数值：避免*iter.end(),直接复位了。">
+
+
+<meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
+<meta itemprop="wordCount" content="3296">
+
+
+
+<meta itemprop="keywords" content="c/c&#43;&#43;,c&#43;&#43;使用技巧,c&#43;&#43;编码规范,c&#43;&#43;性能提升," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Exceptional C&#43;&#43;读书笔记一"/>
+<meta name="twitter:description" content="c/c&#43;&#43;读书系列(EffectiveC&#43;&#43;中文版) 1.取值迭代器时，务必确保迭代器有效 有效的数值：避免*iter.end(),直接复位了。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">suiyelian</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="https://github.com/suiyelian/">
+        <li class="mobile-menu-item">external-link</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">suiyelian</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/post/">Archives</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/tags/">Tags</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/categories/">Categories</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/about/">About</a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="https://github.com/suiyelian/" target="_blank">
+          external-link
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Exceptional C&#43;&#43;读书笔记一</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-15 </span>
+        <div class="post-category">
+            
+              <a href="/categories/c/c&#43;&#43;/"> c/c&#43;&#43; </a>
+            
+          </div>
+        <span class="more-meta"> 约 3296 字 </span>
+        <span class="more-meta"> 预计阅读 7 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#c-c-读书系列-effectivec-中文版">c/c++读书系列(EffectiveC++中文版)</a>
+<ul>
+<li><a href="#1-取值迭代器时-务必确保迭代器有效">1.取值迭代器时，务必确保迭代器有效</a></li>
+<li><a href="#2-明白string类并不是一个真正意义上的类型">2.明白string类并不是一个真正意义上的类型</a>
+<ul>
+<li><a href="#编写一个忽略大小写的string类-其他方面与string类型一样">编写一个忽略大小写的string类，其他方面与string类型一样</a></li>
+</ul></li>
+<li><a href="#3-使用模板使代码复用性最高-产品代码模板是否可用-待商榷">3.使用模板使代码复用性最高（产品代码模板是否可用，待商榷）</a>
+<ul>
+<li><a href="#3-1-模板含义">3.1 模板含义：</a></li>
+<li><a href="#3-2-语法格式">3.2 语法格式</a></li>
+<li><a href="#3-3-模板的形参">3.3 模板的形参</a>
+<ul>
+<li><a href="#a-类型形参">A 类型形参</a></li>
+<li><a href="#b-非类型形参">B 非类型形参</a></li>
+</ul></li>
+<li><a href="#3-4-类模板的默认模板类型形参">3.4 类模板的默认模板类型形参</a></li>
+</ul></li>
+<li><a href="#写一个具有最大通用性的容器">写一个具有最大通用性的容器</a></li>
+<li><a href="#临时对象优化-与尽量使用标准库函数">临时对象优化 与尽量使用标准库函数</a></li>
+<li><a href="#class-设计注意事项">class 设计注意事项</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="c-c-读书系列-effectivec-中文版">c/c++读书系列(EffectiveC++中文版)</h2>
+
+<h3 id="1-取值迭代器时-务必确保迭代器有效">1.取值迭代器时，务必确保迭代器有效</h3>
+
+<ol>
+<li>有效的数值：避免*iter.end(),直接复位了。。。</li>
+<li>有效的寿命：迭代器使用时还有效么？循坏遍历时特别注意，插入等一些操作会使迭代器失效</li>
+<li>有效的范围：迭代器范围，步进等操作不要出现无效范围</li>
+</ol>
+
+<h3 id="2-明白string类并不是一个真正意义上的类型">2.明白string类并不是一个真正意义上的类型</h3>
+
+<h4 id="编写一个忽略大小写的string类-其他方面与string类型一样">编写一个忽略大小写的string类，其他方面与string类型一样</h4>
+
+<p>先上源代码在解析：</p>
+
+<pre><code class="language-cpp">#include &lt;string&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+struct ignoreCaseString :public  char_traits&lt;char&gt;
+{
+    static bool eq(char c1, char c2)
+    {
+        return toupper(c1) == toupper(c2);
+    }
+
+    static bool ne(char c1, char c2)
+    {
+        return toupper(c1) == toupper(c2);
+    }
+
+    static bool lt(char c1, char c2)
+    {
+        return toupper(c1) &lt; toupper(c2);
+    }
+    static bool gt(char c1, char c2)
+    {
+        return toupper(c1) &gt; toupper(c2);
+    }
+
+    static int compare(const char* s1, const char *s2, size_t n)
+    {
+        /*
+        功能：比较内存区域buf1和buf2的前count个字节但不区分字母的大小写
+        说明：memicmp同memcmp的唯一区别是memicmp不区分大小写字母  
+        当buf1&lt;buf2时，返回值&lt;0
+        当buf1=buf2时，返回值=0
+        当buf1&gt;buf2时，返回值&gt;0
+        */
+        return _memicmp(s1, s2, n);
+    }
+
+    static const char* find(const char * s, int n, char c)
+    {
+        while (n-- &gt; 0 &amp;&amp; toupper(*s) != toupper(c))
+        {
+            ++s;
+        }
+        return s;
+    }
+};
+
+typedef basic_string&lt;char, ignoreCaseString&gt; igString;
+</code></pre>
+
+<p>在C++，string簇类实际上均是别名,查看源码得</p>
+
+<pre><code class="language-cpp">using string = basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;;
+using wstring = basic_string&lt;wchar_t, char_traits&lt;wchar_t&gt;, allocator&lt;wchar_t&gt;&gt;;
+using u16string = basic_string&lt;char16_t, char_traits&lt;char16_t&gt;, allocator&lt;char16_t&gt;&gt;;
+using u32string = basic_string&lt;char32_t, char_traits&lt;char32_t&gt;, allocator&lt;char32_t&gt;&gt;;
+</code></pre>
+
+<p>分配器部分不用我们去管理，编译器自己会为我们分配相应的内存，char_traits决定了string的比较等基本操作，其方法大致如下(c++14)
+<img src="C:UsersadminPicturesignore.png" alt="ignore.png" />
+因此，只要我们重载了比较函数，就可以实现字符串的大小写忽略</p>
+
+<h3 id="3-使用模板使代码复用性最高-产品代码模板是否可用-待商榷">3.使用模板使代码复用性最高（产品代码模板是否可用，待商榷）</h3>
+
+<h4 id="3-1-模板含义">3.1 模板含义：</h4>
+
+<ol>
+<li>模板是 C++支持参数化多态的工具，使用模板可以使用户为类或者函数声明一种一般模
+式，使得类中的某些数据成员或者成员函数的参数、返回值取得任意类型。</li>
+<li>模板是一种对类型进行参数化的工具；</li>
+<li>通常有两种形式： 函数模板和类模板；</li>
+<li>函数模板针对仅参数类型不同的函数；</li>
+<li>类模板针对仅数据成员和成员函数类型不同的类。</li>
+<li>使用模板的目的就是能够让程序员编写与类型无关的代码。 比如编写了一个交换两个 整型 int 类型的 swap 函数，这个函数就只能实现 int 型，对 double，字符这些类型无法实 现，要实现这些类型的交换就要重新编写另一个 swap 函数。使用模板的目的就是要让这程. 序的实现与类型无关，比如一个 swap 模板函数，即可以实现 int 型，又可以实现 double 型 的交换。模板可以应用于函数和类。下面分别介绍。</li>
+
+<li><p><strong>注意：模板的声明或定义只能在全局，命名空间或类范围内进行。即不能在局部范围， 函数内进行，比如不能在 main 函数中声明或定义一个模板</strong></p>
+
+<h4 id="3-2-语法格式">3.2 语法格式</h4>
+
+<p>函数模板：</p>
+
+<pre><code class="language-cpp">template &lt;class 形参名， class 形参名， ......&gt; 返回类型 函数名(参数列表)
+    {
+        函数体
+    }
+    template &lt;class T&gt; void swap(T&amp; a, T&amp; b){}
+    类模板：
+    template&lt;class 形参名， class 形参名， …&gt; class 类名
+    { 
+     ... 
+    };
+</code></pre>
+
+<pre><code>template&lt;class T&gt; class A{public: T a; T b; T hy(T c, T &amp;d);};
+</code></pre>
+
+<p>其中 template 和 class 是关键字， class 可以用 typename 关见字代替，在这里 typename和 class 没区别， &lt;&gt;括号中的参数叫模板形参，模板形参和函数形参很相像， 模板形参不能为空。一但声明了模板函数就可以用模板函数的形参名声明类中的成员变量和成员函数，即可以在该函数中使用内置类型的地方都可以使用模板形参名。 模板形参需要调用该模板函数时提供的模板实参来初始化模板形参，一旦编译器确定了实际的模板实参类型就称他实例化了函数模板的一个实例。比如 swap 的模板函数形式为</p>
+
+<h4 id="3-3-模板的形参">3.3 模板的形参</h4>
+
+<p>有三种类型的模板形参：类型形参，非类型形参和模板形参</p>
+
+<h5 id="a-类型形参">A 类型形参</h5>
+
+<p>类型模板形参： 类型形参由关见字 class 或 typename 后接说明符构成，如
+template<class T> void h(T a){};其中 T 就是一个类型形参，类型形参的名字由用户自已确定。
+模板形参表示的是一个未知的类型。模板类型形参可作为类型说明符用在模板中的任何地
+方，与内置类型说明符或类类型说明符的使用方式完全相同，即可以用于指定返回类型，变
+量声明等</p>
+
+<h5 id="b-非类型形参">B 非类型形参</h5></li>
+
+<li><p>非类型模板形参： 模板的非类型形参也就是内置类型形参，如 template<classT, int a> class B{};其中 int a 就是非类型的模板形参。</p></li>
+
+<li><p>非类型形参在模板定义的内部是常量值，也就是说非类型形参在模板的内部是常量。</p></li>
+
+<li><p>非类型模板的形参只能是整型，指针和引用，像 double， String, String **这 样的类型是不允许的。 但是 double &amp;， double *， 对象的引用或指针是正确的。</p></li>
+
+<li><p>调用非类型模板形参的实参必须是一个常量表达式，即他必须能在编译时计算出结果。</p></li>
+
+<li><p>注意： 任何局部对象，局部变量，局部对象的地址， 局部变量的地址都不是 一个常量表达式，都不能用作非类型模板形参的实参。全局指针类型，全局变量，全局对象也不是一个常量表达式，不能用作非类型模板形参的实参。</p></li>
+
+<li><p>全局变量的地址或引用，全局对象的地址或引用 const 类型变量是常量表达 式，可以用作非类型模板形参的实参。</p></li>
+
+<li><p>sizeof 表达式的结果是一个常量表达式，也能用作非类型模板形参的实参。</p></li>
+
+<li><p>当模板的形参是整型时调用该模板时的实参必须是整型的，且在编译期间是常量，比如 template <class T, int a> class A{};如果有 int b，这时 A<int, b> m;将出错，因为 b不是常量，如果 const int b，这时 A<int, b> m;就是正确的，因为这时 b 是常量。</p></li>
+
+<li><p>非类型形参一般不应用于函数模板中，比如有函数模板 template<class T, int a> void h(T b){}，若使用 h(2)调用会出现无法为非类型形参 a 推演出参数的错误，对这种模板函数可以用显示模板实参来解决，如用 h<int, 3>(2)这样就把非类型形参 a 设置为整数 3。显示模板实参在后面介绍。</p></li>
+
+<li><p>非类型模板形参的形参和实参间所允许的转换
+a.  允许从数组到指针，从函数到指针的转换。如： template <int *a> class A{}; int b[1]; A&lt;b&gt; m;即数组到指针的转换
+b. const 修饰符的转换。如： template<const int *a> class A{}; int b; A&lt;&amp;b&gt; m; 即 从 int *到 const int *的转换。
+c. 提升转换。如： template<int a> class A{}; const short b=2; A&lt;b&gt; m; 即从 short到 int 的提升转换
+d. 整值转换。如： template<unsigned int a> class A{}; A&lt;3&gt; m; 即从 int 到unsigned int 的转换。
+e.常规转换。</p>
+
+<h4 id="3-4-类模板的默认模板类型形参">3.4 类模板的默认模板类型形参</h4>
+
+<p>1、可以为类模板的类型形参提供默认值，但不能为函数模板的类型形参提供默认值。
+函数模板和类模板都可以为模板的非类型形参提供默认值。
+2、类模板的类型形参默认值形式为： template<class T1, class T2=int> class A{};为第二个
+模板类型形参 T2 提供 int 型的默认值。
+3、类模板类型形参默认值和函数的默认参数一样，如果有多个类型形参则从第一个形
+参设定了默认值之后的所有模板形参都要设定默认值，比如 template<class T1=int, class
+T2>class A{};就是错误的，因为 T1 给出了默认值，而 T2 没有设定。
+4、在类模板的外部定义类中的成员时 template 后的形参表应省略默认的形参类型。比
+如 template<class T1, class T2=int> class A{public: void h();}; 定义方法为 template<class
+T1,class T2> void A<T1,T2>::h(){}</p>
+
+<h3 id="写一个具有最大通用性的容器">写一个具有最大通用性的容器</h3>
+
+<p>写一个自适应长度的容器类,下面代码注释前，根据经验，写一个拷贝与复制构造函数，从已有的容器拷贝一份size大小的内容</p>
+
+<pre><code class="language-cpp">template&lt;typename T, size_t size&gt;
+class fixed_vector {
+public:
+    typedef T* iterator;
+    typedef const T* const_iteraor;
+    fixed_vector() {}
+    template&lt;typename 0, size_t osize&gt;
+    /*
+    fixed_vector(const fixed_vector&lt;0, size_t osize&gt;&amp;other)
+    {
+        copy(other.begin(), other.begin() + min(size, osize), begin());
+    }
+    template&lt;typename 0, size_t osize&gt;
+    fixed_vector&lt;T, size&gt;&amp;
+    operator=(const fixed_vector&lt;0, size_t osize&gt;&amp;other)
+    {
+        copy(other.begin(), other.begin() + min(size, osize), begin());
+        return  *this;
+    }*/
+    iterator begin() { return v_; };
+    iterator end() {return v_+ size};
+    const_iterator begin()  const{ return v_; };
+    const_iterator end() const{ return v_ + size };
+
+private:
+    T v_[size];
+};
+</code></pre></li>
+</ol>
+
+<p><strong>拷贝与赋值构造函数操作只对类型完全相同的对象进行，如果是一个模板类，模板的参数也必须相同，所以上述代码只是一个虚有其表的构造函数与赋值函数，系统还是会为这个类生成默认的拷贝构造函数与拷贝赋值函数</strong></p>
+
+<pre><code class="language-cpp">    fixed_vector&lt;char, 4&gt; v;
+    fixed_vector&lt;int, 4&gt; w;
+    fixed_vector&lt;int, 4&gt;w2(w); //W与w2不是相同类型对象
+    fixed_vector&lt;int, 4&gt;w3(v); //W与w3是相同类型对象
+</code></pre>
+
+<p>从上面实例可以得知，上述代码只是增加了拷贝构造与拷贝赋值的适应性，当然还可以继续添加其他入参的拷贝赋值与构造函数，以实现更多的复用性,下面提供另外的实现方法：</p>
+
+<pre><code class="language-cpp">template&lt;Iter&gt;
+    fixed_vector(Iter begin, Iter end ) 
+    {
+        copy(begin ,begin+ min(size, end - begin), begin());
+    } //拷贝构造
+
+    template&lt;Iter&gt;
+    fixed_vector&lt;T, size&gt;&amp;
+        assign(Iter begin, Iter end)
+    {
+        copy(begin, begin + min(size, end - begin), begin());
+        return  *this;
+    }//v.assign 调用assign追求效率更高，从其他地方赋值操作过来效率不是很好
+</code></pre>
+
+<h3 id="临时对象优化-与尽量使用标准库函数">临时对象优化 与尽量使用标准库函数</h3>
+
+<p><strong>临时对象产生的三种主要类型：</strong>
+1. 以值的方式给函数传参 &mdash;-》 尽量传引用（再尽量传const的引用）
+2. 隐式类型转换          &mdash; 》 尽量使用显示转换，自定义类时，可使用explicit对构造函数进行声明，可以禁止隐式转换
+3.  函数返回一个对象时  返回引用（很危险，可不优化），返回值产生临时对象（如返回类型string，return &ldquo;&rdquo;; 将产生一个临时string对象返回，可以先对返回值声明）</p>
+
+<h3 id="class-设计注意事项">class 设计注意事项</h3>
+
+<ol>
+<li>构造函数尽量使用explict</li>
+<li>运算符重载务必遵循以下规则
+<img src=".1.png" alt="1.png" /></li>
+<li>定义了operate+ 就应该定义对应的operate+=</li>
+<li>总是在operate&lt;&lt; 与operate&gt;&gt;中返回引用</li>
+<li>前置++ 与后置++重载</li>
+</ol>
+
+<pre><code class="language-cpp">    A&amp; operator++()  
+    {  
+        ++m_i;  
+        return *this;  
+    }  // 注意返回值类型
+    // i++  
+    const A operator++(int)  
+    {  
+        A tmp = *this;  
+        ++(*this);    // Implemented by prefix increment  
+        return A(tmp);  
+    }  // 注意返回值类型
+</code></pre>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">buyunhui</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-15</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    
+      <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    
+  </div>
+</div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/c/c&#43;&#43;/">c/c&#43;&#43;</a>
+          
+          <a href="/tags/c&#43;&#43;%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">c&#43;&#43;使用技巧</a>
+          
+          <a href="/tags/c&#43;&#43;%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">c&#43;&#43;编码规范</a>
+          
+          <a href="/tags/c&#43;&#43;%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87/">c&#43;&#43;性能提升</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/python-decorate/">
+            <span class="next-text nav-default">python decorate</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://outlook.live.com/" rel="me" class="iconfont icon-email" 
+        title="email" target="_blank">
+      </a>
+      <a href="http://localhost:1313" rel="me" class="iconfont icon-stack-overflow" 
+        title="stack-overflow" target="_blank">
+      </a>
+      <a href="https://github.com" rel="me" class="iconfont icon-github" 
+        title="github" target="_blank">
+      </a>
+      <a href="https://weibo.com/" rel="me" class="iconfont icon-weibo" 
+        title="weibo" target="_blank">
+      </a>
+      <a href="https://www.zhihu.com/" rel="me" class="iconfont icon-zhihu" 
+        title="zhihu" target="_blank">
+      </a>
+  <a href="https://buyunhui.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">suiyelian(卜云辉)</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+</body>
+</html>
