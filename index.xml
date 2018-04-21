@@ -2967,6 +2967,43 @@ C.&lt;strong&gt;getitem&lt;/strong&gt;(self,key)        获取某个值
 C.&lt;strong&gt;setitem&lt;/strong&gt;(self,key,val)        设置某个值
 C.&lt;strong&gt;delitem&lt;/strong&gt;(self,key)        删除某个值
 C.&lt;strong&gt;missing&lt;/strong&gt;(self,key)        给定键若不存在，则返回一个默认值&lt;/p&gt;
+
+&lt;h3 id=&#34;3-new-init-call-的介绍&#34;&gt;3. &lt;strong&gt;new&lt;/strong&gt;、&lt;strong&gt;init&lt;/strong&gt;、&lt;strong&gt;call&lt;/strong&gt;的介绍&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;__new__方法负责创建一个实例对象，在对象被创建的时候调用该方法它是一个类方法。__new__方法在返回一个实例之后，会自动的调用__init__方法，对实例进行初始化。如果__new__方法不返回值，或者返回的不是实例，那么它就不会自动的去调用__init__方法。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;__init__ 方法负责将该实例对象进行初始化，在对象被创建之后调用该方法，在__new__方法创建出一个实例后对实例属性进行初始化。__init__方法可以没有返回值。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;__call__方法其实和类的创建过程和实例化没有多大关系了，定义了__call__方法才能被使用函数的方式执行。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;#coding:utf-8
+class Foo(object):
+    def __new__(cls, *args, **kwargs):
+        #__new__是一个类方法，在对象创建的时候调用
+        print &amp;quot;excute __new__&amp;quot;
+        return super(Foo,cls).__new__(cls,*args,**kwargs)
+
+
+    def __init__(self,value):
+        #__init__是一个实例方法，在对象创建后调用，对实例属性做初始化
+        print &amp;quot;excute __init&amp;quot;
+        self.value = value
+
+
+f1 = Foo(1)
+print f1.value
+f2 = Foo(2)
+print f2.value
+
+#输出===：
+excute __new__
+excute __init
+excute __new__
+excute __init
+#====可以看出new方法在init方法之前执行
+&lt;/code&gt;&lt;/pre&gt;
 </description>
       
     </item>
@@ -3712,7 +3749,7 @@ MyObject = MyClass()     #类创建实例
 
 &lt;p&gt;函数type实际上是一个元类。type就是Python在背后用来创建所有类的元类。现在你想知道那为什么type会全部采用小写形式而不是Type呢？好吧，我猜这是为了和str保持一致性，str是用来创建字符串对象的类，而int是用来创建整数对象的类。type就是创建类对象的类。你可以通过检查&lt;strong&gt;class&lt;/strong&gt;属性来看到这一点。Python中所有的东西，注意，我是指所有的东西——都是对象。这包括整数、字符串、函数以及类。它们全部都是对象，而且它们都是从一个类创建而来。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;只适用于python2.*
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
 # 元类会自动将你通常传给‘type’的参数作为自己的参数传入
 def upper_attr(future_class_name, future_class_parents, future_class_attr):
     &#39;&#39;&#39;返回一个类对象，将属性都转为大写形式&#39;&#39;&#39;
@@ -3723,9 +3760,14 @@ def upper_attr(future_class_name, future_class_parents, future_class_attr):
     #通过&#39;type&#39;来做类对象的创建
     return type(future_class_name, future_class_parents, uppercase_attr)#返回一个类
 
+# python2
 class Foo(object):
     __metaclass__ = upper_attr
     bar = &#39;bip&#39;
+# python 3    
+class Foo(metaclass=Singleton):
+    print(&amp;quot;A1&amp;quot;)
+     #在代码执行到这里的时候，元类中的__new__方法和__init__方法其实已经被执行了，而不是在Foo实例化的时候执行。且仅会执行一次。
 &lt;/code&gt;&lt;/pre&gt;
 </description>
       

@@ -85,7 +85,7 @@
 
 <meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
 <meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
-<meta itemprop="wordCount" content="1127">
+<meta itemprop="wordCount" content="1545">
 
 
 
@@ -195,8 +195,8 @@
               <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
             
           </div>
-        <span class="more-meta"> 约 1127 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span class="more-meta"> 约 1545 字 </span>
+        <span class="more-meta"> 预计阅读 4 分钟 </span>
       </div>
     </header>
 
@@ -216,6 +216,7 @@
 <li><a href="#1-python中-getattribute-vs-getattr-vs-get浅谈">1.Python中 <strong>getattribute</strong> vs <strong>getattr</strong> vs get浅谈</a></li>
 <li><a href="#2-方法总览">2. 方法总览</a></li>
 </ul></li>
+<li><a href="#3-new-init-call-的介绍">3. <strong>new</strong>、<strong>init</strong>、<strong>call</strong>的介绍</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -319,6 +320,43 @@ C.<strong>getitem</strong>(self,key)        获取某个值
 C.<strong>setitem</strong>(self,key,val)        设置某个值
 C.<strong>delitem</strong>(self,key)        删除某个值
 C.<strong>missing</strong>(self,key)        给定键若不存在，则返回一个默认值</p>
+
+<h3 id="3-new-init-call-的介绍">3. <strong>new</strong>、<strong>init</strong>、<strong>call</strong>的介绍</h3>
+
+<ol>
+<li><p>__new__方法负责创建一个实例对象，在对象被创建的时候调用该方法它是一个类方法。__new__方法在返回一个实例之后，会自动的调用__init__方法，对实例进行初始化。如果__new__方法不返回值，或者返回的不是实例，那么它就不会自动的去调用__init__方法。</p></li>
+
+<li><p>__init__ 方法负责将该实例对象进行初始化，在对象被创建之后调用该方法，在__new__方法创建出一个实例后对实例属性进行初始化。__init__方法可以没有返回值。</p></li>
+
+<li><p>__call__方法其实和类的创建过程和实例化没有多大关系了，定义了__call__方法才能被使用函数的方式执行。</p></li>
+</ol>
+
+<pre><code class="language-python">#coding:utf-8
+class Foo(object):
+    def __new__(cls, *args, **kwargs):
+        #__new__是一个类方法，在对象创建的时候调用
+        print &quot;excute __new__&quot;
+        return super(Foo,cls).__new__(cls,*args,**kwargs)
+
+
+    def __init__(self,value):
+        #__init__是一个实例方法，在对象创建后调用，对实例属性做初始化
+        print &quot;excute __init&quot;
+        self.value = value
+
+
+f1 = Foo(1)
+print f1.value
+f2 = Foo(2)
+print f2.value
+
+#输出===：
+excute __new__
+excute __init
+excute __new__
+excute __init
+#====可以看出new方法在init方法之前执行
+</code></pre>
 
     </div>
 

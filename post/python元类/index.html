@@ -83,7 +83,7 @@
 
 
 
-<meta itemprop="wordCount" content="1244">
+<meta itemprop="wordCount" content="1309">
 
 
 
@@ -185,7 +185,7 @@
       <div class="post-meta">
         <span class="post-time"> 0001-01-01 </span>
         
-        <span class="more-meta"> 约 1244 字 </span>
+        <span class="more-meta"> 约 1309 字 </span>
         <span class="more-meta"> 预计阅读 3 分钟 </span>
       </div>
     </header>
@@ -317,7 +317,7 @@ MyObject = MyClass()     #类创建实例
 
 <p>函数type实际上是一个元类。type就是Python在背后用来创建所有类的元类。现在你想知道那为什么type会全部采用小写形式而不是Type呢？好吧，我猜这是为了和str保持一致性，str是用来创建字符串对象的类，而int是用来创建整数对象的类。type就是创建类对象的类。你可以通过检查<strong>class</strong>属性来看到这一点。Python中所有的东西，注意，我是指所有的东西——都是对象。这包括整数、字符串、函数以及类。它们全部都是对象，而且它们都是从一个类创建而来。</p>
 
-<pre><code class="language-python">只适用于python2.*
+<pre><code class="language-python">
 # 元类会自动将你通常传给‘type’的参数作为自己的参数传入
 def upper_attr(future_class_name, future_class_parents, future_class_attr):
     '''返回一个类对象，将属性都转为大写形式'''
@@ -328,9 +328,14 @@ def upper_attr(future_class_name, future_class_parents, future_class_attr):
     #通过'type'来做类对象的创建
     return type(future_class_name, future_class_parents, uppercase_attr)#返回一个类
 
+# python2
 class Foo(object):
     __metaclass__ = upper_attr
     bar = 'bip'
+# python 3    
+class Foo(metaclass=Singleton):
+    print(&quot;A1&quot;)
+     #在代码执行到这里的时候，元类中的__new__方法和__init__方法其实已经被执行了，而不是在Foo实例化的时候执行。且仅会执行一次。
 </code></pre>
 
     </div>
