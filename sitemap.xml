@@ -94,12 +94,6 @@
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/post/2%E8%A3%85%E9%A5%B0%E5%99%A8/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://buyunhui.github.io/tags/c&#43;&#43;%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</loc>
     <lastmod>2018-04-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -121,14 +115,14 @@
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/tags/c/c&#43;&#43;/</loc>
+    <loc>https://buyunhui.github.io/categories/c/c&#43;&#43;/</loc>
     <lastmod>2018-04-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/categories/c/c&#43;&#43;/</loc>
+    <loc>https://buyunhui.github.io/tags/c/c&#43;&#43;/</loc>
     <lastmod>2018-04-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -170,13 +164,6 @@
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/tags/python/</loc>
-    <lastmod>2018-04-15T14:57:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://buyunhui.github.io/categories/python/</loc>
     <lastmod>2018-04-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -184,7 +171,7 @@
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/tags/python%E8%AF%AD%E6%B3%95/</loc>
+    <loc>https://buyunhui.github.io/tags/python/</loc>
     <lastmod>2018-04-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -198,7 +185,7 @@
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/tags/python%E8%BF%9B%E9%98%B6/</loc>
+    <loc>https://buyunhui.github.io/tags/python%E8%AF%AD%E6%B3%95/</loc>
     <lastmod>2018-04-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -206,6 +193,13 @@
   
   <url>
     <loc>https://buyunhui.github.io/categories/python%E8%BF%9B%E9%98%B6/</loc>
+    <lastmod>2018-04-15T14:57:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://buyunhui.github.io/tags/python%E8%BF%9B%E9%98%B6/</loc>
     <lastmod>2018-04-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -226,14 +220,14 @@
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <loc>https://buyunhui.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     <lastmod>2018-05-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://buyunhui.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <loc>https://buyunhui.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     <lastmod>2018-05-15T14:57:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>

@@ -120,14 +120,5 @@
       <description>python定制类 1.Python中 getattribute vs getattr vs get浅谈 __get__, __getattr__和__getattribute都是访问属性的方法，但不太相同。</description>
     </item>
     
-    <item>
-      <title></title>
-      <link>https://buyunhui.github.io/post/2%E8%A3%85%E9%A5%B0%E5%99%A8/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://buyunhui.github.io/post/2%E8%A3%85%E9%A5%B0%E5%99%A8/</guid>
-      <description>author: &amp;ldquo;buyunhui&amp;rdquo; date: 2018-04-15T14:57:23+08:00 lastmod: 2018-04-15T14:57:23+08:00 title: &amp;ldquo;python decorate详解&amp;rdquo; tags: [ &amp;ldquo;python&amp;rdquo;, &amp;ldquo;python语法&amp;rdquo;, &amp;ldquo;python进阶&amp;rdq</description>
-    </item>
-    
   </channel>
 </rss>
