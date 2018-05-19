@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Postgres使用技巧 on 小灰灰的乱世奇谈</title>
+    <link>https://buyunhui.github.io/tags/postgres%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</link>
+    <description>Recent content in Postgres使用技巧 on 小灰灰的乱世奇谈</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>suiyelian(卜云辉)</copyright>
+    <lastBuildDate>Sun, 15 Apr 2018 14:57:23 +0800</lastBuildDate>
+    
+	<atom:link href="https://buyunhui.github.io/tags/postgres%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>postgres 读书笔记一</title>
+      <link>https://buyunhui.github.io/post/postgres%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/postgres%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>#postgres数据库学习笔记一（基础入门） 1.基本操作 1.1 创建，删除 createdb mydb dropdb mydb \c mydb 切换数据库 1.2 查看数据库 1.2.1 查看数据库 \l //\加上字母l,相当</description>
+    </item>
+    
+  </channel>
+</rss>

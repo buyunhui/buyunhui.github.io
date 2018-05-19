@@ -49,6 +49,15 @@
     </item>
     
     <item>
+      <title>python 元类</title>
+      <link>https://buyunhui.github.io/post/python%E5%85%83%E7%B1%BB/</link>
+      <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python%E5%85%83%E7%B1%BB/</guid>
+      <description>python元类 1. 在python中，一切皆对象 class ObjectCreator(object): pass 将在内存中创建一个对象，名字就是ObjectCreator。这个对象（类）自身拥有创建对</description>
+    </item>
+    
+    <item>
       <title>python 常用函数</title>
       <link>https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/</link>
       <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
