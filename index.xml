@@ -1869,7 +1869,8 @@ If multiple items are specified, returns a tuple of lookup values. For example:
 &lt;pre&gt;&lt;code&gt;  在python中，*当前作用域局部变量-&amp;gt;外层作用域变量-&amp;gt;当前模块中的全局变量-&amp;gt;python内置变量*
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def scope_test():
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+def scope_test():
     def do_local():
         spam = &amp;quot;local spam&amp;quot; #此函数定义了另外的一个spam字符串变量，并且生命周期只在此函数内。此处的spam和外层的spam是两个变量，如果写出spam = spam + “local spam” 会报错
     def do_nonlocal():
@@ -1885,9 +1886,12 @@ If multiple items are specified, returns a tuple of lookup values. For example:
     print(&amp;quot;After nonlocal assignment:&amp;quot;,spam)
     do_global()
     print(&amp;quot;After global assignment:&amp;quot;,spam)
+
  
+
 scope_test()
 print(&amp;quot;In global scope:&amp;quot;,spam)
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;**
@@ -1897,8 +1901,9 @@ After nonlocal assignment: nonlocal spam
 After global assignment: nonlocal spam
 In global scope: global spam&lt;/p&gt;
 
-&lt;p&gt;备注：说明： nonlocal适用于在局部函数中的局部函数，把最内层的局部变量设置成外层局部可用，但是还不是全局的。
-**&lt;/p&gt;
+&lt;p&gt;备注：说明： nonlocal适用于在局部函数中的局部函数，把最内层的局部变量设置成外层局部可用，但是还不是全局的。&lt;/p&gt;
+
+&lt;p&gt;**&lt;/p&gt;
 
 &lt;h3 id=&#34;2-函数对象&#34;&gt;&lt;strong&gt;2.函数对象&lt;/strong&gt;&lt;/h3&gt;
 
@@ -1917,6 +1922,7 @@ print(id(foo))
 print(type(foo))
 print(foo)
 输出：
+
 from foo
 4406808360
 &amp;lt;class &#39;function&#39;&amp;gt;
@@ -1927,11 +1933,14 @@ from foo
 
 &lt;p&gt;还可以把该函数赋值给更多的变量，唯一变化的是该函数对象的引用计数不断地增加，本质上这些变量最终指向的都是同一个函数对象。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# -*- coding:utf-8 -*-
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+# -*- coding:utf-8 -*-
+
 def foo():
     print(&#39;from foo&#39;)
 
 foo()
+
 func=foo    #引用,赋值
 print(foo)
 print(func)
@@ -1941,6 +1950,7 @@ from foo
 &amp;lt;function foo at 0x10eed8f28&amp;gt;
 &amp;lt;function foo at 0x10eed8f28&amp;gt;
 from foo
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h4 id=&#34;c-函数可以当做参数传递&#34;&gt;c.函数可以当做参数传递&lt;/h4&gt;
@@ -1953,25 +1963,24 @@ def bar(func):
     func()
 
 bar(foo)
+
 输出：
 &amp;lt;function foo at 0x000001F77C3A3E18&amp;gt;
 from foo
-
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h4 id=&#34;d-函数可以作返回值&#34;&gt;D.函数可以作返回值&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def foo():
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+def foo():
     print(&#39;from foo&#39;)
-
 def bar(func):
-    return func     
-
+   return func     
 f=bar(foo)
-
 print(f)
 
 f()
+
 输出：
 
 &amp;lt;function foo at 0x000001F77C3A3E18&amp;gt;
@@ -1984,20 +1993,23 @@ map,filter,reduce等内置函数
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def foo():
     print(&#39;from foo&#39;)
+
 dic={&#39;func&#39;:foo}
 foo()
 print(dic[&#39;func&#39;])
 dic[&#39;func&#39;]()
 输出：
 from foo
+
 &amp;lt;function foo at 0x0000024B6D443E18&amp;gt;
+
 from foo
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h4 id=&#34;f-函数还可以嵌套&#34;&gt;F.函数还可以嵌套&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def f1():
-
     def f2():
         print(&#39;from f2&#39;)
         def f3():
@@ -2008,7 +2020,6 @@ f1()
 输出：
 from f2
 from f3
-
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;3-类变量与实例变量&#34;&gt;&lt;strong&gt;3.类变量与实例变量&lt;/strong&gt;&lt;/h3&gt;
@@ -2026,7 +2037,8 @@ Student.addAttri = &amp;quot;add&amp;quot;; # 在类定义之后，可以通过�
 &lt;p&gt;对于可变类型的类属性：
 1.可以通过实例进行访问,此时，类属性与实例属性相同
 2.当通过实例赋值属性的时候，都将为实例新建一个实例属性，这时类属性与实例属性不一样
-3.当通过实例修改类属性的时候，将修改指向的内存地址，此时实例属性与类属性相同&lt;/p&gt;
+3.当通过实例修改类属性的时候，将修改指向的内存地址，此时实例属性与类属性相同
+4.动态地为类添加类属性后，该类的所有对象也都添加了该属性（即使是动态添加类属性之前创建的对象）。通过实例修改属性，并不会影响其他实例的同名属性和类上的同名属性。&lt;/p&gt;
 
 &lt;h3 id=&#34;4-访问控制&#34;&gt;&lt;strong&gt;4.访问控制&lt;/strong&gt;&lt;/h3&gt;
 
@@ -2038,7 +2050,7 @@ Student.addAttri = &amp;quot;add&amp;quot;; # 在类定义之后，可以通过�
     name = &#39;类公有成员&#39;
     _var = &amp;quot;类保护成员&amp;quot;
     __foo = &amp;quot;类私有成员&amp;quot;
-    
+
     def __init__(self):
        self.name = &#39;实例公有成员&#39;
        self.name_var = &amp;quot;实例保护成员&amp;quot;
@@ -2047,14 +2059,18 @@ Student.addAttri = &amp;quot;add&amp;quot;; # 在类定义之后，可以通过�
 
 &lt;h4 id=&#34;2-使用-property-达到成员访问权限控制与参数检查&#34;&gt;2.使用@property，达到成员访问权限控制与参数检查&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;class Person:
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+class Person:
     def __init__(self, first_name):
         self.first_name = first_name
 
     # Getter function
     @property
     def first_name(self):
+
         return self._first_name
+
+
 
     # Setter function
     @first_name.setter
@@ -2064,8 +2080,11 @@ Student.addAttri = &amp;quot;add&amp;quot;; # 在类定义之后，可以通过�
         self._first_name = value
 
     # Deleter function (optional)
+
     @first_name.deleter
+
     def first_name(self):
+
         raise AttributeError(&amp;quot;Can&#39;t delete attribute&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -2073,20 +2092,29 @@ Student.addAttri = &amp;quot;add&amp;quot;; # 在类定义之后，可以通过�
 
 &lt;p&gt;&lt;strong&gt;一个property属性其实就是一系列相关绑定方法的集合。如果你去查看拥有property的类， 就会发现property本身的fget、fset和fdel属性就是类里面的普通方法。比如：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;&amp;gt;&amp;gt;&amp;gt; Person.first_name.fget
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+&amp;gt;&amp;gt;&amp;gt; Person.first_name.fget
+
 &amp;lt;function Person.first_name at 0x1006a60e0&amp;gt;
+
 &amp;gt;&amp;gt;&amp;gt; Person.first_name.fset
+
 &amp;lt;function Person.first_name at 0x1006a6170&amp;gt;
+
 &amp;gt;&amp;gt;&amp;gt; Person.first_name.fdel
+
 &amp;lt;function Person.first_name at 0x1006a62e0&amp;gt;
+
 &amp;gt;&amp;gt;&amp;gt;
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;通常来讲，我们写代码不用直接取调用fget或者fset，它们会在访问property的时候自动被触发。&lt;/p&gt;
 
 &lt;p&gt;只有当你确实需要对attribute执行其他额外的操作的时候才应该使用到property。 有时候一些从其他编程语言(比如Java)过来的程序员总认为所有访问都应该通过getter和setter， 所以他们认为代码应该像下面这样写：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;class Person:
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+class Person:
     def __init__(self, first_name):
         self.first_name = first_name
 
@@ -2097,15 +2125,19 @@ Student.addAttri = &amp;quot;add&amp;quot;; # 在类定义之后，可以通过�
     @first_name.setter
     def first_name(self, value):
         self._first_name = value
+
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;不要写上面这种没有做任何其他额外操作的property。 首先，它会让你的代码变得很臃肿，并且还会迷惑阅读者。 其次，它还会让你的程序运行起来变慢很多。&lt;/p&gt;
+&lt;p&gt;不要写上面这种没有做任何其他额外操作的property。 首先，它会让你的代码变得很臃肿，并且还会迷惑阅读者。 其次，它还会让你的程序运行起来变慢很多。
+Properties还是一种定义动态计算attribute的方法。 这种类型的attributes并不会被实际的存储，而是在需要的时候计算出来。&lt;/p&gt;
 
-&lt;p&gt;Properties还是一种定义动态计算attribute的方法。 这种类型的attributes并不会被实际的存储，而是在需要的时候计算出来。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+import math
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import math
 class Circle:
+
     def __init__(self, radius):
+
         self.radius = radius
 
     @property
@@ -2119,6 +2151,7 @@ class Circle:
     @property
     def perimeter(self):
         return 2 * math.pi * self.radius
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;5-创建新的类或实例属性&#34;&gt;5.创建新的类或实例属性&lt;/h3&gt;
@@ -2127,11 +2160,15 @@ class Circle:
 
 &lt;h4 id=&#34;描述器定义&#34;&gt;描述器定义&lt;/h4&gt;
 
-&lt;p&gt;任何函数或者对象定义了一下方法&lt;strong&gt;get&lt;/strong&gt;(), &lt;strong&gt;set&lt;/strong&gt;(), &lt;strong&gt;delete&lt;/strong&gt;()，均称为描述器
-python默认的属性调用是对象的&lt;strong&gt;dict&lt;/strong&gt;，对于实例：a.x，调用a.&lt;strong&gt;dict&lt;/strong&gt;[&amp;lsquo;x&amp;rsquo;]，对于类：调用type(a).&lt;strong&gt;dict&lt;/strong&gt;[&amp;lsquo;x&amp;rsquo;]。如果一个对象定义了描述子，则优先调用描述子方法。
-1. descr.&lt;strong&gt;get&lt;/strong&gt;(self, obj, type=None) &amp;ndash;&amp;gt; value
-1. descr.&lt;strong&gt;set&lt;/strong&gt;(self, obj, value) &amp;ndash;&amp;gt; None
-1. descr.&lt;strong&gt;delete&lt;/strong&gt;(self, obj) &amp;ndash;&amp;gt; None&lt;/p&gt;
+&lt;p&gt;任何函数或者对象定义了一下方法&lt;strong&gt;get&lt;/strong&gt;(), &lt;strong&gt;set&lt;/strong&gt;(), &lt;strong&gt;delete&lt;/strong&gt;()，均称为描述器&lt;/p&gt;
+
+&lt;p&gt;python默认的属性调用是对象的&lt;strong&gt;dict&lt;/strong&gt;，对于实例：a.x，调用a.&lt;strong&gt;dict&lt;/strong&gt;[&amp;lsquo;x&amp;rsquo;]，对于类：调用type(a).&lt;strong&gt;dict&lt;/strong&gt;[&amp;lsquo;x&amp;rsquo;]。如果一个对象定义了描述子，则优先调用描述子方法。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;descr.&lt;strong&gt;get&lt;/strong&gt;(self, obj, type=None) &amp;ndash;&amp;gt; value&lt;/li&gt;
+&lt;li&gt;descr.&lt;strong&gt;set&lt;/strong&gt;(self, obj, value) &amp;ndash;&amp;gt; None&lt;/li&gt;
+&lt;li&gt;descr.&lt;strong&gt;delete&lt;/strong&gt;(self, obj) &amp;ndash;&amp;gt; None&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;h4 id=&#34;描述器分类&#34;&gt;描述器分类&lt;/h4&gt;
 
@@ -2147,11 +2184,23 @@ Properties, bound methods, static methods, and class methods are all based on th
 • overriding &lt;strong&gt;getattribute&lt;/strong&gt;() prevents automatic descriptor calls
 • object.&lt;strong&gt;getattribute&lt;/strong&gt;() and type.&lt;strong&gt;getattribute&lt;/strong&gt;() make different calls to &lt;strong&gt;get&lt;/strong&gt;().
 • data descriptors always override instance dictionaries.
-• non-data descriptors may be overridden by instance dictionaries.==&lt;/strong&gt;==&lt;/p&gt;
+• non-data descriptors may be overridden by instance dictionaries.==&lt;/strong&gt;==
+通过实例访问属性
+&lt;strong&gt;getattribute&lt;/strong&gt;、&lt;strong&gt;getattr&lt;/strong&gt;、&lt;strong&gt;get&lt;/strong&gt;和&lt;strong&gt;dict&lt;/strong&gt;[attr]都是跟属性访问相关的方法，它们的优先级:&lt;/p&gt;
+
+&lt;p&gt;当类中定义了&lt;strong&gt;getattribute&lt;/strong&gt;方法时，则调用&lt;strong&gt;getattribute&lt;/strong&gt;。
+如果访问的属性存在，且
+    属性是个Descriptor，是调用这个属性的&lt;strong&gt;get&lt;/strong&gt;
+    属性不是Descriptor，则调用&lt;strong&gt;dict&lt;/strong&gt;[attr]&lt;/p&gt;
+
+&lt;p&gt;如果类中没有定义该属性，则调用&lt;strong&gt;getattr&lt;/strong&gt;
+否则，抛出异常AttributeError　&lt;/p&gt;
 
 &lt;h4 id=&#34;描述器实例&#34;&gt;描述器实例&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Descriptor attribute for an integer type-checked attribute
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+# Descriptor attribute for an integer type-checked attribute
+
 class Integer:
     def __init__(self, name):
         self.name = name
@@ -2162,13 +2211,19 @@ class Integer:
         else:
             return instance.__dict__[self.name]
 
+
+
     def __set__(self, instance, value):
         if not isinstance(value, int):
             raise TypeError(&#39;Expected an int&#39;)
         instance.__dict__[self.name] = value
 
+
+
     def __delete__(self, instance):
         del instance.__dict__[self.name]
+
+
 
 class Point:
     x = Integer(&#39;x&#39;)
@@ -2177,12 +2232,12 @@ class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        
 p = Point(2, 3)
 print(p.x)  # Calls Point.x.__get__(p,Point)
 p.x = 2.3 # Calls Point.x.__set__(p, 2.3)
 p.y = 5 # Calls Point.y.__set__(p, 5)
 print(p.y)
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre&gt;&lt;code&gt;   描述器可实现大部分Python类特性中的底层魔法， 包括 @classmethod 、@staticmethod 、@property ，甚至是 __slots__ 特性。
@@ -3636,6 +3691,169 @@ here I will do something.
 
 revive from exception.
 
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/postgres%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/postgres%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      
+        <description>
+
+&lt;p&gt;#&lt;center&gt;postgres数据库学习笔记一（基础入门）&lt;/p&gt;
+
+&lt;h2 id=&#34;1-基本操作&#34;&gt;1.基本操作&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-创建-删除&#34;&gt;1.1 创建，删除&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;createdb mydb 
+dropdb mydb
+\c mydb 切换数据库
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-2-查看数据库&#34;&gt;1.2 查看数据库&lt;/h3&gt;
+
+&lt;h4 id=&#34;1-2-1-查看数据库&#34;&gt;1.2.1 查看数据库&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;\l //\加上字母l,相当于mysql的，mysql&amp;gt; show databases;  
+
+ select pg_database_size(&#39;playboy&#39;);    //查看playboy数据库的大小 
+
+ select pg_database.datname, pg_database_size(pg_database.datname) 
+ AS size from pg_database;    //查看所有数据库的大小  
+ select pg_size_pretty(pg_database_size(&#39;playboy&#39;));      //以KB，MB，GB的方式来查看数据库大小  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;1-3-表操作&#34;&gt;1.3 表操作&lt;/h3&gt;
+
+&lt;h4 id=&#34;1-3-1-创建表&#34;&gt;1.3.1 创建表&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt; create table ([字段名1] [类型1] &amp;lt;references 关联表名(关联的字段名)&amp;gt;;,[字段名2] [类型2],......&amp;lt;,primary key (字段名m,字段名n,...)&amp;gt;;); 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CREATE TABLE cities (
+    name            varchar(80),
+    location        point
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;1-3-2-删除数据库-drop-table-tablename&#34;&gt;1.3.2 删除数据库 DROP TABLE tablename;&lt;/h4&gt;
+
+&lt;h4 id=&#34;1-3-3-插入一行数据&#34;&gt;1.3.3 插入一行数据&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;INSERT INTO weather VALUES (&#39;San Francisco&#39;, 46, 50, 0.25, &#39;1994-11-27&#39;);
+
+COPY weather FROM &#39;/home/user/weather.txt&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;选择数据插入:如果你需要，你可以用另外一个顺序列出列或者是忽略某些列， 比如说，我们不知道降水量：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;INSERT INTO weather (date, city, temp_hi, temp_lo)
+    VALUES (&#39;1994-11-29&#39;, &#39;Hayward&#39;, 54, 37);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;1-3-4-查询一张表&#34;&gt;1.3.4 查询一张表&lt;/h4&gt;
+
+&lt;p&gt;按默认列顺序全部查询&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;SELECT * FROM weather; *代表所有列
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;SELECT city, (temp_hi+temp_lo)/2 AS temp_avg, date FROM weather;
+SELECT * FROM weather WHERE city = &#39;San Francisco&#39; AND prcp &amp;gt; 0.0;
+
+SELECT * FROM weather
+    ORDER BY city;
+
+# 多关键字排序
+SELECT * FROM weather
+    ORDER BY city, temp_lo;
+# 去除重复行（DISTINCT） 并排序
+SELECT DISTINCT city
+    FROM weather
+    ORDER BY city;
+# 内连接表两张表取交集    
+语法一：
+SELECT city, temp_lo, temp_hi, prcp, date, location
+    FROM weather, cities
+    WHERE city = name;
+语法二：
+SELECT weather.city, weather.temp_lo, weather.temp_hi,
+       weather.prcp, weather.date, cities.location
+    FROM weather, cities
+    WHERE cities.name = weather.city;
+语法三：
+SELECT *
+    FROM weather INNER JOIN cities ON (weather.city = cities.name);
+# 外连接表：全连接（两张表取并集） 左连接（取左边表的全量）右连接（取右边表的全量）
+## 左连接示意：
+SELECT *
+    FROM weather LEFT OUTER JOIN cities ON (weather.city = cities.name);
+
+# 自连接 表内数据比较
+SELECT W1.city, W1.temp_lo AS low, W1.temp_hi AS high,
+    W2.city, W2.temp_lo AS low, W2.temp_hi AS high
+    FROM weather W1, weather W2
+    WHERE W1.temp_lo &amp;lt; W2.temp_lo
+    AND W1.temp_hi &amp;gt; W2.temp_hi;
+
+# 缩写  weather w, cities c
+SELECT *
+    FROM weather w, cities c
+    WHERE w.city = c.name;
+    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;1-3-5-聚集函数&#34;&gt;1.3.5 聚集函数&lt;/h4&gt;
+
+&lt;p&gt;一个聚集函数从多个输入行中计算出一个结果。 比如，我们有在一个行集合上计算count（计数）、sum（和）、avg（均值）、max（最大值）和min（最小值）的函数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;SELECT max(temp_lo) FROM weather;
+如果我们想知道该读数发生在哪个城市，我们可以用： 
+SELECT city FROM weather
+    WHERE temp_lo = (SELECT max(temp_lo) FROM weather);
+    
+聚集同样也常用于和GROUP BY子句组合。比如，我们可以获取每个城市观测到的最低温度的最高值： 
+SELECT city, max(temp_lo)
+    FROM weather
+    GROUP BY city;
+    
+这样给我们每个城市一个输出。每个聚集结果都是在匹配该城市的表行上面计算的。我们可以用HAVING 过滤这些被分组的行： 
+SELECT city, max(temp_lo)
+    FROM weather
+    GROUP BY city
+    HAVING max(temp_lo) &amp;lt; 40;
+    
+这样就只给出那些所有temp_lo值曾都低于 40的城市。最后，如果我们只关心那些名字以&amp;quot;S&amp;quot;开头的城市，我们可以用： 
+SELECT city, max(temp_lo)
+    FROM weather
+    WHERE city LIKE &#39;S%&#39;(1)
+    GROUP BY city
+    HAVING max(temp_lo) &amp;lt; 40;
+    
+#更新数据
+UPDATE weather
+    SET temp_hi = temp_hi - 2,  temp_lo = temp_lo - 2
+    WHERE date &amp;gt; &#39;1994-11-28&#39;;
+# 删除数据
+DELETE FROM weather WHERE city = &#39;Hayward&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-0-视图&#34;&gt;2.0 视图&lt;/h3&gt;
+
+&lt;p&gt;假设天气记录和城市为止的组合列表对我们的应用有用，但我们又不想每次需要使用它时都敲入整个查询。我们可以在该查询上创建一个视图，这会给该查询一个名字，我们可以像使用一个普通表一样来使用它：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CREATE VIEW myview AS
+    SELECT city, temp_lo, temp_hi, prcp, date, location
+        FROM weather, cities
+        WHERE city = name;
+
+SELECT * FROM myview;
 &lt;/code&gt;&lt;/pre&gt;
 </description>
       

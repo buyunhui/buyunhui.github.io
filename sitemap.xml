@@ -86,6 +86,12 @@
   </url>
   
   <url>
+    <loc>https://buyunhui.github.io/post/postgres%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://buyunhui.github.io/post/python%E5%85%83%E7%B1%BB/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

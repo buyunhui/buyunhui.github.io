@@ -85,7 +85,7 @@
 
 <meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
 <meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
-<meta itemprop="wordCount" content="2585">
+<meta itemprop="wordCount" content="2872">
 
 
 
@@ -195,7 +195,7 @@
               <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
             
           </div>
-        <span class="more-meta"> 约 2585 字 </span>
+        <span class="more-meta"> 约 2872 字 </span>
         <span class="more-meta"> 预计阅读 6 分钟 </span>
       </div>
     </header>
@@ -252,7 +252,8 @@
 <pre><code>  在python中，*当前作用域局部变量-&gt;外层作用域变量-&gt;当前模块中的全局变量-&gt;python内置变量*
 </code></pre>
 
-<pre><code class="language-python">def scope_test():
+<pre><code class="language-python">
+def scope_test():
     def do_local():
         spam = &quot;local spam&quot; #此函数定义了另外的一个spam字符串变量，并且生命周期只在此函数内。此处的spam和外层的spam是两个变量，如果写出spam = spam + “local spam” 会报错
     def do_nonlocal():
@@ -268,9 +269,12 @@
     print(&quot;After nonlocal assignment:&quot;,spam)
     do_global()
     print(&quot;After global assignment:&quot;,spam)
+
  
+
 scope_test()
 print(&quot;In global scope:&quot;,spam)
+
 </code></pre>
 
 <p>**
@@ -280,8 +284,9 @@ After nonlocal assignment: nonlocal spam
 After global assignment: nonlocal spam
 In global scope: global spam</p>
 
-<p>备注：说明： nonlocal适用于在局部函数中的局部函数，把最内层的局部变量设置成外层局部可用，但是还不是全局的。
-**</p>
+<p>备注：说明： nonlocal适用于在局部函数中的局部函数，把最内层的局部变量设置成外层局部可用，但是还不是全局的。</p>
+
+<p>**</p>
 
 <h3 id="2-函数对象"><strong>2.函数对象</strong></h3>
 
@@ -300,6 +305,7 @@ print(id(foo))
 print(type(foo))
 print(foo)
 输出：
+
 from foo
 4406808360
 &lt;class 'function'&gt;
@@ -310,11 +316,14 @@ from foo
 
 <p>还可以把该函数赋值给更多的变量，唯一变化的是该函数对象的引用计数不断地增加，本质上这些变量最终指向的都是同一个函数对象。</p>
 
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+<pre><code class="language-python">
+# -*- coding:utf-8 -*-
+
 def foo():
     print('from foo')
 
 foo()
+
 func=foo    #引用,赋值
 print(foo)
 print(func)
@@ -324,6 +333,7 @@ from foo
 &lt;function foo at 0x10eed8f28&gt;
 &lt;function foo at 0x10eed8f28&gt;
 from foo
+
 </code></pre>
 
 <h4 id="c-函数可以当做参数传递">c.函数可以当做参数传递</h4>
@@ -336,25 +346,24 @@ def bar(func):
     func()
 
 bar(foo)
+
 输出：
 &lt;function foo at 0x000001F77C3A3E18&gt;
 from foo
-
 </code></pre>
 
 <h4 id="d-函数可以作返回值">D.函数可以作返回值</h4>
 
-<pre><code class="language-python">def foo():
+<pre><code class="language-python">
+def foo():
     print('from foo')
-
 def bar(func):
-    return func     
-
+   return func     
 f=bar(foo)
-
 print(f)
 
 f()
+
 输出：
 
 &lt;function foo at 0x000001F77C3A3E18&gt;
@@ -367,20 +376,23 @@ map,filter,reduce等内置函数
 
 <pre><code class="language-python">def foo():
     print('from foo')
+
 dic={'func':foo}
 foo()
 print(dic['func'])
 dic['func']()
 输出：
 from foo
+
 &lt;function foo at 0x0000024B6D443E18&gt;
+
 from foo
+
 </code></pre>
 
 <h4 id="f-函数还可以嵌套">F.函数还可以嵌套</h4>
 
 <pre><code class="language-python">def f1():
-
     def f2():
         print('from f2')
         def f3():
@@ -391,7 +403,6 @@ f1()
 输出：
 from f2
 from f3
-
 </code></pre>
 
 <h3 id="3-类变量与实例变量"><strong>3.类变量与实例变量</strong></h3>
@@ -409,7 +420,8 @@ Student.addAttri = &quot;add&quot;; # 在类定义之后，可以通过类名动
 <p>对于可变类型的类属性：
 1.可以通过实例进行访问,此时，类属性与实例属性相同
 2.当通过实例赋值属性的时候，都将为实例新建一个实例属性，这时类属性与实例属性不一样
-3.当通过实例修改类属性的时候，将修改指向的内存地址，此时实例属性与类属性相同</p>
+3.当通过实例修改类属性的时候，将修改指向的内存地址，此时实例属性与类属性相同
+4.动态地为类添加类属性后，该类的所有对象也都添加了该属性（即使是动态添加类属性之前创建的对象）。通过实例修改属性，并不会影响其他实例的同名属性和类上的同名属性。</p>
 
 <h3 id="4-访问控制"><strong>4.访问控制</strong></h3>
 
@@ -421,7 +433,7 @@ Student.addAttri = &quot;add&quot;; # 在类定义之后，可以通过类名动
     name = '类公有成员'
     _var = &quot;类保护成员&quot;
     __foo = &quot;类私有成员&quot;
-    
+
     def __init__(self):
        self.name = '实例公有成员'
        self.name_var = &quot;实例保护成员&quot;
@@ -430,14 +442,18 @@ Student.addAttri = &quot;add&quot;; # 在类定义之后，可以通过类名动
 
 <h4 id="2-使用-property-达到成员访问权限控制与参数检查">2.使用@property，达到成员访问权限控制与参数检查</h4>
 
-<pre><code class="language-python">class Person:
+<pre><code class="language-python">
+class Person:
     def __init__(self, first_name):
         self.first_name = first_name
 
     # Getter function
     @property
     def first_name(self):
+
         return self._first_name
+
+
 
     # Setter function
     @first_name.setter
@@ -447,8 +463,11 @@ Student.addAttri = &quot;add&quot;; # 在类定义之后，可以通过类名动
         self._first_name = value
 
     # Deleter function (optional)
+
     @first_name.deleter
+
     def first_name(self):
+
         raise AttributeError(&quot;Can't delete attribute&quot;)
 </code></pre>
 
@@ -456,20 +475,29 @@ Student.addAttri = &quot;add&quot;; # 在类定义之后，可以通过类名动
 
 <p><strong>一个property属性其实就是一系列相关绑定方法的集合。如果你去查看拥有property的类， 就会发现property本身的fget、fset和fdel属性就是类里面的普通方法。比如：</strong></p>
 
-<pre><code class="language-python">&gt;&gt;&gt; Person.first_name.fget
+<pre><code class="language-python">
+&gt;&gt;&gt; Person.first_name.fget
+
 &lt;function Person.first_name at 0x1006a60e0&gt;
+
 &gt;&gt;&gt; Person.first_name.fset
+
 &lt;function Person.first_name at 0x1006a6170&gt;
+
 &gt;&gt;&gt; Person.first_name.fdel
+
 &lt;function Person.first_name at 0x1006a62e0&gt;
+
 &gt;&gt;&gt;
+
 </code></pre>
 
 <p>通常来讲，我们写代码不用直接取调用fget或者fset，它们会在访问property的时候自动被触发。</p>
 
 <p>只有当你确实需要对attribute执行其他额外的操作的时候才应该使用到property。 有时候一些从其他编程语言(比如Java)过来的程序员总认为所有访问都应该通过getter和setter， 所以他们认为代码应该像下面这样写：</p>
 
-<pre><code class="language-python">class Person:
+<pre><code class="language-python">
+class Person:
     def __init__(self, first_name):
         self.first_name = first_name
 
@@ -480,15 +508,19 @@ Student.addAttri = &quot;add&quot;; # 在类定义之后，可以通过类名动
     @first_name.setter
     def first_name(self, value):
         self._first_name = value
+
 </code></pre>
 
-<p>不要写上面这种没有做任何其他额外操作的property。 首先，它会让你的代码变得很臃肿，并且还会迷惑阅读者。 其次，它还会让你的程序运行起来变慢很多。</p>
+<p>不要写上面这种没有做任何其他额外操作的property。 首先，它会让你的代码变得很臃肿，并且还会迷惑阅读者。 其次，它还会让你的程序运行起来变慢很多。
+Properties还是一种定义动态计算attribute的方法。 这种类型的attributes并不会被实际的存储，而是在需要的时候计算出来。</p>
 
-<p>Properties还是一种定义动态计算attribute的方法。 这种类型的attributes并不会被实际的存储，而是在需要的时候计算出来。</p>
+<pre><code class="language-python">
+import math
 
-<pre><code class="language-python">import math
 class Circle:
+
     def __init__(self, radius):
+
         self.radius = radius
 
     @property
@@ -502,6 +534,7 @@ class Circle:
     @property
     def perimeter(self):
         return 2 * math.pi * self.radius
+
 </code></pre>
 
 <h3 id="5-创建新的类或实例属性">5.创建新的类或实例属性</h3>
@@ -510,11 +543,15 @@ class Circle:
 
 <h4 id="描述器定义">描述器定义</h4>
 
-<p>任何函数或者对象定义了一下方法<strong>get</strong>(), <strong>set</strong>(), <strong>delete</strong>()，均称为描述器
-python默认的属性调用是对象的<strong>dict</strong>，对于实例：a.x，调用a.<strong>dict</strong>[&lsquo;x&rsquo;]，对于类：调用type(a).<strong>dict</strong>[&lsquo;x&rsquo;]。如果一个对象定义了描述子，则优先调用描述子方法。
-1. descr.<strong>get</strong>(self, obj, type=None) &ndash;&gt; value
-1. descr.<strong>set</strong>(self, obj, value) &ndash;&gt; None
-1. descr.<strong>delete</strong>(self, obj) &ndash;&gt; None</p>
+<p>任何函数或者对象定义了一下方法<strong>get</strong>(), <strong>set</strong>(), <strong>delete</strong>()，均称为描述器</p>
+
+<p>python默认的属性调用是对象的<strong>dict</strong>，对于实例：a.x，调用a.<strong>dict</strong>[&lsquo;x&rsquo;]，对于类：调用type(a).<strong>dict</strong>[&lsquo;x&rsquo;]。如果一个对象定义了描述子，则优先调用描述子方法。</p>
+
+<ol>
+<li>descr.<strong>get</strong>(self, obj, type=None) &ndash;&gt; value</li>
+<li>descr.<strong>set</strong>(self, obj, value) &ndash;&gt; None</li>
+<li>descr.<strong>delete</strong>(self, obj) &ndash;&gt; None<br /></li>
+</ol>
 
 <h4 id="描述器分类">描述器分类</h4>
 
@@ -530,11 +567,23 @@ Properties, bound methods, static methods, and class methods are all based on th
 • overriding <strong>getattribute</strong>() prevents automatic descriptor calls
 • object.<strong>getattribute</strong>() and type.<strong>getattribute</strong>() make different calls to <strong>get</strong>().
 • data descriptors always override instance dictionaries.
-• non-data descriptors may be overridden by instance dictionaries.==</strong>==</p>
+• non-data descriptors may be overridden by instance dictionaries.==</strong>==
+通过实例访问属性
+<strong>getattribute</strong>、<strong>getattr</strong>、<strong>get</strong>和<strong>dict</strong>[attr]都是跟属性访问相关的方法，它们的优先级:</p>
+
+<p>当类中定义了<strong>getattribute</strong>方法时，则调用<strong>getattribute</strong>。
+如果访问的属性存在，且
+    属性是个Descriptor，是调用这个属性的<strong>get</strong>
+    属性不是Descriptor，则调用<strong>dict</strong>[attr]</p>
+
+<p>如果类中没有定义该属性，则调用<strong>getattr</strong>
+否则，抛出异常AttributeError　</p>
 
 <h4 id="描述器实例">描述器实例</h4>
 
-<pre><code class="language-python"># Descriptor attribute for an integer type-checked attribute
+<pre><code class="language-python">
+# Descriptor attribute for an integer type-checked attribute
+
 class Integer:
     def __init__(self, name):
         self.name = name
@@ -545,13 +594,19 @@ class Integer:
         else:
             return instance.__dict__[self.name]
 
+
+
     def __set__(self, instance, value):
         if not isinstance(value, int):
             raise TypeError('Expected an int')
         instance.__dict__[self.name] = value
 
+
+
     def __delete__(self, instance):
         del instance.__dict__[self.name]
+
+
 
 class Point:
     x = Integer('x')
@@ -560,12 +615,12 @@ class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        
 p = Point(2, 3)
 print(p.x)  # Calls Point.x.__get__(p,Point)
 p.x = 2.3 # Calls Point.x.__set__(p, 2.3)
 p.y = 5 # Calls Point.y.__set__(p, 5)
 print(p.y)
+
 </code></pre>
 
 <pre><code>   描述器可实现大部分Python类特性中的底层魔法， 包括 @classmethod 、@staticmethod 、@property ，甚至是 __slots__ 特性。
