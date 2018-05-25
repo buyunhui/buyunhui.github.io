@@ -18,7 +18,7 @@
       <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
       
       <guid>https://buyunhui.github.io/post/postgres%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
-      <description>#postgres数据库学习笔记一（基础入门） 1.基本操作 1.1 创建，删除 createdb mydb dropdb mydb \c mydb 切换数据库 1.2 查看数据库 1.2.1 查看数据库 \l //\加上字母l,相当</description>
+      <description>postgres数据库学习笔记一（基础入门） 1.基本操作 1.1 创建，删除 createdb mydb dropdb mydb \c mydb 切换数据库 1.2 查看数据库 1.2.1 查看数据库 \l //\加上字母l,相当于</description>
     </item>
     
   </channel>
