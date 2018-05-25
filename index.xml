@@ -461,6 +461,123 @@ DELETE FROM weather WHERE city = &#39;Hayward&#39;;
 
 SELECT * FROM myview;
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-0-约束摘要&#34;&gt;3.0 约束摘要&lt;/h3&gt;
+
+&lt;h4 id=&#34;3-1-检查约束&#34;&gt;3.1 检查约束&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;CHECK (price &amp;gt; 0)&lt;/strong&gt;:检查项
+&lt;strong&gt;CONSTRAINT positive_price&lt;/strong&gt;：CONSTRAINT 定义别名&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CREATE TABLE products (
+    product_no integer,
+    name text,
+    price numeric CONSTRAINT positive_price CHECK (price &amp;gt; 0)
+);
+
+CREATE TABLE products (
+    product_no integer,
+    name text,
+    price numeric,
+    CHECK (price &amp;gt; 0),
+    discounted_price numeric,
+    CHECK (discounted_price &amp;gt; 0), # 另起一行 表约束
+    CHECK (price &amp;gt; discounted_price)
+);
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-2-唯一约束&#34;&gt;3.2 唯一约束&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;
+CREATE TABLE products (
+    product_no integer UNIQUE, # 唯一约束保证\在一列中或者一组列中保存的数据在表中所有行间是唯一的
+    name text,
+    price numeric
+);
+
+CREATE TABLE example (
+    a integer,
+    b integer,
+    c integer,
+    UNIQUE (a, c) # 表约束
+);
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-3-主键&#34;&gt;3.3 主键&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CREATE TABLE products (
+    product_no integer UNIQUE NOT NULL,
+    name text,
+    price numeric
+);
+CREATE TABLE products (
+    product_no integer PRIMARY KEY,
+    name text,
+    price numeric
+);
+主键也可以包含多于一个列，其语法和唯一约束相似： 
+
+CREATE TABLE example (
+    a integer,
+    b integer,
+    c integer,
+    PRIMARY KEY (a, c)
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-4-外键约束&#34;&gt;3.4 外键约束&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CREATE TABLE products (
+    product_no integer PRIMARY KEY,
+    name text,
+    price numeric
+);
+
+CREATE TABLE orders (
+    order_id integer PRIMARY KEY,
+    shipping_address text,
+    ...
+);
+
+CREATE TABLE order_items (
+    product_no integer REFERENCES products,
+    order_id integer REFERENCES orders,
+    quantity integer,
+    PRIMARY KEY (product_no, order_id)
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了说明这些，让我们在上面的多对多关系例子中实现下面的策略：当某人希望移除一个仍然被一个订单引用（通过order_items）的产品时 ，我们组织它。如果某人移除一个订单，订单项也同时被移除：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CREATE TABLE products (
+    product_no integer PRIMARY KEY,
+    name text,
+    price numeric
+);
+
+CREATE TABLE orders (
+    order_id integer PRIMARY KEY,
+    shipping_address text,
+    ...
+);
+
+CREATE TABLE order_items (
+    product_no integer REFERENCES products ON DELETE RESTRICT,
+    order_id integer REFERENCES orders ON DELETE CASCADE,
+    quantity integer,
+    PRIMARY KEY (product_no, order_id)
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;限制删除或者级联删除是两种最常见的选项。RESTRICT阻止删除一个被引用的行。NO ACTION表示在约束被检察时如果有任何引用行存在，则会抛出一个错误，这是我们没有指定任何东西时的默认行为（这两种选择的本质不同在于NO ACTION允许检查被推迟到事务的最后，而RESTRICT则不会）。CASCADE指定当一个被引用行被删除后，引用它的行也应该被自动删除。还有其他两种选项：SET NULL和SET DEFAULT。这些将导致在被引用行被删除后，引用行中的引用列被置为空值或它们的默认值。注意这些并不会是我们免于遵守任何约束。例如，如果一个动作指定了SET DEFAULT，但是默认值不满足外键约束，操作将会失败。&lt;/p&gt;
+
+&lt;p&gt;与ON DELETE相似，同样有ON UPDATE可以用在一个被引用列被修改（更新）的情况，可选的动作相同。在这种情况下，CASCADE意味着被引用列的更新值应该被复制到引用行中。&lt;/p&gt;
+
+&lt;p&gt;正常情况下，如果一个引用行的任意一个引用列都为空，则它不需要满足外键约束。如果在外键定义中加入了MATCH FULL，一个引用行只有在它的所有引用列为空时才不需要满足外键约束（因此空和非空值的混合肯定会导致MATCH FULL约束失败）。如果不希望引用行能够避开外键约束，将引用行声明为NOT NULL。&lt;/p&gt;
+
+&lt;p&gt;一个外键所引用的列必须是一个主键或者被唯一约束所限制。这意味着被引用列总是拥有一个索引（位于主键或唯一约束之下的索引），因此在其上进行的一个引用行是否匹配的检查将会很高效。由于从被引用表中DELETE一行或者UPDATE一个被引用列将要求对引用表进行扫描以得到匹配旧值的行，在引用列上建立合适的索引也会大有益处。由于这种做法并不是必须的，而且创建索引也有很多种选择，所以外键约束的定义并不会自动在引用列上创建索引。&lt;/p&gt;
 </description>
       
     </item>
