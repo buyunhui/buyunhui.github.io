@@ -34,123 +34,6 @@
     </item>
     
     <item>
-      <title>python import exec</title>
-      <link>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</link>
-      <pubDate>Sun, 27 May 2018 14:00:23 +0800</pubDate>
-      
-      <guid>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;python中的exec-和-eval&#34;&gt;python中的exec 和 eval&lt;/h1&gt;
-
-&lt;h2 id=&#34;1-import机制概要&#34;&gt;1.import机制概要&lt;/h2&gt;
-
-&lt;h3 id=&#34;1-1-import背后那些事&#34;&gt;1.1 import背后那些事&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;import通过各种方式遍历sys.path以定位模块，有内置的导入逻辑，也有导入引子&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;现在取决于负责的导入钩子，它可能会加载字节码（.pyc）或源代码（.py）&lt;/p&gt;
-
-&lt;p&gt;a. 如果字节码可用并且魔术校验和与当前Python解释器的版本相匹配，则字节码文件的时间戳更新或等于源版本（或源不存在），它将加载该版本。
-b. 如果字节码缺失或过时，它将加载源文件并将其编译为字节码。为此，它会根据这些设置检查文件标题中的魔术注释以进行编码设置和解码。它还将检查是否存在特殊的制表符宽度注释，以便将制表符视为除8个字符以外的其他字符（如有必要）。一些导入钩子会根据Python的版本和实现生成 .pyc文件或将字节码存储在其他地方（&lt;strong&gt;pycache&lt;/strong&gt;）。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Python解释器创建一个新的模块对象（您可以通过调用imp.new_module或创建types.ModuleType的实例来 完成这些操作），并使用正确的名称。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;如果模块是从文件加载的，则设置&lt;strong&gt;file&lt;/strong&gt;键。 如果在执行代码之前涉及包，导入系统还将确保&lt;strong&gt;package&lt;/strong&gt;和&lt;strong&gt;path&lt;/strong&gt;设置正确。导入钩子将进一步设置&lt;strong&gt;loader&lt;/strong&gt;变量&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Python解释器在模块字典的上下文中执行字节码。因此，执行代码的框架局部和框架全局是该模块的&lt;strong&gt;dict&lt;/strong&gt;属性。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;该模块被插入到sys.modules中&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;1-2-import导入实例讲解&#34;&gt;1.2 import导入实例讲解&lt;/h3&gt;
-
-&lt;p&gt;查看博客
-&lt;a href=&#34;https://blog.csdn.net/xys430381_1/article/details/78138796&#34;&gt;https://blog.csdn.net/xys430381_1/article/details/78138796&lt;/a&gt;
-python之import机制详解
-&lt;a href=&#34;http://www.jb51.net/article/51815.htm&#34;&gt;http://www.jb51.net/article/51815.htm&lt;/a&gt;
-&lt;a href=&#34;http://www.jb51.net/article/118358.htm&#34;&gt;http://www.jb51.net/article/118358.htm&lt;/a&gt;
-浅谈python import引入不同路径下的模块
-&lt;a href=&#34;http://www.jb51.net/article/118367.htm&#34;&gt;http://www.jb51.net/article/118367.htm&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;2-exec函数&#34;&gt;2 exec函数&lt;/h2&gt;
-
-&lt;h3 id=&#34;2-1-函数介绍&#34;&gt;2.1 函数介绍&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;函数原型**&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;exec(object [，globals [，locals ] ])
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;对象必须是字符串或代码对象。如果它是一个字符串，则将该字符串解析为一组Python语句，然后执行该语句（除非发生语法错误）。如果它是一个代码对象，它只是被执行。在任何情况下，执行的代码都应该作为文件输入有效&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;所有情况下，如果省略可选部件，则代码将在当前范围内执行。如果只提供全局变量，则它必须是一个字典，它将用于全局变量和局部变量。内置的函数globals()并分别locals()返回当前的全局和本地字典.在模块级别，全局变量和本地变量是相同的字典&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;2-2-exec使用方法&#34;&gt;2.2 exec使用方法&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;import机制中，解析Python代码并将其转换为字节码是一项昂贵的操作，可以通过exec函数，让自己的字符串变成字节码&lt;/strong&gt;
-1. 实例1:exec也快乐地执行字节码。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;code = compile(&#39;a = 1 + 2&#39;,&#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)  # 最后一个参数可以是 &#39;exec&#39;，&#39;eval&#39;和&#39;single&#39;中的一个。第一个是exec使用的，第二个是eval功能使用。不同之处在于第一个可以包含语句，仅次于第二个表达式。 &#39;single&#39;是混合模式的一种形式，除了交互式shell外，其他都无用。
-exec(code)
-print(a) # 3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;因为代码变量实际上是代码类型的对象而不是字符串。编译的第二个参数是文件名提示。如果我们从一个实际的字符串编译，那么我们应该提供一个用尖括号括起来的值，因为这是Python所能做的。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;字节码的性能测试
-默认使用全局字典&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;python -mtimeit -s  &amp;quot;a = 2; b = 3; c = a * b&amp;quot;
-100000000 loops, best of 3: 0.00834 usec per loop
-
-python -mtimeit -s &amp;quot;code = &#39;a = 2; b = 3; c = a * b&#39;&amp;quot; &amp;quot;exec(code)&amp;quot;
-100000 loops, best of 3: 10.1 usec per loop
-python -mtimeit -s  &amp;quot;&amp;quot;&amp;quot;exec(&amp;quot;compile(&#39;a = 2; b = 3; c = a * b&#39;,&#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)&amp;quot;)&amp;quot;&amp;quot;&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;全局字典与局部字典&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;code_global = compile(&#39;&#39;&#39;
-sum = 0
-for x in range(500000):
-    sum += x
-&#39;&#39;&#39;, &#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)
-code_local = compile(&#39;&#39;&#39;
-def f():
-    sum = 0
-    for x in range(500000):
-        sum += x
-&#39;&#39;&#39;, &#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)
-
-def test_global():
-    exec(code_global)
-
-def test_local():
-    locals()
-    exec(code_local,locals())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;性能：
-    PS D:\Algorithm\python_other\tipsTest&amp;gt; python -mtimeit -s &amp;lsquo;from testModel  import test_global as t&amp;rsquo; &amp;rsquo;t()&amp;rsquo;
-    10 loops, best of 3: 45.8 msec per loop
-    PS D:\Algorithm\python_other\tipsTest&amp;gt; python -mtimeit -s &amp;lsquo;from testModel  import test_local
-    as t&amp;rsquo; &amp;rsquo;t()&amp;rsquo;
-    1000000 loops, best of 3: 0.445 usec per loop
-    PS D:\Algorithm\python_other\tipsTest&amp;gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;一句话总结：python将代码转化为字节序代价昂贵，使用exec需谨慎&lt;/strong&gt;&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
       <title>Exceptional C&#43;&#43;读书笔记一</title>
       <link>https://buyunhui.github.io/post/c&#43;&#43;%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Sun, 15 Apr 2018 14:57:23 +0800</pubDate>
@@ -3624,6 +3507,123 @@ excute __new__
 excute __init
 #====可以看出new方法在init方法之前执行
 &lt;/code&gt;&lt;/pre&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;python中的exec-和-eval&#34;&gt;python中的exec 和 eval&lt;/h1&gt;
+
+&lt;h2 id=&#34;1-import机制概要&#34;&gt;1.import机制概要&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-import背后那些事&#34;&gt;1.1 import背后那些事&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;import通过各种方式遍历sys.path以定位模块，有内置的导入逻辑，也有导入引子&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;现在取决于负责的导入钩子，它可能会加载字节码（.pyc）或源代码（.py）&lt;/p&gt;
+
+&lt;p&gt;a. 如果字节码可用并且魔术校验和与当前Python解释器的版本相匹配，则字节码文件的时间戳更新或等于源版本（或源不存在），它将加载该版本。
+b. 如果字节码缺失或过时，它将加载源文件并将其编译为字节码。为此，它会根据这些设置检查文件标题中的魔术注释以进行编码设置和解码。它还将检查是否存在特殊的制表符宽度注释，以便将制表符视为除8个字符以外的其他字符（如有必要）。一些导入钩子会根据Python的版本和实现生成 .pyc文件或将字节码存储在其他地方（&lt;strong&gt;pycache&lt;/strong&gt;）。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Python解释器创建一个新的模块对象（您可以通过调用imp.new_module或创建types.ModuleType的实例来 完成这些操作），并使用正确的名称。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果模块是从文件加载的，则设置&lt;strong&gt;file&lt;/strong&gt;键。 如果在执行代码之前涉及包，导入系统还将确保&lt;strong&gt;package&lt;/strong&gt;和&lt;strong&gt;path&lt;/strong&gt;设置正确。导入钩子将进一步设置&lt;strong&gt;loader&lt;/strong&gt;变量&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Python解释器在模块字典的上下文中执行字节码。因此，执行代码的框架局部和框架全局是该模块的&lt;strong&gt;dict&lt;/strong&gt;属性。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;该模块被插入到sys.modules中&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;1-2-import导入实例讲解&#34;&gt;1.2 import导入实例讲解&lt;/h3&gt;
+
+&lt;p&gt;查看博客
+1. &lt;a href=&#34;https://blog.csdn.net/xys430381_1/article/details/78138796&#34;&gt;https://blog.csdn.net/xys430381_1/article/details/78138796&lt;/a&gt;
+python之import机制详解
+2. &lt;a href=&#34;http://www.jb51.net/article/51815.htm&#34;&gt;http://www.jb51.net/article/51815.htm&lt;/a&gt;
+3. &lt;a href=&#34;http://www.jb51.net/article/118358.htm&#34;&gt;http://www.jb51.net/article/118358.htm&lt;/a&gt;
+浅谈python import引入不同路径下的模块
+4. &lt;a href=&#34;http://www.jb51.net/article/118367.htm&#34;&gt;http://www.jb51.net/article/118367.htm&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;2-exec函数&#34;&gt;2 exec函数&lt;/h2&gt;
+
+&lt;h3 id=&#34;2-1-函数介绍&#34;&gt;2.1 函数介绍&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;函数原型**&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;exec(object [，globals [，locals ] ])
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;对象必须是字符串或代码对象。如果它是一个字符串，则将该字符串解析为一组Python语句，然后执行该语句（除非发生语法错误）。如果它是一个代码对象，它只是被执行。在任何情况下，执行的代码都应该作为文件输入有效&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;所有情况下，如果省略可选部件，则代码将在当前范围内执行。如果只提供全局变量，则它必须是一个字典，它将用于全局变量和局部变量。内置的函数globals()并分别locals()返回当前的全局和本地字典.在模块级别，全局变量和本地变量是相同的字典&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;2-2-exec使用方法&#34;&gt;2.2 exec使用方法&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;import机制中，解析Python代码并将其转换为字节码是一项昂贵的操作，可以通过exec函数，让自己的字符串变成字节码&lt;/strong&gt;
+1. 实例1:exec也快乐地执行字节码。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;code = compile(&#39;a = 1 + 2&#39;,&#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)  # 最后一个参数可以是 &#39;exec&#39;，&#39;eval&#39;和&#39;single&#39;中的一个。第一个是exec使用的，第二个是eval功能使用。不同之处在于第一个可以包含语句，仅次于第二个表达式。 &#39;single&#39;是混合模式的一种形式，除了交互式shell外，其他都无用。
+exec(code)
+print(a) # 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为代码变量实际上是代码类型的对象而不是字符串。编译的第二个参数是文件名提示。如果我们从一个实际的字符串编译，那么我们应该提供一个用尖括号括起来的值，因为这是Python所能做的。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;字节码的性能测试
+默认使用全局字典&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;python -mtimeit -s  &amp;quot;a = 2; b = 3; c = a * b&amp;quot;
+100000000 loops, best of 3: 0.00834 usec per loop
+
+python -mtimeit -s &amp;quot;code = &#39;a = 2; b = 3; c = a * b&#39;&amp;quot; &amp;quot;exec(code)&amp;quot;
+100000 loops, best of 3: 10.1 usec per loop
+python -mtimeit -s  &amp;quot;&amp;quot;&amp;quot;exec(&amp;quot;compile(&#39;a = 2; b = 3; c = a * b&#39;,&#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)&amp;quot;)&amp;quot;&amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;全局字典与局部字典&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;code_global = compile(&#39;&#39;&#39;
+sum = 0
+for x in range(500000):
+    sum += x
+&#39;&#39;&#39;, &#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)
+code_local = compile(&#39;&#39;&#39;
+def f():
+    sum = 0
+    for x in range(500000):
+        sum += x
+&#39;&#39;&#39;, &#39;&amp;lt;string&amp;gt;&#39;, &#39;exec&#39;)
+
+def test_global():
+    exec(code_global)
+
+def test_local():
+    locals()
+    exec(code_local,locals())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;性能：
+    PS D:\Algorithm\python_other\tipsTest&amp;gt; python -mtimeit -s &amp;lsquo;from testModel  import test_global as t&amp;rsquo; &amp;rsquo;t()&amp;rsquo;
+    10 loops, best of 3: 45.8 msec per loop
+    PS D:\Algorithm\python_other\tipsTest&amp;gt; python -mtimeit -s &amp;lsquo;from testModel  import test_local
+    as t&amp;rsquo; &amp;rsquo;t()&amp;rsquo;
+    1000000 loops, best of 3: 0.445 usec per loop
+    PS D:\Algorithm\python_other\tipsTest&amp;gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;一句话总结：python将代码转化为字节序代价昂贵，使用exec需谨慎&lt;/strong&gt;&lt;/p&gt;
 </description>
       
     </item>
