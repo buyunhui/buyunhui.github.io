@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>suiyelian(卜云辉)</copyright>
-    <lastBuildDate>Sun, 15 Apr 2018 14:57:23 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 27 May 2018 14:00:23 +0800</lastBuildDate>
     
 	<atom:link href="https://buyunhui.github.io/tags/python%E8%AF%AD%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>python import exec</title>
+      <link>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</link>
+      <pubDate>Sun, 27 May 2018 14:00:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</guid>
+      <description>python中的exec 和 eval 1.import机制概要 1.1 import背后那些事 import通过各种方式遍历sys.path以定位模块，有内置的</description>
+    </item>
     
     <item>
       <title>python decorate</title>

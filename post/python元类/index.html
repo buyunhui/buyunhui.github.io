@@ -85,7 +85,7 @@
 
 <meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
 <meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
-<meta itemprop="wordCount" content="1309">
+<meta itemprop="wordCount" content="1499">
 
 
 
@@ -195,7 +195,7 @@
               <a href="/categories/python%E8%BF%9B%E9%98%B6/"> python进阶 </a>
             
           </div>
-        <span class="more-meta"> 约 1309 字 </span>
+        <span class="more-meta"> 约 1499 字 </span>
         <span class="more-meta"> 预计阅读 3 分钟 </span>
       </div>
     </header>
@@ -346,6 +346,42 @@ class Foo(object):
 class Foo(metaclass=Singleton):
     print(&quot;A1&quot;)
      #在代码执行到这里的时候，元类中的__new__方法和__init__方法其实已经被执行了，而不是在Foo实例化的时候执行。且仅会执行一次。
+
+元类实现单例：
+# -*- coding: utf-8 -*-
+
+
+class Singleton(type):
+    &quot;&quot;&quot;
+    閫氳繃鍏冪被瀹炵幇鍗曚緥
+    &quot;&quot;&quot;
+    def __init__(self, *args, **kwargs):
+        print(&quot;__init__&quot;)
+        self.__instance = None
+        super(Singleton, self).__init__(*args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        print(&quot;__call__&quot;)
+        if self.__instance is None:
+            self.__instance = super(Singleton,self).__call__(*args, **kwargs)
+        return self.__instance
+
+
+class Foo(metaclass=Singleton):
+    def __init__(self):
+        pass
+foo1 = Foo()
+foo2 = Foo()
+print(Foo.__dict__)  #_Singleton__instance': &lt;__main__.Foo object at 0x100c52f10&gt; 瀛樺湪涓€涓鏈夊睘鎬ф潵淇濆瓨灞炴€э紝鑰屼笉浼氭薄鏌揊oo绫伙紙鍏跺疄杩樻槸浼氭薄鏌擄紝鍙槸鏃犳硶鐩存帴閫氳繃__instance灞炴€ц闂級
+
+print(foo1 is foo2)  # True
+
+# 杈撳嚭
+# __init__
+# __call__
+# __call__
+# {'__module__': '__main__', '__metaclass__': &lt;class '__main__.Singleton'&gt;, '_Singleton__instance': &lt;__main__.Foo object at 0x100c52f10&gt;, '__dict__': &lt;attribute '__dict__' of 'Foo' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Foo' objects&gt;, '__doc__': None}
+# True
 </code></pre>
 
     </div>

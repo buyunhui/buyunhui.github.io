@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python性能 on 小灰灰的乱世奇谈</title>
+    <link>https://buyunhui.github.io/categories/python%E6%80%A7%E8%83%BD/</link>
+    <description>Recent content in Python性能 on 小灰灰的乱世奇谈</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>suiyelian(卜云辉)</copyright>
+    <lastBuildDate>Sun, 27 May 2018 14:00:23 +0800</lastBuildDate>
+    
+	<atom:link href="https://buyunhui.github.io/categories/python%E6%80%A7%E8%83%BD/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>python import exec</title>
+      <link>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</link>
+      <pubDate>Sun, 27 May 2018 14:00:23 +0800</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</guid>
+      <description>python中的exec 和 eval 1.import机制概要 1.1 import背后那些事 import通过各种方式遍历sys.path以定位模块，有内置的</description>
+    </item>
+    
+  </channel>
+</rss>
