@@ -298,6 +298,46 @@ private:
         return A(tmp);  
     }  // 注意返回值类型
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;wstring转string&lt;/p&gt;
+
+&lt;p&gt;void funWstrToStr（wstring strw，string&amp;amp; str，UINT CODEPAGE）&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;int num = strw.length();
+int len = WideCharToMultiByte(CODEPAGE, 0, (LPCWSTR)strw.c_str(), num, NULL, 0, NULL, NULL);
+char* szStr = new char[len+1];
+WideCharToMultiByte(CODEPAGE, 0, (LPCWSTR)strw.c_str(), num, szStr, len, NULL, NULL);
+szStr[len] = &amp;lsquo;\0&amp;rsquo;;&lt;/p&gt;
+
+&lt;p&gt;str = szStr;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;string 转wstring&lt;/p&gt;
+
+&lt;p&gt;void funStrToWstr（string str,wstring&amp;amp; strw，UINT CODEPAGE）&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;char* pData= str.c_str();&lt;/p&gt;
+
+&lt;p&gt;DWORD dwNum = MultiByteToWideChar(CodePage, 0,
+pData, -1, NULL, 0);
+if (dwNum == 0)
+{
+return;
+}&lt;/p&gt;
+
+&lt;p&gt;WCHAR* pwText = new WCHAR[dwNum];
+memset(pwText, &amp;lsquo;\0&amp;rsquo;, dwNum);
+MultiByteToWideChar(CodePage, 0, pData, -1, pwText, dwNum);
+strw = pwText;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;setlocale(LC_ALL,&amp;ldquo;chs&amp;rdquo;);&lt;/p&gt;
 </description>
       
     </item>
@@ -3119,6 +3159,9 @@ print(it.next()) # 0
 
 &lt;h4 id=&#34;3-1-生成器-generator-概念&#34;&gt;3.1 生成器(generator)概念&lt;/h4&gt;
 
+&lt;p&gt;&lt;a href=&#34;http://python.jobbole.com/87154/&#34;&gt;http://python.jobbole.com/87154/&lt;/a&gt;
+&lt;a href=&#34;http://python.jobbole.com/86481/&#34;&gt;http://python.jobbole.com/86481/&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;生成器不会把结果保存在一个系列中，而是保存生成器的状态，在每次进行迭代时返回一个值，直到遇到StopIteration异常结束。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;&lt;em&gt;生成器语法：&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
@@ -3513,6 +3556,110 @@ excute __init
     
     <item>
       <title></title>
+      <link>https://buyunhui.github.io/post/python%E4%B8%8Ec%E7%9B%B8%E4%BA%92%E8%B0%83%E7%94%A8/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python%E4%B8%8Ec%E7%9B%B8%E4%BA%92%E8%B0%83%E7%94%A8/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;python与c-c-相互调用&#34;&gt;Python与C/C++相互调用&lt;/h1&gt;
+
+&lt;h3 id=&#34;1-python调用c-c-动态链接库&#34;&gt;1.Python调用C、c++动态链接库&lt;/h3&gt;
+
+&lt;h4 id=&#34;1-1-python调用c库比较简单-不经过任何封装打包成so-linux-dll-windows-再使用python的ctypes调用即可&#34;&gt;1.1 Python调用C库比较简单，不经过任何封装打包成so（linux） dll(windows)，再使用python的ctypes调用即可。&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;windows:&lt;/strong&gt;
+1）弄清楚编译的时候函数的调用约定采用的&lt;strong&gt;cdecl还是&lt;/strong&gt;stdcall，因为根据DLL中函数调用约定方式，Python将使用相应的函数加载DLL。
+2）如果采用C++的工程，那么导出的接口需要extern &amp;ldquo;C&amp;rdquo;，这样python中才能识别导出的函数。
+3）dll（64位还是32位）要与python版本一致
+vs2017 dll测试代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;stdio.h&amp;gt;  
+#include &amp;lt;stdlib.h&amp;gt;  
+
+__declspec(dllexport) int foo(int a, int b);
+__declspec(dllexport) int foo(int a, int b)
+{
+    printf(&amp;quot;you input %d and %d\n&amp;quot;, a, b);
+    return a + b;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;python 调用代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import ctypes   
+lib = ctypes.cdll.LoadLibrary(&amp;quot;D:\\Algorithm\\python_other\\tipsTest\\Project5.dll&amp;quot;)    
+lib.foo(1, 3)  
+print(&#39;***finish***&#39;)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Linux&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;stdio.h&amp;gt;  
+#include &amp;lt;stdlib.h&amp;gt;  
+int foo(int a, int b)  
+{  
+  printf(&amp;quot;you input %d and %d\n&amp;quot;, a, b);  
+  return a+b;  
+}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import ctypes  
+ll = ctypes.cdll.LoadLibrary   
+lib = ll(&amp;quot;libpycall.so&amp;quot;)    
+lib.foo(1, 3)  
+print(&#39;***finish***&#39;)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注：c依赖库生成命令：
+gcc -o libpycall.so -shared -fPIC pycall.c
+c++ 依赖库生成命令：
+g++ -o libpycall.so -shared -fPIC pycall.c&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-更多交互参考博文&#34;&gt;2.1 更多交互参考博文：&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/taiyang1987912/article/details/44779719&#34;&gt;https://blog.csdn.net/taiyang1987912/article/details/44779719&lt;/a&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/</guid>
+      
+        <description>
+
+&lt;p&gt;git config &amp;ndash;global alias.modFlie status # 查看本次修改的文件
+git add                                  # 添加修改文件 add . 添加当前目录下所有修改文件
+git config &amp;ndash;global alias.commit &amp;ldquo;status -m&amp;rdquo; # 查看本次修改的文件
+git config &amp;ndash;global alias.unMod &amp;lsquo;checkout &amp;ndash;&amp;rsquo; # 撤销本次对文件的修改
+git config &amp;ndash;global alias.unAdd &amp;lsquo;reset HEAD&amp;rsquo; # 撤销add
+git config &amp;ndash;global alias.megerCommit &amp;lsquo;commit &amp;ndash;amend&amp;rsquo; #
+git config &amp;ndash;global alias.newBranch &amp;lsquo;checkout -b&amp;rsquo; # 新建分支，并进入到新分支目录下
+git config &amp;ndash;global alias.toBranch &amp;lsquo;checkout&amp;rsquo; # 切换到某分支
+git config &amp;ndash;global alias.delBranch &amp;lsquo;branch -d&amp;rsquo; # 切换到某分支&lt;/p&gt;
+
+&lt;p&gt;git config &amp;ndash;global alias.revert &amp;lsquo;reset &amp;ndash;hard&amp;rsquo; # 回到历史版本
+git config &amp;ndash;global alias.lastVer &amp;lsquo;&amp;ndash;hard HEAD^&amp;rsquo; # 回到上个版本
+git config &amp;ndash;global alias.toBranch &amp;lsquo;checkout&amp;rsquo; # 切换到某分支
+git config &amp;ndash;global alias.toBranch &amp;lsquo;checkout&amp;rsquo; # 切换到某分支
+git config &amp;ndash;global alias.toBranch &amp;lsquo;checkout&amp;rsquo; # 切换到某分支&lt;/p&gt;
+
+&lt;h1 id=&#34;git-commit-m-initial-commit&#34;&gt;git commit -m &amp;lsquo;initial commit&amp;rsquo;&lt;/h1&gt;
+
+&lt;h1 id=&#34;git-add-forgotten-file&#34;&gt;git add forgotten_file&lt;/h1&gt;
+
+&lt;h1 id=&#34;git-commit-amend-只会产生一个commit-initial-commit&#34;&gt;git commit &amp;ndash;amend  只会产生一个commit:&amp;lsquo;initial commit&amp;rsquo;&lt;/h1&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -3624,6 +3771,180 @@ def test_local():
 &lt;/ol&gt;
 
 &lt;p&gt;&lt;strong&gt;一句话总结：python将代码转化为字节序代价昂贵，使用exec需谨慎&lt;/strong&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8tips/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8tips/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;python常用tips&#34;&gt;python常用Tips&lt;/h1&gt;
+
+&lt;h4 id=&#34;尽量使用内建函数-详情请参考官方介绍&#34;&gt;尽量使用内建函数，详情请参考官方介绍&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://docs.python.org/3/library/functions.html&#34;&gt;https://docs.python.org/3/library/functions.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;尽可能使用局部变量-比全局变量更快-搜索符号逻辑有关&#34;&gt;尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关&lt;/h4&gt;
+
+&lt;h4 id=&#34;如果可能-使用in代替if判断&#34;&gt;如果可能，使用in代替if判断&lt;/h4&gt;
+
+&lt;h4 id=&#34;列表查找可以将list转为set-dic-再进行查找&#34;&gt;列表查找可以将list转为set dic，再进行查找&lt;/h4&gt;
+
+&lt;h3 id=&#34;1-元组列表指定index排序&#34;&gt;1. 元组列表指定index排序&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def sortby_inplace(somelist, n):
+    somelist[:] = [(x[n], x) for x in somelist]
+    somelist.sort()
+    somelist[:] = [val for (key, val) in somelist]
+    return
+   
+import operator
+somelist.sort(key=operator.itemgetter(1))
+print(somelist)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-字符串连接&#34;&gt;2. 字符串连接&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;slist = [&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;,&amp;quot;3&amp;quot;,&amp;quot;4&amp;quot;]
+s = &amp;quot;_&amp;quot;.join(slist) # 用符号_连接各个字符串
+# 1_2_3_4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-序列操作&#34;&gt;3. 序列操作&lt;/h3&gt;
+
+&lt;h4 id=&#34;3-1-map函数-将一个函数作用于序列的每一个元素&#34;&gt;3.1 map函数 将一个函数作用于序列的每一个元素&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;list(map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9]))
+[&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-2-reduce函数-将一个函数作用序列&#34;&gt;3.2 reduce函数 将一个函数作用序列&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from functools import reduce
+def fn(x, y):
+... return x * 10 + y
+
+reduce(fn, [1, 3, 5, 7, 9]) # 13579
+
+
+综合例子：str 转int型
+from functools import reduce
+
+DIGITS = {&#39;0&#39;: 0, &#39;1&#39;: 1, &#39;2&#39;: 2, &#39;3&#39;: 3, &#39;4&#39;: 4, &#39;5&#39;: 5, &#39;6&#39;: 6, &#39;7&#39;: 7, &#39;8&#39;: 8, &#39;9&#39;: 9}
+
+def char2num(s):
+    return DIGITS[s]
+
+def str2int(s):
+    return reduce(lambda x, y: x * 10 + y, map(char2num, s))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-3-dic&#34;&gt;3.3 dic&lt;/h4&gt;
+
+&lt;p&gt;建议使用defaultdict 不会产生keyerror&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from collections import defaultdict
+
+s = &#39;mississippi&#39;
+d = defaultdict(int)
+for k in s:
+  d[k] += 1
+print(d)
+
+s = [(&#39;red&#39;, 1), (&#39;blue&#39;, 2), (&#39;red&#39;, 3), (&#39;blue&#39;, 4), (&#39;red&#39;, 1), (&#39;blue&#39;, 4)]
+d = defaultdict(set)
+for k, v in s:
+  d[k].add(v)
+
+print(d)
+defaultdict(&amp;lt;class &#39;int&#39;&amp;gt;, {&#39;m&#39;: 1, &#39;i&#39;: 4, &#39;s&#39;: 4, &#39;p&#39;: 2})
+defaultdict(&amp;lt;class &#39;set&#39;&amp;gt;, {&#39;red&#39;: {1, 3}, &#39;blue&#39;: {2, 4}})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-4-函数与loop&#34;&gt;3.4 函数与loop&lt;/h4&gt;
+
+&lt;p&gt;函数内循环操作（doit2）比循环函数（doit1）快一倍以上&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import time
+x = 0
+def doit2(list):
+    global x 
+    for i in list:
+        x = x + i
+
+list = range(100000000)
+t = time.time()
+doit2(list)
+print(&amp;quot;%.3f&amp;quot; % (time.time()-t)) 
+
+x = 0
+def doit1(i):
+    global x
+    x = x + i
+
+list = range(100000000)
+t = time.time()
+for i in list:
+    doit1(i)
+
+print(&amp;quot;%.3f&amp;quot; % (time.time()-t))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;3-5-尽可能使用列表表达式来生成序列数据-如果不影响功能-请有点追求使用生成器&#34;&gt;3.5 尽可能使用列表表达式来生成序列数据，如果不影响功能，请有点追求使用生成器&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;evens = [ i for i in range(10) if i%2 == 0] 
+chunk = ( 1000 * i for i in xrange(1000)) # 生成器
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-import位置&#34;&gt;4. import位置&lt;/h3&gt;
+
+&lt;p&gt;两种常见的import&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def doit1():
+    import string ###### import statement inside function 需要时导入 减少程序加载时间，但多处用到时，性能爆减
+    string.lower(&#39;Python&#39;)
+
+for num in range(100000):
+    doit1()
+
+第二种 直接在文件头加载 一次搞定，但是这样写失去了python的灵活性，增加启动时间
+import string ###### import statement outside function
+def doit2():
+    string.lower(&#39;Python&#39;)
+
+for num in range(100000):
+    doit2()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一种可行的懒惰import方式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;modelName = None
+
+def parse_modelName():
+    global modelName
+    if modelName is None:
+        import modelName
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-变量交换&#34;&gt;5. 变量交换,&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ppython&#34;&gt;x, y = y, x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ppython&#34;&gt;x, y = y, x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ppython&#34;&gt;x, y = y, x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ppython&#34;&gt;x, y = y, x
+&lt;/code&gt;&lt;/pre&gt;
 </description>
       
     </item>

@@ -122,11 +122,38 @@
     
     <item>
       <title></title>
+      <link>https://buyunhui.github.io/post/python%E4%B8%8Ec%E7%9B%B8%E4%BA%92%E8%B0%83%E7%94%A8/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python%E4%B8%8Ec%E7%9B%B8%E4%BA%92%E8%B0%83%E7%94%A8/</guid>
+      <description>Python与C/C++相互调用 1.Python调用C、c++动态链接库 1.1 Python调用C库比较简单，不经过任何封装打包成so（linux</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/</guid>
+      <description>git config &amp;ndash;global alias.modFlie status # 查看本次修改的文件 git add # 添加修改文件 add . 添加当前目录下所有修改文件 git config &amp;ndash;global alias.commit &amp;ldquo;status -m&amp;rdquo; # 查看本次修改的文件 git config &amp;ndash;global alias.unMod &amp;lsquo;checkout &amp;ndash;&amp;rsquo; # 撤销本次对文件的</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/</guid>
       <description>python中的exec 和 eval 1.import机制概要 1.1 import背后那些事 import通过各种方式遍历sys.path以定位模块，有内置的</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8tips/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8tips/</guid>
+      <description>python常用Tips 尽量使用内建函数，详情请参考官方介绍 https://docs.python.org/3/library/functions.html 尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关 如果可能，使用in代替if</description>
     </item>
     
   </channel>

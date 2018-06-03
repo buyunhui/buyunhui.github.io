@@ -26,7 +26,7 @@
 
 
 <meta name="author" content="suiyelian" />
-  <meta name="description" content="python中的exec 和 eval 1.import机制概要 1.1 import背后那些事 import通过各种方式遍历sys.path以定位模块，有内置的" />
+  <meta name="description" content="python常用Tips 尽量使用内建函数，详情请参考官方介绍 https://docs.python.org/3/library/functions.html 尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关 如果可能，使用in代替if" />
 
   <meta name="keywords" content="Hugo, theme, jane" />
 
@@ -38,7 +38,7 @@
 <meta name="generator" content="Hugo 0.38.2" />
 
 
-<link rel="canonical" href="https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/" />
+<link rel="canonical" href="https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8tips/" />
 
 
 
@@ -59,9 +59,9 @@
 
 
 <meta property="og:title" content="" />
-<meta property="og:description" content="python中的exec 和 eval 1.import机制概要 1.1 import背后那些事 import通过各种方式遍历sys.path以定位模块，有内置的" />
+<meta property="og:description" content="python常用Tips 尽量使用内建函数，详情请参考官方介绍 https://docs.python.org/3/library/functions.html 尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关 如果可能，使用in代替if" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://buyunhui.github.io/post/python-exec-%E5%92%8C-eval/" />
+<meta property="og:url" content="https://buyunhui.github.io/post/python-%E5%B8%B8%E7%94%A8tips/" />
 
 
 
@@ -79,18 +79,18 @@
 
 
 <meta itemprop="name" content="">
-<meta itemprop="description" content="python中的exec 和 eval 1.import机制概要 1.1 import背后那些事 import通过各种方式遍历sys.path以定位模块，有内置的">
+<meta itemprop="description" content="python常用Tips 尽量使用内建函数，详情请参考官方介绍 https://docs.python.org/3/library/functions.html 尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关 如果可能，使用in代替if">
 
 
 
-<meta itemprop="wordCount" content="1429">
+<meta itemprop="wordCount" content="718">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content=""/>
-<meta name="twitter:description" content="python中的exec 和 eval 1.import机制概要 1.1 import背后那些事 import通过各种方式遍历sys.path以定位模块，有内置的"/>
+<meta name="twitter:description" content="python常用Tips 尽量使用内建函数，详情请参考官方介绍 https://docs.python.org/3/library/functions.html 尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关 如果可能，使用in代替if"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -185,8 +185,8 @@
       <div class="post-meta">
         <span class="post-time"> 0001-01-01 </span>
         
-        <span class="more-meta"> 约 1429 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span class="more-meta"> 约 718 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
       </div>
     </header>
 
@@ -197,17 +197,29 @@
   <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
-<li><a href="#python中的exec-和-eval">python中的exec 和 eval</a>
+<li><a href="#python常用tips">python常用Tips</a>
 <ul>
-<li><a href="#1-import机制概要">1.import机制概要</a>
+<li>
 <ul>
-<li><a href="#1-1-import背后那些事">1.1 import背后那些事</a></li>
-<li><a href="#1-2-import导入实例讲解">1.2 import导入实例讲解</a></li>
+<li>
+<ul>
+<li><a href="#尽量使用内建函数-详情请参考官方介绍">尽量使用内建函数，详情请参考官方介绍</a></li>
+<li><a href="#尽可能使用局部变量-比全局变量更快-搜索符号逻辑有关">尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关</a></li>
+<li><a href="#如果可能-使用in代替if判断">如果可能，使用in代替if判断</a></li>
+<li><a href="#列表查找可以将list转为set-dic-再进行查找">列表查找可以将list转为set dic，再进行查找</a></li>
 </ul></li>
-<li><a href="#2-exec函数">2 exec函数</a>
+<li><a href="#1-元组列表指定index排序">1. 元组列表指定index排序</a></li>
+<li><a href="#2-字符串连接">2. 字符串连接</a></li>
+<li><a href="#3-序列操作">3. 序列操作</a>
 <ul>
-<li><a href="#2-1-函数介绍">2.1 函数介绍</a></li>
-<li><a href="#2-2-exec使用方法">2.2 exec使用方法</a></li>
+<li><a href="#3-1-map函数-将一个函数作用于序列的每一个元素">3.1 map函数 将一个函数作用于序列的每一个元素</a></li>
+<li><a href="#3-2-reduce函数-将一个函数作用序列">3.2 reduce函数 将一个函数作用序列</a></li>
+<li><a href="#3-3-dic">3.3 dic</a></li>
+<li><a href="#3-4-函数与loop">3.4 函数与loop</a></li>
+<li><a href="#3-5-尽可能使用列表表达式来生成序列数据-如果不影响功能-请有点追求使用生成器">3.5 尽可能使用列表表达式来生成序列数据，如果不影响功能，请有点追求使用生成器</a></li>
+</ul></li>
+<li><a href="#4-import位置">4. import位置</a></li>
+<li><a href="#5-变量交换">5. 变量交换,</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -219,110 +231,167 @@
     <div class="post-content">
       
 
-<h1 id="python中的exec-和-eval">python中的exec 和 eval</h1>
+<h1 id="python常用tips">python常用Tips</h1>
 
-<h2 id="1-import机制概要">1.import机制概要</h2>
+<h4 id="尽量使用内建函数-详情请参考官方介绍">尽量使用内建函数，详情请参考官方介绍</h4>
 
-<h3 id="1-1-import背后那些事">1.1 import背后那些事</h3>
+<p><a href="https://docs.python.org/3/library/functions.html">https://docs.python.org/3/library/functions.html</a></p>
 
-<ol>
-<li>import通过各种方式遍历sys.path以定位模块，有内置的导入逻辑，也有导入引子</li>
+<h4 id="尽可能使用局部变量-比全局变量更快-搜索符号逻辑有关">尽可能使用局部变量，比全局变量更快，搜索符号逻辑有关</h4>
 
-<li><p>现在取决于负责的导入钩子，它可能会加载字节码（.pyc）或源代码（.py）</p>
+<h4 id="如果可能-使用in代替if判断">如果可能，使用in代替if判断</h4>
 
-<p>a. 如果字节码可用并且魔术校验和与当前Python解释器的版本相匹配，则字节码文件的时间戳更新或等于源版本（或源不存在），它将加载该版本。
-b. 如果字节码缺失或过时，它将加载源文件并将其编译为字节码。为此，它会根据这些设置检查文件标题中的魔术注释以进行编码设置和解码。它还将检查是否存在特殊的制表符宽度注释，以便将制表符视为除8个字符以外的其他字符（如有必要）。一些导入钩子会根据Python的版本和实现生成 .pyc文件或将字节码存储在其他地方（<strong>pycache</strong>）。</p></li>
+<h4 id="列表查找可以将list转为set-dic-再进行查找">列表查找可以将list转为set dic，再进行查找</h4>
 
-<li><p>Python解释器创建一个新的模块对象（您可以通过调用imp.new_module或创建types.ModuleType的实例来 完成这些操作），并使用正确的名称。</p></li>
+<h3 id="1-元组列表指定index排序">1. 元组列表指定index排序</h3>
 
-<li><p>如果模块是从文件加载的，则设置<strong>file</strong>键。 如果在执行代码之前涉及包，导入系统还将确保<strong>package</strong>和<strong>path</strong>设置正确。导入钩子将进一步设置<strong>loader</strong>变量</p></li>
-
-<li><p>Python解释器在模块字典的上下文中执行字节码。因此，执行代码的框架局部和框架全局是该模块的<strong>dict</strong>属性。</p></li>
-
-<li><p>该模块被插入到sys.modules中</p></li>
-</ol>
-
-<h3 id="1-2-import导入实例讲解">1.2 import导入实例讲解</h3>
-
-<p>查看博客
-1. <a href="https://blog.csdn.net/xys430381_1/article/details/78138796">https://blog.csdn.net/xys430381_1/article/details/78138796</a>
-**python之import机制详解 **
-2. <a href="http://www.jb51.net/article/51815.htm">http://www.jb51.net/article/51815.htm</a>
-3. <a href="http://www.jb51.net/article/118358.htm">http://www.jb51.net/article/118358.htm</a>
-**浅谈python import引入不同路径下的模块 **
-4. <a href="http://www.jb51.net/article/118367.htm">http://www.jb51.net/article/118367.htm</a></p>
-
-<h2 id="2-exec函数">2 exec函数</h2>
-
-<h3 id="2-1-函数介绍">2.1 函数介绍</h3>
-
-<ol>
-<li><p>函数原型**</p>
-
-<pre><code>exec(object [，globals [，locals ] ])
-</code></pre></li>
-
-<li><p>对象必须是字符串或代码对象。如果它是一个字符串，则将该字符串解析为一组Python语句，然后执行该语句（除非发生语法错误）。如果它是一个代码对象，它只是被执行。在任何情况下，执行的代码都应该作为文件输入有效</p></li>
-
-<li><p>所有情况下，如果省略可选部件，则代码将在当前范围内执行。如果只提供全局变量，则它必须是一个字典，它将用于全局变量和局部变量。内置的函数globals()并分别locals()返回当前的全局和本地字典.在模块级别，全局变量和本地变量是相同的字典</p></li>
-</ol>
-
-<h3 id="2-2-exec使用方法">2.2 exec使用方法</h3>
-
-<p><strong>import机制中，解析Python代码并将其转换为字节码是一项昂贵的操作，可以通过exec函数，让自己的字符串变成字节码</strong>
-1. 实例1:exec也快乐地执行字节码。</p>
-
-<pre><code class="language-python">code = compile('a = 1 + 2','&lt;string&gt;', 'exec')  # 最后一个参数可以是 'exec'，'eval'和'single'中的一个。第一个是exec使用的，第二个是eval功能使用。不同之处在于第一个可以包含语句，仅次于第二个表达式。 'single'是混合模式的一种形式，除了交互式shell外，其他都无用。
-exec(code)
-print(a) # 3
+<pre><code class="language-python">def sortby_inplace(somelist, n):
+    somelist[:] = [(x[n], x) for x in somelist]
+    somelist.sort()
+    somelist[:] = [val for (key, val) in somelist]
+    return
+   
+import operator
+somelist.sort(key=operator.itemgetter(1))
+print(somelist)
 </code></pre>
 
-<p>因为代码变量实际上是代码类型的对象而不是字符串。编译的第二个参数是文件名提示。如果我们从一个实际的字符串编译，那么我们应该提供一个用尖括号括起来的值，因为这是Python所能做的。</p>
+<h3 id="2-字符串连接">2. 字符串连接</h3>
 
-<ol>
-<li><p>字节码的性能测试
-默认使用全局字典</p>
-
-<pre><code class="language-python">python -mtimeit -s  &quot;a = 2; b = 3; c = a * b&quot;
-100000000 loops, best of 3: 0.00834 usec per loop
-
-python -mtimeit -s &quot;code = 'a = 2; b = 3; c = a * b'&quot; &quot;exec(code)&quot;
-100000 loops, best of 3: 10.1 usec per loop
-python -mtimeit -s  &quot;&quot;&quot;exec(&quot;compile('a = 2; b = 3; c = a * b','&lt;string&gt;', 'exec')&quot;)&quot;&quot;&quot;
+<pre><code class="language-python">slist = [&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;]
+s = &quot;_&quot;.join(slist) # 用符号_连接各个字符串
+# 1_2_3_4
 </code></pre>
 
-<p>全局字典与局部字典</p>
+<h3 id="3-序列操作">3. 序列操作</h3>
 
-<pre><code class="language-python">code_global = compile('''
-sum = 0
-for x in range(500000):
-    sum += x
-''', '&lt;string&gt;', 'exec')
-code_local = compile('''
-def f():
-    sum = 0
-    for x in range(500000):
-        sum += x
-''', '&lt;string&gt;', 'exec')
+<h4 id="3-1-map函数-将一个函数作用于序列的每一个元素">3.1 map函数 将一个函数作用于序列的每一个元素</h4>
 
-def test_global():
-    exec(code_global)
-
-def test_local():
-    locals()
-    exec(code_local,locals())
+<pre><code class="language-python">list(map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9]))
+['1', '2', '3', '4', '5', '6', '7', '8', '9']
 </code></pre>
 
-<p>性能：
-    PS D:\Algorithm\python_other\tipsTest&gt; python -mtimeit -s &lsquo;from testModel  import test_global as t&rsquo; &rsquo;t()&rsquo;
-    10 loops, best of 3: 45.8 msec per loop
-    PS D:\Algorithm\python_other\tipsTest&gt; python -mtimeit -s &lsquo;from testModel  import test_local
-    as t&rsquo; &rsquo;t()&rsquo;
-    1000000 loops, best of 3: 0.445 usec per loop
-    PS D:\Algorithm\python_other\tipsTest&gt;</p></li>
-</ol>
+<h4 id="3-2-reduce函数-将一个函数作用序列">3.2 reduce函数 将一个函数作用序列</h4>
 
-<p><strong>一句话总结：python将代码转化为字节序代价昂贵，使用exec需谨慎</strong></p>
+<pre><code class="language-python">from functools import reduce
+def fn(x, y):
+... return x * 10 + y
+
+reduce(fn, [1, 3, 5, 7, 9]) # 13579
+
+
+综合例子：str 转int型
+from functools import reduce
+
+DIGITS = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
+
+def char2num(s):
+    return DIGITS[s]
+
+def str2int(s):
+    return reduce(lambda x, y: x * 10 + y, map(char2num, s))
+</code></pre>
+
+<h4 id="3-3-dic">3.3 dic</h4>
+
+<p>建议使用defaultdict 不会产生keyerror</p>
+
+<pre><code class="language-python">from collections import defaultdict
+
+s = 'mississippi'
+d = defaultdict(int)
+for k in s:
+  d[k] += 1
+print(d)
+
+s = [('red', 1), ('blue', 2), ('red', 3), ('blue', 4), ('red', 1), ('blue', 4)]
+d = defaultdict(set)
+for k, v in s:
+  d[k].add(v)
+
+print(d)
+defaultdict(&lt;class 'int'&gt;, {'m': 1, 'i': 4, 's': 4, 'p': 2})
+defaultdict(&lt;class 'set'&gt;, {'red': {1, 3}, 'blue': {2, 4}})
+</code></pre>
+
+<h4 id="3-4-函数与loop">3.4 函数与loop</h4>
+
+<p>函数内循环操作（doit2）比循环函数（doit1）快一倍以上</p>
+
+<pre><code class="language-python">import time
+x = 0
+def doit2(list):
+    global x 
+    for i in list:
+        x = x + i
+
+list = range(100000000)
+t = time.time()
+doit2(list)
+print(&quot;%.3f&quot; % (time.time()-t)) 
+
+x = 0
+def doit1(i):
+    global x
+    x = x + i
+
+list = range(100000000)
+t = time.time()
+for i in list:
+    doit1(i)
+
+print(&quot;%.3f&quot; % (time.time()-t))
+</code></pre>
+
+<h4 id="3-5-尽可能使用列表表达式来生成序列数据-如果不影响功能-请有点追求使用生成器">3.5 尽可能使用列表表达式来生成序列数据，如果不影响功能，请有点追求使用生成器</h4>
+
+<pre><code class="language-python">evens = [ i for i in range(10) if i%2 == 0] 
+chunk = ( 1000 * i for i in xrange(1000)) # 生成器
+</code></pre>
+
+<h3 id="4-import位置">4. import位置</h3>
+
+<p>两种常见的import</p>
+
+<pre><code class="language-python">def doit1():
+    import string ###### import statement inside function 需要时导入 减少程序加载时间，但多处用到时，性能爆减
+    string.lower('Python')
+
+for num in range(100000):
+    doit1()
+
+第二种 直接在文件头加载 一次搞定，但是这样写失去了python的灵活性，增加启动时间
+import string ###### import statement outside function
+def doit2():
+    string.lower('Python')
+
+for num in range(100000):
+    doit2()
+</code></pre>
+
+<p>一种可行的懒惰import方式：</p>
+
+<pre><code class="language-python">modelName = None
+
+def parse_modelName():
+    global modelName
+    if modelName is None:
+        import modelName
+</code></pre>
+
+<h3 id="5-变量交换">5. 变量交换,</h3>
+
+<pre><code class="language-ppython">x, y = y, x
+</code></pre>
+
+<pre><code class="language-ppython">x, y = y, x
+</code></pre>
+
+<pre><code class="language-ppython">x, y = y, x
+</code></pre>
+
+<pre><code class="language-ppython">x, y = y, x
+</code></pre>
 
     </div>
 
@@ -366,17 +435,12 @@ def test_local():
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/git%E9%85%8D%E7%BD%AE/">
+          <a class="prev" href="/post/python-exec-%E5%92%8C-eval/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default"></span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         
-          <a class="next" href="/post/python-%E5%B8%B8%E7%94%A8tips/">
-            <span class="next-text nav-default"></span>
-            <span class="prev-text nav-mobile">下一篇</span>
-            <i class="iconfont icon-right"></i>
-          </a>
       </nav>
     </footer>
     

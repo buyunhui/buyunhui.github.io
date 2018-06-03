@@ -85,7 +85,7 @@
 
 <meta itemprop="datePublished" content="2018-04-15T14:57:23&#43;08:00" />
 <meta itemprop="dateModified" content="2018-04-15T14:57:23&#43;08:00" />
-<meta itemprop="wordCount" content="3296">
+<meta itemprop="wordCount" content="3487">
 
 
 
@@ -191,7 +191,7 @@
               <a href="/categories/c/c&#43;&#43;/"> c/c&#43;&#43; </a>
             
           </div>
-        <span class="more-meta"> 约 3296 字 </span>
+        <span class="more-meta"> 约 3487 字 </span>
         <span class="more-meta"> 预计阅读 7 分钟 </span>
       </div>
     </header>
@@ -493,6 +493,46 @@ private:
         return A(tmp);  
     }  // 注意返回值类型
 </code></pre>
+
+<p>wstring转string</p>
+
+<p>void funWstrToStr（wstring strw，string&amp; str，UINT CODEPAGE）</p>
+
+<p>{</p>
+
+<p>int num = strw.length();
+int len = WideCharToMultiByte(CODEPAGE, 0, (LPCWSTR)strw.c_str(), num, NULL, 0, NULL, NULL);
+char* szStr = new char[len+1];
+WideCharToMultiByte(CODEPAGE, 0, (LPCWSTR)strw.c_str(), num, szStr, len, NULL, NULL);
+szStr[len] = &lsquo;\0&rsquo;;</p>
+
+<p>str = szStr;</p>
+
+<p>}</p>
+
+<p>string 转wstring</p>
+
+<p>void funStrToWstr（string str,wstring&amp; strw，UINT CODEPAGE）</p>
+
+<p>{</p>
+
+<p>char* pData= str.c_str();</p>
+
+<p>DWORD dwNum = MultiByteToWideChar(CodePage, 0,
+pData, -1, NULL, 0);
+if (dwNum == 0)
+{
+return;
+}</p>
+
+<p>WCHAR* pwText = new WCHAR[dwNum];
+memset(pwText, &lsquo;\0&rsquo;, dwNum);
+MultiByteToWideChar(CodePage, 0, pData, -1, pwText, dwNum);
+strw = pwText;</p>
+
+<p>}</p>
+
+<p>setlocale(LC_ALL,&ldquo;chs&rdquo;);</p>
 
     </div>
 
