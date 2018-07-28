@@ -3626,6 +3626,440 @@ g++ -o libpycall.so -shared -fPIC pycall.c&lt;/p&gt;
     
     <item>
       <title></title>
+      <link>https://buyunhui.github.io/post/c&#43;&#43;%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/c&#43;&#43;%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      
+        <description>
+
+&lt;h3 id=&#34;c-编程思想阅读笔记&#34;&gt;C++编程思想阅读笔记&lt;/h3&gt;
+
+&lt;h4 id=&#34;1-实现结构声明在头文件-实现在-cpp文件-进一步隐藏实现&#34;&gt;1. 实现结构声明在头文件，实现在.cpp文件，进一步隐藏实现&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class{
+    struct X;
+    X* handle;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;2-strstream类&#34;&gt;2.strstream类&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;用ostrstream.str()将冻结自身，不能再向它追加字符，并且还需要清除存储器
+char* cp=A.str()；
+delete A.str()
+A . r d b u f ( ) - &amp;gt; f r e e z e ( 0 )； 对ostrstream进行解冻
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但通常不这样做。正常的情况下，如果
+我们获得o s t r s t r e a m的c h a r *时想添加更多的字符，就建立一个新的 o s t r s t r e a m，通过使用r d b u f ( )
+把旧的流灌到这个新的流中去，并继续添加新的字符到新的 o s t r s t r e a m中&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/c&#43;&#43;%E8%BF%9B%E9%98%B6%E7%B3%BB%E5%88%97%E4%B9%8Bc&#43;&#43;%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/c&#43;&#43;%E8%BF%9B%E9%98%B6%E7%B3%BB%E5%88%97%E4%B9%8Bc&#43;&#43;%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/</guid>
+      
+        <description>
+
+&lt;h3 id=&#34;c-进阶系列之c-对象模型&#34;&gt;C++进阶系列之C++对象模型&lt;/h3&gt;
+
+&lt;h3 id=&#34;1-引子struct-vs-class&#34;&gt;1.引子struct VS class&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;//template &amp;lt; class type &amp;gt;
+class Point3d
+{
+public:
+    Point3d( type x = 0.0, type y = 0.0, type z = 0.0 ): _x( x ), _y( y ), _z( z ) {}
+    type x() { return _x; }
+    void x( type xval ) { _x = xval; }
+    // ... etc ...
+private:
+    type _x;
+    type _y;
+    type _z;
+}
+
+struct S_Point3d
+{
+    type _x;
+    type _y;
+    type _z;
+}
+
+Point3d p1;
+S_Point3d p2;
+用C++ 类Point3d p1封装 C 结构体 p2增加了哪些布局成本?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-c-对象模型&#34;&gt;2.c++对象模型&lt;/h3&gt;
+
+&lt;h4 id=&#34;2-1-布局成本增加&#34;&gt;2.1 布局成本增加&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;虚函数机制（ virtual function）&lt;/strong&gt;：支持c++执行期绑定，多态&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;虚基类（virtual base clas）&lt;/strong&gt;：菱形继承，多次出现在继承体系中的base class，有一个单一而被共享的实例。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多重继承下的子类与基类之间的转换&lt;/strong&gt;。&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;其他情况下，c++其实也并没有比C庞大或者迟缓。&lt;/p&gt;
+
+&lt;h4 id=&#34;2-2-c-对象模型&#34;&gt;2.2 C++ 对象模型&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class Point
+{
+public:
+    Point( float xval );
+    virtual ~Point();
+    float x() const;
+    static int PointCount();
+protected:
+    virtual ostream&amp;amp;
+    print( ostream &amp;amp;os ) const;
+    float _x;
+    static int _point_count;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上，在C++中有两种类成员数据（class data members）：静态非静态（static and nonstatic）
+以及三种类成员函数（class member functions—static, nonstatic, and virtual），参考下面C++对象示意图，
+对第一节提的问，显然是没有增加任何成本的。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&#34;D:blogsfig1.png&#34; alt=&#34;fig1.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;非静态类成员数据被放置在每一个类实例（对象）之类，类的静态和非静态成员函数，静态数据则被放在类实例之外。
+虚函数c++两步骤给予支持。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;每一个class产生一堆指向虚函数指针，放在表格之中，表格成为virtual table(vtbl).&lt;/li&gt;
+&lt;li&gt;每一个类实例（对象）拥有一指向相关virtual table的指针（vptr）,每一个class 所关联的type_info object一般放在vtbl的第一个slot.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&#34;2-3-多重继承的性能探讨引子&#34;&gt;2.3 多重继承的性能探讨引子&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class iostream:public istream,public ostream { ... };
+class istream : virtual public ios { ... };
+class ostream : virtual public ios { ... };
+   ios
+   / \
+  ist ost
+   \ /
+ iostream
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在C++继承体制中，“间接性”的级数因为继承的深度而增加。例如iostream需要两次间接存取才能取到ios的成员，而istream
+只需要一次。当然，如果把base指针直接复制一份到子类，倒是可以直接读，空间换时间罢了。
+而如果直接把基类放成员放子类中，好处：直接读写，坏处：当基类改变，所有子类全部全部得重新编译。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;D:blogsfig2.png&#34; alt=&#34;fig2.png&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-对象布局&#34;&gt;2.3 对象布局&lt;/h4&gt;
+
+&lt;p&gt;c++实现动态多态：
+1. 隐式转换，基类向父类转换，一般会发生截断情况。
+2. virtual机制
+3. 经由dynamic_cast和typeid运算符&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;那个一个类实例到底需要占用多少内存？&lt;/strong&gt;
+   非静态成员数据 +  加上需要字节对齐所需内存 + 为了支持virtual所需的负担&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/git%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87%E8%B5%B6%E8%B6%85svn-%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/git%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87%E8%B5%B6%E8%B6%85svn-%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B1/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;center-白话系列-git开发效率赶超svn-进阶教程1&#34;&gt;&lt;center&gt; 白话系列：git开发效率赶超svn 进阶教程1&lt;/h1&gt;
+
+&lt;p&gt;####1. 基础命令之撤销（命令较多 可参考别名赋予命令含义）
+    # 恢复暂存区的指定文件到工作区 add
+    $ git checkout [file]
+    # 恢复某个commit的指定文件到工作区
+    $ git checkout [commit] [file]
+    # 恢复上一个commit的所有文件到工作区
+    $ git checkout .
+    # 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变
+    $ git reset [file]
+    # 重置暂存区与工作区，与上一次commit保持一致
+    $ git reset &amp;ndash;hard
+    # 重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变
+    $ git reset [commit]
+    # 重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致
+    $ git reset &amp;ndash;hard [commit]
+    # 回退到某个版本，只回退了commit的信息，不会恢复到index file一级。如果还要提交，直接commit即可
+    $ git reset –soft：
+    # 重置当前HEAD为指定commit，但保持暂存区和工作区不变
+    $ git reset &amp;ndash;keep [commit]
+    # 新建一个commit，用来撤销指定commit
+    # 后者的所有变化都将被前者抵消，并且应用到当前分支
+    $ git revert [commit]
+    $ 需要删除暂存区或分支上的文件, 但本地又需要使用, 只是不希望这个文件被版本控制, 可以使用
+    $ git rm &amp;ndash;cached file_path
+    # 如果代码没有任何新变化，则用来改写上一次commit的提交信息
+    $ git commit &amp;ndash;amend -m  [message]
+    # 重做上一次commit，并包括指定文件的新变化
+    $ git commit &amp;ndash;amend
+####2.远程同步相关操作命令
+    # 下载远程仓库的所有变动
+    $ git fetch [remote]
+    # 显示所有远程仓库
+    $ git remote -v
+    # 显示某个远程仓库的信息
+    $ git remote show [remote]
+    # 增加一个新的远程仓库，并命名
+    $ git remote add [shortname] [url]
+    # 取回远程仓库的变化，并与本地分支合并
+    $ git pull [remote] [branch]
+    # 上传本地指定分支到远程仓库
+    $ git push [remote] [branch]
+    # 强行推送当前分支到远程仓库，即使有冲突
+    $ git push [remote] &amp;ndash;force
+    # 推送所有分支到远程仓库
+    $ git push [remote] &amp;ndash;all
+####3.git diff 差异比较
+    ```git
+    git diff [options] [&lt;commit&gt;] [&amp;ndash;] [&lt;path&gt;…​]
+    git diff [options] &amp;ndash;cached [&lt;commit&gt;] [&amp;ndash;] [&lt;path&gt;…​]
+    git diff [options] &lt;commit&gt; &lt;commit&gt; [&amp;ndash;] [&lt;path&gt;…​]
+    git diff [options] &lt;blob&gt; &lt;blob&gt;
+    git diff [options] [&amp;ndash;no-index] [&amp;ndash;] &lt;path&gt; &lt;path&gt;
+    git diff &amp;ndash;staged # 比较暂存区和版本库差异&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git diff --cached # 比较暂存区和版本库差异
+
+git diff --stat # 仅仅比较统计信息
+```
+git diff foo
+这会显示你当前工作目录与另外一个叫 foo 的分支的差别。你也以加上路径限定符，来只比较某一个文件或目录。
+
+git diff master..foo
+这条命令显示两个分支间的差异。
+
+git diff master...foo
+这条命令显示 master、foo 的共有父分支和 test 分支之间的差异，用 3 个 . 来取代前面的两个 . 。
+
+git diff localbranch remotebranch classfoo.txt
+比较某个文件和远程分支上的区别。
+
+git diff tag1 tag2
+
+git diff HEAD
+上面这条命令会显示你工作目录与上次提交时之间的所有差别，这条命令所显示的 内容都会在执行 git commit -a 命令时被提交。
+
+git diff HEAD -- ./foo
+上面这条命令会显示你当前工作目录下的 foo 目录与上次提交之间的差别（更准确地说是在当前分支）。
+
+git diff --stat
+不查看每个文件的详细差别，只是统计一下有哪些文件被改动，有多少行被改动。
+
+git diff [&amp;lt;path&amp;gt;...]
+这个命令最常用，在每次 add 进入 index 前会运行这个命令，查看即将 add 进入 index 时所做的内容修改，即 working directory 和 index 的差异。
+
+git diff --cached [&amp;lt;path&amp;gt;...]
+这个命令初学者不太常用，却非常有用，它表示查看已经 add 进入 index 但是尚未 commit 的内容同最后一次 commit 时的内容的差异。即 index 和 git directory 的差异。
+
+git diff --cached [&amp;lt;commit&amp;gt;] [&amp;lt;path&amp;gt;...]
+这个命令初学者用的更少，也非常有用，它表示查看已经 add 进入 index 但是尚未commit的内容同指定的 &amp;lt;commit&amp;gt; 之间的差异，和上面一条很相似，差别仅仅 &amp;lt;commit&amp;gt;，即 index 和 git directory 中指定版本的差异。
+
+git diff &amp;lt;commit&amp;gt; [&amp;lt;path&amp;gt;...]
+这个命令用来查看工作目录和指定 &amp;lt;commit&amp;gt; 的 commit 之间的差别，如果要和 Git directory 中最新版比较差别，则 &amp;lt;commit&amp;gt;=HEAD。如果要和某一个 branch 比较差别，&amp;lt;commit&amp;gt;=分支名字。
+
+git diff &amp;lt;commit&amp;gt; &amp;lt;commit&amp;gt; [&amp;lt;path&amp;gt;...]
+这个命令用来比较 git directory 中任意两个 &amp;lt;commit&amp;gt; 之间的差别，如果想比较任意一个 &amp;lt;commit&amp;gt; 和最新版的差别，把其中一个 &amp;lt;commit&amp;gt; 换成 HEAD 即可。
+
+git diff commit-id-1 commit-id-2 &amp;gt; d:/diff.txt
+输出两次提交的差异到文件diff，+表示新增，-表示删除
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####4 git log 等维护命令
+####4.1 git log 查看提交信息
+这里提供几个高效的命令别名，格式化打印log，方便查看日志信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-git&#34;&gt;plog = log --graph --pretty=&#39;format:%C(red)%d%C(reset) %C(yellow)%h%C(reset) %ar %C(green)%aN%C(reset) %s&#39;
+lg = log --color --graph --pretty=format:&#39;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&amp;lt;%an&amp;gt;%Creset&#39; --abbrev-commit
+tlog = log --stat --since=&#39;1 Day Ago&#39; --graph --pretty=oneline --abbrev-commit --date=relative
+rank = shortlog -sn --no-merges # 查看当前工程贡献天梯排行榜
+git log --author=&amp;quot;$(git config --get user.name)&amp;quot; --pretty=tformat: --numstat | gawk &#39;{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf &amp;quot;added lines: %s removed lines : %s total lines: %s\n&amp;quot;,add,subs,loc }&#39; - # 统计代码行
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt; 我们常用 -p 选项展开显示每次提交的内容差异，用 -2 则仅显示最近的两次更新：
+ git log -p -2
+
+按照时间作限制的选项，比如 --since 和 --until
+ git log --since=2.weeks # 查看最近两周的提交信息
+
+ 以给出各种时间格式，比如说具体的某一天（“2008-01-15”），或者是多久以前（“2 years 1 day 3 minutes ago”）。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;还可以给出若干搜索条件，列出符合的提交。用 &amp;ndash;author 选项显示指定作者的提交，用 &amp;ndash;grep 选项搜索提交说明中的关键字。（请注意，如果要得到同时满足这两个选项搜索条件的提交，就必须用 &amp;ndash;all-match 选项。否则，满足任意一个条件的提交都会被匹配出来）&lt;/p&gt;
+
+&lt;p&gt;另一个真正实用的git log选项是路径(path)，如果只关心某些文件或者目录的历史提交，可以在 git log 选项的最后指定它们的路径。因为是放在最后位置上的选项，所以用两个短划线（&amp;ndash;）隔开之前的选项和后面限定的路径名。
+更多用法请参考：&lt;a href=&#34;https://git-scm.com/book/zh/v1/Git-%E5%9F%BA%E7%A1%80-%E6%9F%A5%E7%9C%8B%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2&#34;&gt;https://git-scm.com/book/zh/v1/Git-%E5%9F%BA%E7%A1%80-%E6%9F%A5%E7%9C%8B%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;4-2-git-log-进行分支差异对比&#34;&gt;4.2 git log 进行分支差异对比&lt;/h4&gt;
+
+&lt;p&gt;1）.查看 dev 有，而 master 中没有的：
+git log dev ^master&lt;/p&gt;
+
+&lt;p&gt;同理查看 master 中有，而 dev 中没有的内容：
+git log master ^dev&lt;/p&gt;
+
+&lt;p&gt;2）.查看 dev 中比 master 中多提交了哪些内容：
+git log master..dev&lt;/p&gt;
+
+&lt;p&gt;注意，列出来的是两个点后边（此处即dev）多提交的内容。同理，想知道 master 比 dev 多提交了什么：
+git log dev..master&lt;/p&gt;
+
+&lt;p&gt;3）.不知道谁提交的多谁提交的少，单纯想知道有什么不一样：
+git log dev&amp;hellip;master&lt;/p&gt;
+
+&lt;p&gt;4）.在上述情况下，再显示出每个提交是在哪个分支上：
+git log &amp;ndash;left-right dev&amp;hellip;master
+注意 commit 后面的箭头，根据我们在 –left-right dev…master 的顺序，左箭头 &amp;lt; 表示是 dev 的，右箭头 &amp;gt; 表示是 master的。&lt;/p&gt;
+
+&lt;h4 id=&#34;4-4查找问题的利器-git-blame-与git-show&#34;&gt;4.4查找问题的利器 - git blame 与git show&lt;/h4&gt;
+
+&lt;p&gt;如果你要查看文件的每个部分是谁修改的, 那么 git blame 就是不二选择. 只要运行&amp;rsquo;git blame [filename]&amp;lsquo;, 你就会得到整个文件的每一行的详细修改信息:包括SHA串,日期和作者:
+git blame可以查看文件每一行是谁修改的，命令如下：&lt;br /&gt;
+    git blame file_name
+输出格式如下：
+**commit ID | 代码提交作者 | 提交时间 | 代码位于文件中的行数 | 实际代码 **
+然后根据commit id，使用git show修改差异，或者git diff 前后commit差异到文件中慢慢欣赏
+&lt;strong&gt;git show commitID&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;4-4-信息统计-娱乐&#34;&gt;4.4 信息统计（娱乐）&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-git&#34;&gt;rank = shortlog -sn --no-merges # 查看当前工程贡献天梯排行榜
+git log --author=&amp;quot;$(git config --get user.name)&amp;quot; --pretty=tformat: --numstat | gawk &#39;{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf &amp;quot;added lines: %s removed lines : %s total lines: %s\n&amp;quot;,add,subs,loc }&#39; - # 统计代码行
+
+统计某人的代码提交量，包括增加，删除：
+git log --author=&amp;quot;$(git config --get user.name)&amp;quot; --pretty=tformat: --numstat | gawk &#39;{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf &amp;quot;added lines: %s removed lines : %s total lines: %s\n&amp;quot;,add,subs,loc }&#39; -
+仓库提交者排名前 5（如果看全部，去掉 head 管道即可）：
+git log --pretty=&#39;%aN&#39; | sort | uniq -c | sort -k1 -n -r | head -n 5
+仓库提交者（邮箱）排名前 5：这个统计可能不会太准，因为很多人有不同的邮箱，但会使用相同的名字
+git log --pretty=format:%ae | gawk -- &#39;{ ++c[$0]; } END { for(cc in c) printf &amp;quot;%5d %s\n&amp;quot;,c[cc],cc; }&#39; | sort -u -n -r | head -n 5 
+贡献者统计：
+git log --pretty=&#39;%aN&#39; | sort -u | wc -l
+提交数统计：
+git log --oneline | wc -l 
+添加或修改的代码行数：
+git log --stat|perl -ne &#39;END { print $c } $c += $1 if /(\d+) insertions/;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5 git 高级命令
+####5.1 输出最后一次提交的改变&lt;/p&gt;
+
+&lt;p&gt;这个命令，我经常使用它 来发送其他没有使用git的人来检查或者集成所修改的。它会输出最近提交的修改内容到一个zip文件中。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git archive -o ../updated.zip HEAD $(git diff --name-only HEAD^)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.2 输出两个提交间的改变
+类似的，如果你需要输出某两个提交间的改变时，使用下面两条命令之一均可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  git archive -o ../latest.zip NEW_COMMIT_ID_HERE $(git diff --name-only OLD_COMMIT_ID_HERE NEW_COMMIT_ID_HERE)
+
+git archive --format=zip HEAD `git diff --name-only 7c4660150d12e77fadecd298043fad02ff835b44 c4f9cfb2faa8068fa45250e6fe88ee7489c04fce` &amp;gt; a.zip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.3 克隆指定的远程分支
+如果你渴望只克隆远程仓库的一个指定分支，而不是整个仓库分支，这对你帮助很大。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git init
+git remote add -t BRANCH_NAME_HERE -f origin REMOTE_REPO_URL_PATH_HERE
+git checkout BRANCH_NAME_HERE
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.4 应用 从不相关的本地仓库来的补丁
+git diff &amp;gt; patch //patch的命名是随意的，不加其他参数时作用是当我们希望将我们本仓库工作区的修改拷贝一份到其他机器上使用，但是修改的文件比较多，拷贝量比较大，&lt;/p&gt;
+
+&lt;p&gt;此时我们可以将修改的代码做成补丁，之后在其他机器上对应目录下使用 git apply patch 将补丁打上即可&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;git diff &amp;ndash;cached &amp;gt; patch //是将我们暂存区与版本库的差异做成补丁&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;git diff &amp;ndash;HEAD &amp;gt; patch //是将工作区与版本库的差异做成补丁&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;git diff Testfile &amp;gt; patch//将单个文件做成一个单独的补丁&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;拓展：git apply patch 应用补丁，应用补丁之前我们可以先检验一下补丁能否应用，git apply &amp;ndash;check patch 如果没有任何输出，那么表示可以顺利接受这个补丁&lt;/p&gt;
+
+&lt;p&gt;另外可以使用git apply &amp;ndash;reject patch将能打的补丁先打上，有冲突的会生成.rej文件，此时可以找到这些文件进行手动打补丁　&lt;/p&gt;
+
+&lt;p&gt;如果你需要其它一些不相关的本地仓库作为你现在仓库的补丁，这里就是通往那里的捷径。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git --git-dir=PATH_TO_OTHER_REPOSITORY_HERE/.git format-patch -k -1 --stdout COMMIT_HASH_ID_HERE| git am -3 -k
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.5  检测你的分支的改变是否为其它分支的一部分&lt;/p&gt;
+
+&lt;p&gt;cherry命令让我们检测你的分支的改变是否出现在其它一些分支中。它通过+或者-符号来显示从当前分支与所给的分支之间的改变：是否合并了(merged)。.+ 指示没有出现在所给分支中，反之，- 就表示出现在了所给的分支中了。这里就是如何去检测：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git cherry -v OTHER_BRANCH_NAME_HERE
+#例如: 检测master分支
+git cherry -v master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.6.开始一个无历史的新分支（不用被git log刷屏）&lt;/p&gt;
+
+&lt;p&gt;有时，你需要开始一个新分支，但是又不想把很长很长的历史记录带进来，例如，你想在公众区域（开源）放置你的代码，但是又不想别人知道它的历史记录。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git checkout --orphan NEW_BRANCH_NAME_HERE
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.7 无切换分支的从其它分支Checkout文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;不想切换分支，但是又想从其它分支中获得你需要的文件：
+git checkout BRANCH_NAME_HERE -- PATH_TO_FILE_IN_BRANCH_HERE
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.8.忽略已追踪文件的变动&lt;/p&gt;
+
+&lt;p&gt;如果您正在一个团队中工作，而且大家都在同一条branch上面工作，那么您很有可能会经常用到fetch和merge。但是有时候这样会重置您的环境配置文件，如此的话，您就得在每次merge后修改它。使用这一命令，您就能要求git忽视指定文件的变动。这样，下回你再merge的话，这个文件就不会被修改了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git update-index --assume-unchanged PATH_TO_FILE_HERE
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####5.9.使用rebase推送而非merge&lt;/p&gt;
+
+&lt;p&gt;如果您正在团队中工作并且整个团队都在同一条branch上面工作，那么您就得经常地进行fetch/merge或者pull。Git中，分支的合并以所提交的merge来记录，以此表明一条feature分支何时与主分支合并。但是在多团队成员共同工作于一条branch的情形中，常规的merge会导致log中出现多条消息，从而产生混淆。因此，您可以在pull的时候使用rebase，以此来减少无用的merge消息，从而保持历史记录的清晰。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git pull --rebase
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;您也可以将某条branch配置为总是使用rebase推送：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git config branch.BRANCH_NAME_HERE.rebase true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;6-git一些设置&#34;&gt;6 git一些设置&lt;/h4&gt;
+
+&lt;p&gt;####6.1 help.autocorrect
+该配置项只在 Git 1.6.1及以上版本有效，假如你在Git 1.6中错打了一条命令，会显示：&lt;/p&gt;
+
+&lt;p&gt;$ git com
+git: &amp;lsquo;com&amp;rsquo;
+is  not a git-command. See &amp;lsquo;git &amp;ndash;help&amp;rsquo;.
+Did you mean this?
+     commit
+如果你把help.autocorrect设置成1，启动自动修正），那么在只有一个命令被模糊匹配到的情况下，Git 会自动运行该命令。
+####6.2&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

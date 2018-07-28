@@ -131,6 +131,33 @@
     
     <item>
       <title></title>
+      <link>https://buyunhui.github.io/post/c&#43;&#43;%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/c&#43;&#43;%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>C++编程思想阅读笔记 1. 实现结构声明在头文件，实现在.cpp文件，进一步隐藏实现 class{ struct X; X* handle; } 2.strstream类 用ostrstream.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/c&#43;&#43;%E8%BF%9B%E9%98%B6%E7%B3%BB%E5%88%97%E4%B9%8Bc&#43;&#43;%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/c&#43;&#43;%E8%BF%9B%E9%98%B6%E7%B3%BB%E5%88%97%E4%B9%8Bc&#43;&#43;%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/</guid>
+      <description>C++进阶系列之C++对象模型 1.引子struct VS class //template &amp;lt; class type &amp;gt; class Point3d { public: Point3d( type x = 0.0, type y = 0.0, type z = 0.0 ): _x( x ), _y( y ), _z( z ) {} type x() { return _x; } void x( type xval</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://buyunhui.github.io/post/git%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87%E8%B5%B6%E8%B6%85svn-%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://buyunhui.github.io/post/git%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87%E8%B5%B6%E8%B6%85svn-%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B1/</guid>
+      <description>白话系列：git开发效率赶超svn 进阶教程1 ####1. 基础命令之撤销（命令较多 可参考别名赋予命令含义） # 恢复暂存区的指定文件到工作区 add $ git checkout [file] # 恢复</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

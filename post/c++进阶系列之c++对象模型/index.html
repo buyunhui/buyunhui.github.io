@@ -26,7 +26,7 @@
 
 
 <meta name="author" content="suiyelian" />
-  <meta name="description" content="git config &amp;ndash;global alias.modFlie status # 查看本次修改的文件 git add # 添加修改文件 add . 添加当前目录下所有修改文件 git config &amp;ndash;global alias.commit &amp;ldquo;status -m&amp;rdquo; # 查看本次修改的文件 git config &amp;ndash;global alias.unMod &amp;lsquo;checkout &amp;ndash;&amp;rsquo; # 撤销本次对文件的" />
+  <meta name="description" content="C&#43;&#43;进阶系列之C&#43;&#43;对象模型 1.引子struct VS class //template &amp;lt; class type &amp;gt; class Point3d { public: Point3d( type x = 0.0, type y = 0.0, type z = 0.0 ): _x( x ), _y( y ), _z( z ) {} type x() { return _x; } void x( type xval" />
 
   <meta name="keywords" content="Hugo, theme, jane" />
 
@@ -38,7 +38,7 @@
 <meta name="generator" content="Hugo 0.38.2" />
 
 
-<link rel="canonical" href="https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/" />
+<link rel="canonical" href="https://buyunhui.github.io/post/c&#43;&#43;%E8%BF%9B%E9%98%B6%E7%B3%BB%E5%88%97%E4%B9%8Bc&#43;&#43;%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/" />
 
 
 
@@ -59,9 +59,9 @@
 
 
 <meta property="og:title" content="" />
-<meta property="og:description" content="git config &ndash;global alias.modFlie status # 查看本次修改的文件 git add # 添加修改文件 add . 添加当前目录下所有修改文件 git config &ndash;global alias.commit &ldquo;status -m&rdquo; # 查看本次修改的文件 git config &ndash;global alias.unMod &lsquo;checkout &ndash;&rsquo; # 撤销本次对文件的" />
+<meta property="og:description" content="C&#43;&#43;进阶系列之C&#43;&#43;对象模型 1.引子struct VS class //template &lt; class type &gt; class Point3d { public: Point3d( type x = 0.0, type y = 0.0, type z = 0.0 ): _x( x ), _y( y ), _z( z ) {} type x() { return _x; } void x( type xval" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://buyunhui.github.io/post/git%E9%85%8D%E7%BD%AE/" />
+<meta property="og:url" content="https://buyunhui.github.io/post/c&#43;&#43;%E8%BF%9B%E9%98%B6%E7%B3%BB%E5%88%97%E4%B9%8Bc&#43;&#43;%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/" />
 
 
 
@@ -79,18 +79,18 @@
 
 
 <meta itemprop="name" content="">
-<meta itemprop="description" content="git config &ndash;global alias.modFlie status # 查看本次修改的文件 git add # 添加修改文件 add . 添加当前目录下所有修改文件 git config &ndash;global alias.commit &ldquo;status -m&rdquo; # 查看本次修改的文件 git config &ndash;global alias.unMod &lsquo;checkout &ndash;&rsquo; # 撤销本次对文件的">
+<meta itemprop="description" content="C&#43;&#43;进阶系列之C&#43;&#43;对象模型 1.引子struct VS class //template &lt; class type &gt; class Point3d { public: Point3d( type x = 0.0, type y = 0.0, type z = 0.0 ): _x( x ), _y( y ), _z( z ) {} type x() { return _x; } void x( type xval">
 
 
 
-<meta itemprop="wordCount" content="237">
+<meta itemprop="wordCount" content="966">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content=""/>
-<meta name="twitter:description" content="git config &ndash;global alias.modFlie status # 查看本次修改的文件 git add # 添加修改文件 add . 添加当前目录下所有修改文件 git config &ndash;global alias.commit &ldquo;status -m&rdquo; # 查看本次修改的文件 git config &ndash;global alias.unMod &lsquo;checkout &ndash;&rsquo; # 撤销本次对文件的"/>
+<meta name="twitter:description" content="C&#43;&#43;进阶系列之C&#43;&#43;对象模型 1.引子struct VS class //template &lt; class type &gt; class Point3d { public: Point3d( type x = 0.0, type y = 0.0, type z = 0.0 ): _x( x ), _y( y ), _z( z ) {} type x() { return _x; } void x( type xval"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -185,8 +185,8 @@
       <div class="post-meta">
         <span class="post-time"> 0001-01-01 </span>
         
-        <span class="more-meta"> 约 237 字 </span>
-        <span class="more-meta"> 预计阅读 1 分钟 </span>
+        <span class="more-meta"> 约 966 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
       </div>
     </header>
 
@@ -197,9 +197,21 @@
   <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
-<li><a href="#git-commit-m-initial-commit">git commit -m &lsquo;initial commit&rsquo;</a></li>
-<li><a href="#git-add-forgotten-file">git add forgotten_file</a></li>
-<li><a href="#git-commit-amend-只会产生一个commit-initial-commit">git commit &ndash;amend  只会产生一个commit:&lsquo;initial commit&rsquo;</a></li>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#c-进阶系列之c-对象模型">C++进阶系列之C++对象模型</a></li>
+<li><a href="#1-引子struct-vs-class">1.引子struct VS class</a></li>
+<li><a href="#2-c-对象模型">2.c++对象模型</a>
+<ul>
+<li><a href="#2-1-布局成本增加">2.1 布局成本增加</a></li>
+<li><a href="#2-2-c-对象模型">2.2 C++ 对象模型</a></li>
+<li><a href="#2-3-多重继承的性能探讨引子">2.3 多重继承的性能探讨引子</a></li>
+<li><a href="#2-3-对象布局">2.3 对象布局</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
 </ul>
 </nav>
   </div>
@@ -209,27 +221,106 @@
     <div class="post-content">
       
 
-<p>git config &ndash;global alias.modFlie status # 查看本次修改的文件
-git add                                  # 添加修改文件 add . 添加当前目录下所有修改文件
-git config &ndash;global alias.commit &ldquo;status -m&rdquo; # 查看本次修改的文件
-git config &ndash;global alias.unMod &lsquo;checkout &ndash;&rsquo; # 撤销本次对文件的修改
-git config &ndash;global alias.unAdd &lsquo;reset HEAD&rsquo; # 撤销add
-git config &ndash;global alias.megerCommit &lsquo;commit &ndash;amend&rsquo; #
-git config &ndash;global alias.newBranch &lsquo;checkout -b&rsquo; # 新建分支，并进入到新分支目录下
-git config &ndash;global alias.toBranch &lsquo;checkout&rsquo; # 切换到某分支
-git config &ndash;global alias.delBranch &lsquo;branch -d&rsquo; # 切换到某分支</p>
+<h3 id="c-进阶系列之c-对象模型">C++进阶系列之C++对象模型</h3>
 
-<p>git config &ndash;global alias.revert &lsquo;reset &ndash;hard&rsquo; # 回到历史版本
-git config &ndash;global alias.lastVer &lsquo;&ndash;hard HEAD^&rsquo; # 回到上个版本
-git config &ndash;global alias.toBranch &lsquo;checkout&rsquo; # 切换到某分支
-git config &ndash;global alias.toBranch &lsquo;checkout&rsquo; # 切换到某分支
-git config &ndash;global alias.toBranch &lsquo;checkout&rsquo; # 切换到某分支</p>
+<h3 id="1-引子struct-vs-class">1.引子struct VS class</h3>
 
-<h1 id="git-commit-m-initial-commit">git commit -m &lsquo;initial commit&rsquo;</h1>
+<pre><code class="language-cpp">//template &lt; class type &gt;
+class Point3d
+{
+public:
+    Point3d( type x = 0.0, type y = 0.0, type z = 0.0 ): _x( x ), _y( y ), _z( z ) {}
+    type x() { return _x; }
+    void x( type xval ) { _x = xval; }
+    // ... etc ...
+private:
+    type _x;
+    type _y;
+    type _z;
+}
 
-<h1 id="git-add-forgotten-file">git add forgotten_file</h1>
+struct S_Point3d
+{
+    type _x;
+    type _y;
+    type _z;
+}
 
-<h1 id="git-commit-amend-只会产生一个commit-initial-commit">git commit &ndash;amend  只会产生一个commit:&lsquo;initial commit&rsquo;</h1>
+Point3d p1;
+S_Point3d p2;
+用C++ 类Point3d p1封装 C 结构体 p2增加了哪些布局成本?
+</code></pre>
+
+<h3 id="2-c-对象模型">2.c++对象模型</h3>
+
+<h4 id="2-1-布局成本增加">2.1 布局成本增加</h4>
+
+<ol>
+<li><strong>虚函数机制（ virtual function）</strong>：支持c++执行期绑定，多态</li>
+<li><strong>虚基类（virtual base clas）</strong>：菱形继承，多次出现在继承体系中的base class，有一个单一而被共享的实例。</li>
+<li><strong>多重继承下的子类与基类之间的转换</strong>。</li>
+
+<li><p>其他情况下，c++其实也并没有比C庞大或者迟缓。</p>
+
+<h4 id="2-2-c-对象模型">2.2 C++ 对象模型</h4>
+
+<pre><code class="language-cpp">class Point
+{
+public:
+    Point( float xval );
+    virtual ~Point();
+    float x() const;
+    static int PointCount();
+protected:
+    virtual ostream&amp;
+    print( ostream &amp;os ) const;
+    float _x;
+    static int _point_count;
+};
+</code></pre>
+
+<p>如上，在C++中有两种类成员数据（class data members）：静态非静态（static and nonstatic）
+以及三种类成员函数（class member functions—static, nonstatic, and virtual），参考下面C++对象示意图，
+对第一节提的问，显然是没有增加任何成本的。</p></li>
+</ol>
+
+<p><img src="D:blogsfig1.png" alt="fig1.png" /></p>
+
+<p>非静态类成员数据被放置在每一个类实例（对象）之类，类的静态和非静态成员函数，静态数据则被放在类实例之外。
+虚函数c++两步骤给予支持。</p>
+
+<ol>
+<li>每一个class产生一堆指向虚函数指针，放在表格之中，表格成为virtual table(vtbl).</li>
+<li>每一个类实例（对象）拥有一指向相关virtual table的指针（vptr）,每一个class 所关联的type_info object一般放在vtbl的第一个slot.</li>
+</ol>
+
+<h4 id="2-3-多重继承的性能探讨引子">2.3 多重继承的性能探讨引子</h4>
+
+<pre><code class="language-cpp">class iostream:public istream,public ostream { ... };
+class istream : virtual public ios { ... };
+class ostream : virtual public ios { ... };
+   ios
+   / \
+  ist ost
+   \ /
+ iostream
+</code></pre>
+
+<p>在C++继承体制中，“间接性”的级数因为继承的深度而增加。例如iostream需要两次间接存取才能取到ios的成员，而istream
+只需要一次。当然，如果把base指针直接复制一份到子类，倒是可以直接读，空间换时间罢了。
+而如果直接把基类放成员放子类中，好处：直接读写，坏处：当基类改变，所有子类全部全部得重新编译。</p>
+
+<p><img src="D:blogsfig2.png" alt="fig2.png" /></p>
+
+<h4 id="2-3-对象布局">2.3 对象布局</h4>
+
+<p>c++实现动态多态：
+1. 隐式转换，基类向父类转换，一般会发生截断情况。
+2. virtual机制
+3. 经由dynamic_cast和typeid运算符</p>
+
+<p><strong>那个一个类实例到底需要占用多少内存？</strong>
+   非静态成员数据 +  加上需要字节对齐所需内存 + 为了支持virtual所需的负担</p>
 
     </div>
 
@@ -273,13 +364,13 @@ git config &ndash;global alias.toBranch &lsquo;checkout&rsquo; # 切换到某分
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/git%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87%E8%B5%B6%E8%B6%85svn-%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B1/">
+          <a class="prev" href="/post/c&#43;&#43;%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default"></span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         
-          <a class="next" href="/post/python-exec-%E5%92%8C-eval/">
+          <a class="next" href="/post/git%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87%E8%B5%B6%E8%B6%85svn-%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B1/">
             <span class="next-text nav-default"></span>
             <span class="prev-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
